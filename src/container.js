@@ -27,6 +27,7 @@ import { createMongoClientFilterStore } from './services/clientFilters/mongoStor
 import { createFeedbackStore } from './services/feedback/index.js';
 import { createMongoFeedbackStore } from './services/feedback/mongoStore.js';
 import { createMongoConnection } from './storage/mongo.js';
+import { createDiscordNotifier } from './services/notify/index.js';
 
 // buildContainer: returns `{ dashboard, resume, ai, summariser, logger, env }`.
 // Any field in `overrides` wins over the default construction — handy for
@@ -120,6 +121,16 @@ export function buildContainer({ overrides = {}, logger = rootLogger } = {}) {
         });
     }
 
+    // Discord ops alerts. When webhook URL blank → `enabled:false` → every
+    // send() is a fast no-op. Pipeline code always calls it; never branches.
+    const notifier = createDiscordNotifier({
+        webhookUrl: env.DISCORD_WEBHOOK_URL,
+        logger,
+    });
+    if (notifier.enabled) {
+        logger?.info?.('discord: webhook configured — ops alerts active');
+    }
+
     const defaults = {
         env,
         logger,
@@ -132,6 +143,7 @@ export function buildContainer({ overrides = {}, logger = rootLogger } = {}) {
         session,
         clientFilters,
         feedback,
+        notifier,
         mongo,  // null when using file store — health route uses for ping
     };
 

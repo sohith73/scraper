@@ -126,6 +126,13 @@ const schema = z.object({
     // its own namespace when sharing a cluster with the dashboard.
     MONGO_URI: z.string().optional().default(''),
     MONGO_DB: z.string().optional().default('flashfire_scraper'),
+
+    // --- Discord webhook (optional) ------------------------------------
+    // Ops channel that receives terminal-run alerts: success with counts,
+    // failure with error code, no-jobs warnings, cooldown triggers. Empty
+    // string disables alerts (zero-config default). The URL itself is a
+    // capability token — treat as SECRET.
+    DISCORD_WEBHOOK_URL: z.string().optional().default(''),
 });
 
 // loadEnv: parses process.env against the schema. On failure, formats a clear

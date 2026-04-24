@@ -16,6 +16,10 @@ export const PHASES = Object.freeze({
     ENRICHING: 'enriching',
     PREFLIGHT: 'preflight',
     PUSHING: 'pushing',
+    // Non-terminal: pipeline has exhausted the current filter combo before
+    // hitting the requested count. Waits for operator to pick a filter to
+    // relax (or decline), then resumes with mutated intent.
+    AWAITING_RELAXATION: 'awaiting-relaxation',
     DONE: 'done',
     FAILED: 'failed',
     ABORTED: 'aborted',

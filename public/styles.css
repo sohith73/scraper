@@ -521,6 +521,26 @@ pre {
 .warn-banner li { margin: 2px 0; }
 .warn-banner code { background: var(--code-bg); padding: 1px 4px; border-radius: 3px; }
 
+.relaxation-options {
+    display: flex;
+    flex-direction: column;
+    gap: 6px;
+    margin: 8px 0;
+}
+.relaxation-option {
+    display: flex;
+    align-items: flex-start;
+    gap: 6px;
+    padding: 6px 8px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    cursor: pointer;
+    line-height: 1.5;
+}
+.relaxation-option:hover { border-color: var(--accent); }
+.relaxation-option input[type=radio] { margin-top: 3px; }
+.relaxation-actions { display: flex; gap: 8px; margin-top: 8px; }
+
 .stats-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;

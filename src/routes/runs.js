@@ -40,6 +40,7 @@ function summariseRun(r) {
         durationMs: r.durationMs,
         eventSeq: r.eventSeq,
         resumedFrom: r.resumedFrom || null,
+        pendingRelaxation: r.pendingRelaxation || null,
     };
 }
 
@@ -174,6 +175,47 @@ export function runsRouter({ container }) {
         const run = container.runs.abort(req.params.id);
         if (!run) return respondErr(res, req, 'NOT_FOUND', 'run not found');
         respondOk(res, req, { run: summariseRun(run) });
+    });
+
+    // POST /api/runs/:id/expand — operator answers the "which filter should
+    // I widen?" prompt. Body: { accept: true, planIndex: 0 } accepts the
+    // chosen relaxation; { accept: false } declines and ends the run.
+    router.post('/runs/:id/expand', (req, res) => {
+        const run = container.runs.get(req.params.id);
+        if (!run) return respondErr(res, req, 'NOT_FOUND', 'run not found');
+        if (run.phase !== 'awaiting-relaxation') {
+            return respondErr(
+                res, req,
+                'BAD_INPUT',
+                `run is ${run.phase}, not awaiting-relaxation`,
+            );
+        }
+        if (!run.pendingRelaxation || !Array.isArray(run.pendingRelaxation.plans)) {
+            return respondErr(res, req, 'BAD_INPUT', 'no pending relaxation on this run');
+        }
+        const { accept, planIndex } = req.body || {};
+        if (accept !== true && accept !== false) {
+            return respondErr(res, req, 'BAD_INPUT', 'accept:boolean is required');
+        }
+        const chosen = Number.isInteger(planIndex) ? planIndex : 0;
+        if (accept && (chosen < 0 || chosen >= run.pendingRelaxation.plans.length)) {
+            return respondErr(res, req, 'BAD_INPUT', 'planIndex out of range');
+        }
+        // The pipeline polls for pendingRelaxation.decision — writing it
+        // unblocks the poll loop within ~500ms.
+        container.runs._store?.update?.(run.id, {
+            pendingRelaxation: {
+                ...run.pendingRelaxation,
+                decision: accept
+                    ? { action: 'accept', planIndex: chosen }
+                    : { action: 'decline' },
+            },
+        });
+        respondOk(res, req, {
+            run: summariseRun(container.runs.get(run.id)),
+            accepted: accept,
+            planIndex: chosen,
+        });
     });
 
     // POST /api/runs/:id/resume — spawn a new run that picks up where a

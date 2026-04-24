@@ -147,5 +147,9 @@ export function createRunsService({
         runDir: (id) => store.runDir(id),
         cooldownStatus,
         refreshCooldown,
+        // Escape-hatch used by the /expand route to inject the operator's
+        // relaxation decision into the run state; the pipeline's poll loop
+        // picks it up within 500ms and resumes.
+        _store: store,
     };
 }

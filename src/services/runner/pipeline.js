@@ -23,6 +23,18 @@ import {
 } from './runLogger.js';
 import { setCooldown } from './cooldown.js';
 import { buildCalibrationBlock } from '../feedback/prompt.js';
+import {
+    computeRelaxationPlan,
+    applyRelaxation,
+    serialisePlan,
+} from './relaxation.js';
+import {
+    notifyRunDone,
+    notifyRunFailed,
+    notifyNoJobs,
+    notifyCooldown,
+    computeCulprits,
+} from '../notify/index.js';
 
 // Error codes that signal JR is throttling / blocking us — on these we
 // write a cooldown so the next run refuses up-front.
@@ -47,7 +59,9 @@ function checkAbort(store, runId, logger) {
 
 // failRun: centralise the "this phase failed" transition so the caller
 // can early-return cleanly.
-function failRun(store, runId, error, logger) {
+// `notifier` is optional — passed when the caller has access to the
+// container; absent during the `.catch` synthesised in the outer try/catch.
+function failRun(store, runId, error, logger, notifier = null) {
     logger?.error?.(
         { code: error?.code, message: error?.message },
         'run failing',
@@ -59,6 +73,31 @@ function failRun(store, runId, error, logger) {
             message: error?.message || String(error),
         },
     });
+    if (notifier?.enabled) {
+        notifyRunFailed({ notifier, run: store.get(runId), logger }).catch(() => {});
+    }
+}
+
+// waitForRelaxationDecision: poll the run state until operator answers
+// (via POST /api/runs/:id/expand), or aborts, or we time out. Polling at
+// 500ms is cheap — single run, single operator — and avoids adding an
+// EventEmitter primitive to the store just for this one flow.
+// Returns one of:
+//   { action: 'accept', planIndex, plans }
+//   { action: 'decline' }
+//   { action: 'abort' }       (operator clicked Abort)
+//   { action: 'timeout' }     (>30min no response)
+async function waitForRelaxationDecision(store, runId, { timeoutMs = 30 * 60_000 } = {}) {
+    const start = Date.now();
+    while (Date.now() - start < timeoutMs) {
+        const r = store.get(runId);
+        if (!r) return { action: 'abort' };
+        if (r.abortRequested) return { action: 'abort' };
+        const decision = r.pendingRelaxation?.decision;
+        if (decision) return decision;
+        await new Promise((res) => setTimeout(res, 500));
+    }
+    return { action: 'timeout' };
 }
 
 // writeArtifact: best-effort per-run side file. Never throws.
@@ -85,7 +124,7 @@ export async function runPipeline({
     const run = store.get(runId);
     if (!run) return;
     const { clientEmail, requestedCount, clientName } = run;
-    const { dashboard, resume, summariser, browser, mutex, ai, env, clientFilters, feedback, logger: rootLogger } =
+    const { dashboard, resume, summariser, browser, mutex, ai, env, clientFilters, feedback, notifier, logger: rootLogger } =
         container;
     const runArtDir = store.runDir(runId);
 
@@ -137,7 +176,7 @@ export async function runPipeline({
         const profileRes = await phaseTimer('loading-profile', () =>
             dashboard.getProfile(clientEmail),
         );
-        if (!profileRes.ok) return failRun(store, runId, profileRes.error, logger);
+        if (!profileRes.ok) return failRun(store, runId, profileRes.error, logger, notifier);
         if (checkAbort(store, runId, logger)) return;
 
         // ---- 2. load exclusions (best-effort) -----------------------
@@ -180,6 +219,7 @@ export async function runPipeline({
                         'No resume attached for this client. Attach one in gemini-resume before running a scrape, or save an override intent first.',
                 },
                 logger,
+                notifier,
             );
         }
         if (!intent) {
@@ -191,7 +231,7 @@ export async function runPipeline({
                     clientEmail,
                 }),
             );
-            if (!sumRes.ok) return failRun(store, runId, sumRes.error, logger);
+            if (!sumRes.ok) return failRun(store, runId, sumRes.error, logger, notifier);
             intent = sumRes.value.intent;
             // Apply per-run operator overrides on top of the AI output.
             // Operator Advanced Filters always win over AI inference.
@@ -283,10 +323,21 @@ export async function runPipeline({
             pushed: { total: 0, pushed: 0, duplicates: 0, blocked: 0, errors: 0, durationMs: 0 },
         };
 
+        // Outer "relaxation rounds" loop. Every inner pass is a full
+        // pagination over JR with the current intent. If we exhaust below
+        // target, we pause and ask the operator which filter to widen.
+        const MAX_RELAXATION_ROUNDS = 5;
+        const appliedRelaxations = Array.isArray(resumeFrom?.appliedRelaxations)
+            ? [...resumeFrom.appliedRelaxations]
+            : [];
+        let relaxationRound = 0;
         let page = 0;
         let aiBatches = 0;
         let exhausted = false;
+        let declinedOrTimedOut = false;
 
+        // eslint-disable-next-line no-constant-condition — inner breaks gate the loop
+        while (true) {
         while (
             allPicks.length < requestedCount
             && page < MAX_PAGES
@@ -309,16 +360,28 @@ export async function runPipeline({
             if (!searchRes.ok) {
                 if (COOLDOWN_TRIGGER_CODES.has(searchRes.error.code)) {
                     const ms = Number(env?.JOBRIGHT_COOLDOWN_MS) || 900_000;
+                    const expiresAt = new Date(Date.now() + ms).toISOString();
                     await setCooldown(env?.RUNS_DIR || './runs', {
                         ms,
                         reason: `${searchRes.error.code}: ${searchRes.error.message}`,
                         code: searchRes.error.code,
                     });
                     logger?.warn?.({ code: searchRes.error.code, cooldownMs: ms }, 'cooldown set');
+                    // Fire-and-forget ops alert.
+                    notifyCooldown({
+                        notifier,
+                        run: store.get(runId),
+                        cooldown: {
+                            code: searchRes.error.code,
+                            reason: `${searchRes.error.code}: ${searchRes.error.message}`,
+                            expiresAt,
+                        },
+                        logger,
+                    }).catch(() => {});
                 }
                 // First-page failure kills the run; mid-pagination failure
                 // stops the loop but keeps whatever we've pushed so far.
-                if (page === 0) return failRun(store, runId, searchRes.error, logger);
+                if (page === 0) return failRun(store, runId, searchRes.error, logger, notifier);
                 logger?.warn?.({ code: searchRes.error.code, page }, 'search page failed mid-loop; stopping');
                 break;
             }
@@ -357,7 +420,7 @@ export async function runPipeline({
                     calibration: calibrationBlock,
                 }),
             );
-            if (!filterRes.ok) return failRun(store, runId, filterRes.error, logger);
+            if (!filterRes.ok) return failRun(store, runId, filterRes.error, logger, notifier);
             aiBatches += filterRes.value.stats.batches;
             agg.filtered.totalJobs += filterRes.value.stats.totalJobs;
             agg.filtered.picked += filterRes.value.stats.picked;
@@ -398,7 +461,7 @@ export async function runPipeline({
             const enrichRes = await phaseTimer(`enriching.page${page}`, () =>
                 enrichJobs({ jobs: pushCandidates, logger }),
             );
-            if (!enrichRes.ok) return failRun(store, runId, enrichRes.error, logger);
+            if (!enrichRes.ok) return failRun(store, runId, enrichRes.error, logger, notifier);
             agg.enriched.total += enrichRes.value.stats.total;
             agg.enriched.ready += enrichRes.value.stats.ready;
             agg.enriched.sparse += enrichRes.value.stats.sparse;
@@ -411,7 +474,7 @@ export async function runPipeline({
             const preRes = await phaseTimer(`preflight.page${page}`, async () =>
                 runPreflight({ jobs: enrichRes.value.ready, exclusions, logger }),
             );
-            if (!preRes.ok) return failRun(store, runId, preRes.error, logger);
+            if (!preRes.ok) return failRun(store, runId, preRes.error, logger, notifier);
             agg.preflight.total += preRes.value.stats.total;
             agg.preflight.pushable += preRes.value.stats.pushable;
             agg.preflight.blockedCompany += preRes.value.stats.blockedCompany;
@@ -433,7 +496,7 @@ export async function runPipeline({
             const pushRes = await phaseTimer(`pushing.page${page}`, () =>
                 runPush({ dashboard, clientEmail, clientName, jobs: toPush, logger }),
             );
-            if (!pushRes.ok) return failRun(store, runId, pushRes.error, logger);
+            if (!pushRes.ok) return failRun(store, runId, pushRes.error, logger, notifier);
             agg.pushed.total += pushRes.value.stats.total;
             agg.pushed.pushed += pushRes.value.stats.pushed;
             agg.pushed.duplicates += pushRes.value.stats.duplicates;
@@ -483,6 +546,86 @@ export async function runPipeline({
             page += 1;
         }
 
+        // ---- Relaxation gate -----------------------------------------
+        // Inner pagination pass just ended. Decide what to do next:
+        //  A. hit target → break outer loop and finalise
+        //  B. abort requested → break (checkAbort inside handles phase)
+        //  C. hit pagination caps / exhausted with picks < target →
+        //     compute relaxation plan, ask operator
+        if (allPicks.length >= requestedCount) break;
+        if (checkAbort(store, runId, logger)) return;
+        if (relaxationRound >= MAX_RELAXATION_ROUNDS) {
+            logger?.info?.(
+                { appliedRelaxations: appliedRelaxations.length },
+                'relaxation round cap reached — stopping',
+            );
+            break;
+        }
+
+        const plans = computeRelaxationPlan({ intent });
+        if (plans.length === 0) {
+            logger?.info?.('no further filters can be relaxed — stopping');
+            break;
+        }
+
+        store.update(runId, {
+            phase: PHASES.AWAITING_RELAXATION,
+            pendingRelaxation: {
+                round: relaxationRound + 1,
+                achieved: allPicks.length,
+                target: requestedCount,
+                plans: serialisePlan(plans),
+                appliedRelaxations,
+                createdAt: new Date().toISOString(),
+                decision: null,
+            },
+        });
+        logger?.info?.(
+            { achieved: allPicks.length, target: requestedCount, options: plans.length },
+            'awaiting-relaxation: operator input required',
+        );
+
+        const decision = await waitForRelaxationDecision(store, runId);
+        if (decision.action === 'abort') {
+            logger?.info?.('relaxation aborted — stopping');
+            return; // checkAbort flow flips phase to aborted next loop tick
+        }
+        if (decision.action !== 'accept') {
+            logger?.info?.({ action: decision.action }, 'relaxation declined/timeout — stopping');
+            declinedOrTimedOut = true;
+            break;
+        }
+
+        // Accept — apply the chosen plan entry and start another inner pass.
+        const chosenIdx = Number.isInteger(decision.planIndex) ? decision.planIndex : 0;
+        const chosenPlan = plans[chosenIdx] || plans[0];
+        const nextIntent = applyRelaxation(intent, chosenPlan);
+        appliedRelaxations.push({
+            round: relaxationRound + 1,
+            field: chosenPlan.field,
+            label: chosenPlan.label,
+            from: chosenPlan.from,
+            to: chosenPlan.to,
+            acceptedAt: new Date().toISOString(),
+        });
+        intent = nextIntent;
+        relaxationRound += 1;
+        // Reset pagination counters for the new pass with the widened filter.
+        page = 0;
+        aiBatches = 0;
+        exhausted = false;
+        store.update(runId, {
+            progress: { intent, appliedRelaxations },
+            pendingRelaxation: null,
+        });
+        logger?.info?.(
+            { round: relaxationRound, field: chosenPlan.field, from: chosenPlan.from, to: chosenPlan.to },
+            'relaxation accepted — starting new pagination pass',
+        );
+        // Continue outer loop → inner pagination runs again with new intent.
+        }
+        // ---- end of outer relaxation loop ---------------------------
+
         // ---- finalise -----------------------------------------------
         const picks = allPicks;
         const blocked = allBlocked;
@@ -496,6 +639,8 @@ export async function runPipeline({
             seenJrIds: [...seenJrIds],
             resumedFrom: resumeFrom?.prevRunId || null,
             intent,
+            appliedRelaxations,
+            declinedOrTimedOut,
             pagination: {
                 pagesScanned: page,
                 jrJobsSeen: seenJrIds.size,
@@ -504,6 +649,7 @@ export async function runPipeline({
                 exhausted,
                 hitPageCap: page >= MAX_PAGES,
                 hitAiBatchCap: aiBatches >= MAX_AI_BATCHES,
+                relaxationRounds: relaxationRound,
             },
         });
 
@@ -512,6 +658,27 @@ export async function runPipeline({
             picks,
             progress: { pushed: agg.pushed },
         });
+
+        // --- Ops alert: DONE (or no-jobs variant) ---------------------
+        // Fire-and-forget. Uses the latest run state so picks/progress
+        // reflect the final phase transition.
+        {
+            const finalRun = store.get(runId);
+            const pushedCount = finalRun?.progress?.pushed?.pushed ?? 0;
+            const scanned = finalRun?.progress?.searched?.totalNormalized ?? 0;
+            if (pushedCount === 0 && scanned === 0) {
+                // JR returned nothing for this filter — dedicated alert.
+                notifyNoJobs({
+                    notifier,
+                    run: finalRun,
+                    culprits: computeCulprits(finalRun?.progress?.intent),
+                    logger,
+                }).catch(() => {});
+            } else {
+                notifyRunDone({ notifier, run: finalRun, logger }).catch(() => {});
+            }
+        }
+
         logger?.info?.(
             {
                 picks: picks.length,
@@ -548,7 +715,7 @@ export async function runPipeline({
     } catch (e) {
         rootLogger?.error?.({ runId, err: e.message }, 'pipeline crashed');
         logger?.fatal?.({ err: e.message, stack: e.stack }, 'pipeline crashed');
-        failRun(store, runId, { code: 'UNEXPECTED', message: e.message }, logger);
+        failRun(store, runId, { code: 'UNEXPECTED', message: e.message }, logger, notifier);
     } finally {
         // Persist the final state snapshot for failed runs before we close
         // the logger, so the file stream flushes whatever we logged.

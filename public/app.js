@@ -17,6 +17,8 @@ const PHASE_SEQUENCE = [
 ];
 
 const TERMINAL_PHASES = new Set(['done', 'failed', 'aborted']);
+// Non-terminal but SSE stays open — operator action required.
+const PAUSED_PHASES = new Set(['awaiting-relaxation']);
 
 const state = {
     clients: [],
@@ -835,6 +837,8 @@ function renderRun() {
         r.eventSeq != null ? `seq: ${r.eventSeq}` : '',
     ].filter(Boolean).join(' · ');
 
+    // Abort button stays visible while the run is still alive — including
+    // when paused for relaxation input.
     abortBtn.hidden = TERMINAL_PHASES.has(r.phase);
     resumeBtn.hidden = r.phase !== 'failed';
 
@@ -842,6 +846,7 @@ function renderRun() {
     renderRunStats(r);
     renderError(r);
     renderNoJobsHint(r);
+    renderRelaxationPrompt(r);
 
     // Picks only once we have the full run (after terminal).
     if (Array.isArray(r.picks) && r.picks.length > 0) {
@@ -1059,7 +1064,10 @@ async function resumeRun() {
 function renderTimeline(r) {
     const list = $('run-timeline');
     list.innerHTML = '';
-    const currentIdx = PHASE_SEQUENCE.findIndex((p) => p.key === r.phase);
+    // While paused on relaxation, highlight the LAST completed phase
+    // (pushing) instead of leaving the timeline blank.
+    const effectivePhase = r.phase === 'awaiting-relaxation' ? 'pushing' : r.phase;
+    const currentIdx = PHASE_SEQUENCE.findIndex((p) => p.key === effectivePhase);
     const terminal = TERMINAL_PHASES.has(r.phase);
     for (let i = 0; i < PHASE_SEQUENCE.length; i += 1) {
         const phase = PHASE_SEQUENCE[i];
@@ -1186,6 +1194,80 @@ function renderNoJobsHint(r) {
         <div style="margin-top:8px">${bullets}</div>
         <div style="margin-top:6px" class="muted">Full filter payload: <code>GET /api/runs/${r.id}/log</code></div>
     `;
+}
+
+// renderRelaxationPrompt: shown when run.phase === 'awaiting-relaxation'.
+// Presents the computed widening options as radios + accept/decline.
+function renderRelaxationPrompt(r) {
+    const el = $('relaxation-prompt');
+    if (!el) return;
+    const pr = r.pendingRelaxation;
+    if (r.phase !== 'awaiting-relaxation' || !pr || !Array.isArray(pr.plans) || pr.plans.length === 0) {
+        el.hidden = true;
+        return;
+    }
+    el.hidden = false;
+
+    const header = `<strong>⏸ Paused — got ${pr.achieved}/${pr.target} jobs.</strong>
+        Relaxation round ${pr.round}. Pick one filter to widen, or stop here.`;
+
+    const radios = pr.plans.map((p, i) => `
+        <label class="relaxation-option">
+            <input type="radio" name="relaxation-choice" value="${i}" ${i === 0 ? 'checked' : ''} />
+            <span><strong>${p.label}</strong>: <code>${p.from}</code> → <code>${p.to}</code>
+            <span class="muted">— ${p.reason}</span></span>
+        </label>
+    `).join('');
+
+    const applied = Array.isArray(pr.appliedRelaxations) && pr.appliedRelaxations.length > 0
+        ? `<div class="muted" style="margin-top:6px">Already widened in this run: ${pr.appliedRelaxations.map((a) => `${a.label} (${a.to})`).join(' · ')}</div>`
+        : '';
+
+    el.innerHTML = `
+        <div>${header}</div>
+        <div class="relaxation-options">${radios}</div>
+        ${applied}
+        <div class="relaxation-actions">
+            <button id="relaxation-accept" class="btn-primary">Widen + continue</button>
+            <button id="relaxation-decline" class="btn-secondary">Stop here</button>
+        </div>
+    `;
+    $('relaxation-accept').addEventListener('click', () => submitRelaxation(true));
+    $('relaxation-decline').addEventListener('click', () => submitRelaxation(false));
+}
+
+async function submitRelaxation(accept) {
+    if (!state.run) return;
+    const acceptBtn = $('relaxation-accept');
+    const declineBtn = $('relaxation-decline');
+    if (acceptBtn) acceptBtn.disabled = true;
+    if (declineBtn) declineBtn.disabled = true;
+
+    let planIndex = 0;
+    const checked = document.querySelector('input[name="relaxation-choice"]:checked');
+    if (checked) planIndex = Number.parseInt(checked.value, 10) || 0;
+
+    setStatus('console-status', accept ? 'widening + continuing…' : 'declining…');
+    try {
+        const res = await fetch(`${API}/runs/${encodeURIComponent(state.run.id)}/expand`, {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({ accept, planIndex }),
+        });
+        const body = await res.json();
+        if (!body.success) {
+            setStatus('console-status', `expand failed: ${body.message || body.error}`, { error: true });
+            if (acceptBtn) acceptBtn.disabled = false;
+            if (declineBtn) declineBtn.disabled = false;
+            return;
+        }
+        // SSE is still open — pipeline will flip phase back to SEARCHING
+        // within ~500ms and updates will flow again automatically.
+    } catch (err) {
+        setStatus('console-status', `expand error: ${err.message}`, { error: true });
+        if (acceptBtn) acceptBtn.disabled = false;
+        if (declineBtn) declineBtn.disabled = false;
+    }
 }
 
 function renderError(r) {

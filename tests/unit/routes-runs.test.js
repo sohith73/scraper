@@ -240,6 +240,137 @@ test('POST /api/runs/:id/resume 400s when run is not failed', async () => {
     assert.equal(body.error, 'BAD_INPUT');
 });
 
+test('POST /api/runs/:id/expand writes operator decision into state', async () => {
+    const runsDir = await mkdtemp(join(tmpdir(), 'scraper-runs-'));
+    // Pipeline puts the run into awaiting-relaxation w/ a plan, then waits.
+    let release;
+    const wait = new Promise((r) => (release = r));
+    const srv = await buildSrv({
+        runsDir,
+        pipelineImpl: async ({ store, runId }) => {
+            store.update(runId, {
+                phase: 'awaiting-relaxation',
+                pendingRelaxation: {
+                    round: 1,
+                    achieved: 1,
+                    target: 4,
+                    plans: [
+                        { index: 0, field: 'daysAgo', label: 'Date posted', from: 'past 24 h', to: 'past 3 days', reason: '', priority: 10 },
+                        { index: 1, field: 'workModels', label: 'Work model', from: 'hybrid', to: 'any', reason: '', priority: 8 },
+                    ],
+                    appliedRelaxations: [],
+                    createdAt: new Date().toISOString(),
+                    decision: null,
+                },
+            });
+            await wait;
+            store.update(runId, { phase: 'done', picks: [] });
+        },
+    });
+    after(async () => {
+        release();
+        await srv.close();
+        await rm(runsDir, { recursive: true, force: true });
+    });
+
+    const created = await (await fetch(`${srv.url}/api/runs`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ clientEmail: 'a@b.com', count: 4 }),
+    })).json();
+
+    // Wait for awaiting-relaxation.
+    for (let i = 0; i < 40; i += 1) {
+        const cur = await (await fetch(`${srv.url}/api/runs/${created.run.id}`)).json();
+        if (cur.run.phase === 'awaiting-relaxation') break;
+        await new Promise((r) => setTimeout(r, 10));
+    }
+
+    const res = await fetch(`${srv.url}/api/runs/${created.run.id}/expand`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ accept: true, planIndex: 1 }),
+    });
+    assert.equal(res.status, 200);
+    const body = await res.json();
+    assert.equal(body.accepted, true);
+    assert.equal(body.planIndex, 1);
+
+    const got = await (await fetch(`${srv.url}/api/runs/${created.run.id}`)).json();
+    assert.equal(got.run.pendingRelaxation.decision.action, 'accept');
+    assert.equal(got.run.pendingRelaxation.decision.planIndex, 1);
+});
+
+test('POST /api/runs/:id/expand 400s when run not awaiting-relaxation', async () => {
+    const runsDir = await mkdtemp(join(tmpdir(), 'scraper-runs-'));
+    const srv = await buildSrv({ runsDir });
+    after(async () => {
+        await srv.close();
+        await rm(runsDir, { recursive: true, force: true });
+    });
+    const created = await (await fetch(`${srv.url}/api/runs`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ clientEmail: 'a@b.com', count: 1 }),
+    })).json();
+    // default pipelineImpl drives to DONE — wait for it.
+    for (let i = 0; i < 40; i += 1) {
+        const cur = await (await fetch(`${srv.url}/api/runs/${created.run.id}`)).json();
+        if (cur.run.phase === 'done') break;
+        await new Promise((r) => setTimeout(r, 10));
+    }
+    const res = await fetch(`${srv.url}/api/runs/${created.run.id}/expand`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ accept: true, planIndex: 0 }),
+    });
+    assert.equal(res.status, 400);
+});
+
+test('POST /api/runs/:id/expand 400s on invalid planIndex', async () => {
+    const runsDir = await mkdtemp(join(tmpdir(), 'scraper-runs-'));
+    let release;
+    const wait = new Promise((r) => (release = r));
+    const srv = await buildSrv({
+        runsDir,
+        pipelineImpl: async ({ store, runId }) => {
+            store.update(runId, {
+                phase: 'awaiting-relaxation',
+                pendingRelaxation: {
+                    round: 1, achieved: 0, target: 3,
+                    plans: [{ index: 0, field: 'x', label: 'X', from: 'a', to: 'b', reason: '', priority: 1 }],
+                    appliedRelaxations: [],
+                    createdAt: new Date().toISOString(),
+                    decision: null,
+                },
+            });
+            await wait;
+            store.update(runId, { phase: 'done' });
+        },
+    });
+    after(async () => {
+        release();
+        await srv.close();
+        await rm(runsDir, { recursive: true, force: true });
+    });
+    const created = await (await fetch(`${srv.url}/api/runs`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ clientEmail: 'a@b.com', count: 3 }),
+    })).json();
+    for (let i = 0; i < 40; i += 1) {
+        const cur = await (await fetch(`${srv.url}/api/runs/${created.run.id}`)).json();
+        if (cur.run.phase === 'awaiting-relaxation') break;
+        await new Promise((r) => setTimeout(r, 10));
+    }
+    const res = await fetch(`${srv.url}/api/runs/${created.run.id}/expand`, {
+        method: 'POST',
+        headers: { 'content-type': 'application/json' },
+        body: JSON.stringify({ accept: true, planIndex: 99 }),
+    });
+    assert.equal(res.status, 400);
+});
+
 test('POST /api/runs/:id/resume 404s for unknown run', async () => {
     const runsDir = await mkdtemp(join(tmpdir(), 'scraper-runs-'));
     const srv = await buildSrv({ runsDir });
