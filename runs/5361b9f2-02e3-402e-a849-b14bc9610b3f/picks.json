@@ -1,0 +1,301 @@
+{
+  "picks": [
+    {
+      "jobId": "69e9bdc54b0fa35a7077018c",
+      "title": "Lead Product Manager",
+      "company": "PayPal",
+      "applyUrl": "https://paypal.eightfold.ai/careers/job/274919403894?hl=en-US&domain=paypal.com&Codes=W-LINKEDIN",
+      "createdJobId": "69ea13057bdfe73b36efc9b5",
+      "outcome": "pushed"
+    }
+  ],
+  "blocked": [
+    {
+      "jobId": "69e8f5d64b0fa35a7076a50c",
+      "title": "Product Manager (Temp to Perm)",
+      "company": "Fora Financial",
+      "outcome": "duplicate",
+      "reason": "server dedupe hit"
+    }
+  ],
+  "errored": [],
+  "decisions": [
+    {
+      "jobId": "69e9bd333aa0c479643ab59d",
+      "title": "Product Manager",
+      "company": "Abbott",
+      "applyUrl": "https://www.jobs.abbott/us/en/job/ABLAUS31147643ENUSEXTERNAL/Product-Manager?utm_source=linkedin&utm_medium=phenom-feeds",
+      "pick": false,
+      "score": 55,
+      "reason": "Borderline — senior level Product Manager role, but onsite location conflicts with candidate's preference for remote work."
+    },
+    {
+      "jobId": "69e9507958811370cb12c9b9",
+      "title": "Product Manager",
+      "company": "Nearsite",
+      "applyUrl": "https://www.linkedin.com/jobs/view/4405453396",
+      "pick": false,
+      "score": 55,
+      "reason": "Borderline — senior level Product Manager role, but onsite location conflicts with candidate's preference for remote work."
+    },
+    {
+      "jobId": "69afa78af63f733065b33beb",
+      "title": "Product Manager - Core Product Experiences",
+      "company": "Abridge",
+      "applyUrl": "https://jobs.ashbyhq.com/abridge/c45524b6-96b2-49f0-9cd5-176b998d6ba7/application?utm_source=jobright",
+      "pick": false,
+      "score": 60,
+      "reason": "Borderline — senior level Product Manager role, but hybrid work model may not align with candidate's preference for remote."
+    },
+    {
+      "jobId": "69e8f54a4b0fa35a7076a419",
+      "title": "Principal Product Manager, AI Solutions",
+      "company": "Memorial Sloan Kettering Cancer Center",
+      "applyUrl": "https://msk.wd108.myworkdayjobs.com/MSKCC_Careers_Primary/job/New-York-NY/Principal-Product-Manager--AI-Solutions_94899-1",
+      "pick": false,
+      "score": 55,
+      "reason": "Borderline — senior level Product Manager role, but hybrid work model may not align with candidate's preference for remote."
+    },
+    {
+      "jobId": "69e08ddd9564e855a25de3b0",
+      "title": "Product Manager",
+      "company": "Salesforce",
+      "applyUrl": "https://salesforce.wd12.myworkdayjobs.com/External_Career_Site/job/California---San-Francisco/Product-Manager_JR336692?source=LinkedIn_Jobs",
+      "pick": false,
+      "score": 55,
+      "reason": "Borderline — senior level Product Manager role, but onsite location conflicts with candidate's preference for remote work."
+    },
+    {
+      "jobId": "69e8f43f58811370cb1293d7",
+      "title": "Lead Product Management & Develop",
+      "company": "AT&T",
+      "applyUrl": "https://www.att.jobs/job/-/lead-product-management-and-develop/117/94230504736?source=jb_linkedin_org&utm_source=linkedin.com&utm_medium=organic&utm_campaign=organic&utm_content=social_media&utm_term=418039193",
+      "pick": false,
+      "score": 50,
+      "reason": "Skip — senior level Lead Product Management role, but candidate's profile is strictly for Product Manager."
+    },
+    {
+      "jobId": "69e8de3e58811370cb128c6d",
+      "title": "Product Manager - Connectivity",
+      "company": "NSI Industries",
+      "applyUrl": "https://nsiindustries.applytojob.com/apply/E6TJM88PG3/Product-Manager-Connectivity?source=LILI&source=LINKEDIN",
+      "pick": false,
+      "score": 50,
+      "reason": "Skip — senior level Product Manager role, but onsite location conflicts with candidate's preference for remote work."
+    },
+    {
+      "jobId": "69e8f5d64b0fa35a7076a50c",
+      "title": "Product Manager (Temp to Perm)",
+      "company": "Fora Financial",
+      "applyUrl": "https://www.linkedin.com/jobs/view/4405245877",
+      "pick": true,
+      "score": 75,
+      "reason": "Strong fit — remote Product Manager role with H1B sponsorship, aligns well with candidate's experience in financial services."
+    },
+    {
+      "jobId": "699ff45481476f6176b9d94c",
+      "title": "Senior Product Manager - Commercial",
+      "company": "O2E Brands",
+      "applyUrl": "https://recruiting.ultipro.ca/OEB5000OEBI/JobBoard/9eca249f-c54e-407e-b0ac-e9b01432f1d9/OpportunityDetail?opportunityId=b2f1e890-2f8f-4aae-83ab-eae98f8e7554&source=LinkedIn",
+      "pick": false,
+      "score": 64,
+      "reason": "Borderline — senior level Product Manager role, but candidate's experience may not fully align with the specific requirements."
+    },
+    {
+      "jobId": "69e909613aa0c479643a6a09",
+      "title": "Product Manager - Payroll",
+      "company": "HiBob",
+      "applyUrl": "https://easyapply.jobs/r/GFOn3AG26khSmG2Fjrhu",
+      "pick": false,
+      "score": 50,
+      "reason": "Skip — mid-level Product Manager role, but candidate is seeking senior level positions."
+    },
+    {
+      "jobId": "699535c481476f6176ad161e",
+      "title": "Product Management, Research",
+      "company": "Anthropic",
+      "applyUrl": "https://job-boards.greenhouse.io/anthropic/jobs/5123082008?gh_src=LinkedIn",
+      "pick": true,
+      "score": 70,
+      "reason": "Strong fit — senior level Product Manager role in AI, aligns with candidate's experience and offers remote work."
+    },
+    {
+      "jobId": "69b08c3774950064509706ef",
+      "title": "Senior Product Manager, Workday",
+      "company": "Zillow",
+      "applyUrl": "https://zillow.wd5.myworkdayjobs.com/Zillow_Group_External/job/Remote-USA/Senior-Product-Manager--Workday_P749459-2?source=LinkedIn",
+      "pick": false,
+      "score": 50,
+      "reason": "Skip — senior level Product Manager role, but candidate's experience may not fully align with the specific requirements."
+    },
+    {
+      "jobId": "6995144d81476f6176acf319",
+      "title": "Senior Product Manager (Menlo Park, CA or Durham NC) - #4564",
+      "company": "GRAIL",
+      "applyUrl": "https://www.linkedin.com/jobs/view/4373035917",
+      "pick": false,
+      "score": 50,
+      "reason": "Skip — senior level Product Manager role, but candidate's profile is strictly for Product Manager."
+    },
+    {
+      "jobId": "69e932e84b0fa35a7076cbf4",
+      "title": "Senior Product Manager, Hosted Runners",
+      "company": "GitLab",
+      "applyUrl": "https://job-boards.greenhouse.io/gitlab/jobs/8465712002?lever-origin=applied&lever-source=LINKEDIN",
+      "pick": false,
+      "score": 50,
+      "reason": "Skip — senior level Product Manager role, but candidate's profile is strictly for Product Manager."
+    },
+    {
+      "jobId": "69e9a4eae0cd471b2f13e942",
+      "title": "Product Manager II",
+      "company": "St. Jude Children's Research Hospital - ALSAC",
+      "applyUrl": "https://alsacstjude.wd1.myworkdayjobs.com/en-US/careersalsacstjude/job/Memphis-TN/Product-Manager-II_R0010751?source=LinkedIn",
+      "pick": false,
+      "score": 55,
+      "reason": "Borderline — mid-level Product Manager role, but candidate is seeking senior level positions."
+    },
+    {
+      "jobId": "69e9bdc54b0fa35a7077018c",
+      "title": "Lead Product Manager",
+      "company": "PayPal",
+      "applyUrl": "https://paypal.eightfold.ai/careers/job/274919403894?hl=en-US&domain=paypal.com&Codes=W-LINKEDIN",
+      "pick": true,
+      "score": 85,
+      "reason": "Strong fit — Lead Product Manager at PayPal, senior level, hybrid work model, and H1B sponsorship available."
+    },
+    {
+      "jobId": "69e909474b0fa35a7076b263",
+      "title": "Senior Product Manager - Installer Services",
+      "company": "Palmetto",
+      "applyUrl": "https://www.linkedin.com/jobs/view/4405276981",
+      "pick": false,
+      "score": 45,
+      "reason": "Skip — seniority mismatch (7+ years required) and onsite work model conflicts with candidate's preference."
+    },
+    {
+      "jobId": "69e903374b0fa35a7076b013",
+      "title": "Senior Product Manager",
+      "company": "Vetcove",
+      "applyUrl": "https://jobs.ashbyhq.com/Vetcove/26b0f19c-a62d-4e71-92e1-99f57a1513ec/application?utm_source=XddEOR0wKQ",
+      "pick": false,
+      "score": 51,
+      "reason": "Skip — remote role but lacks H1B sponsorship, which is critical for candidate's F1 OPT status."
+    },
+    {
+      "jobId": "69cc8d7ecfdc6132f940fc90",
+      "title": "Principal Product Manager",
+      "company": "Pioneering Intelligence",
+      "applyUrl": "https://boards.greenhouse.io/embed/job_app?token=8486220002&utm_source=jobright",
+      "pick": false,
+      "score": 45,
+      "reason": "Skip — seniority mismatch (7+ years required) and onsite work model conflicts with candidate's preference."
+    },
+    {
+      "jobId": "69e8de984b0fa35a70769cb4",
+      "title": "Product Manager",
+      "company": "Enterprise Engineering Inc. (EEI)",
+      "applyUrl": "https://www.linkedin.com/jobs/view/4402468843",
+      "pick": true,
+      "score": 75,
+      "reason": "Strong fit — Product Manager role at EEI, senior level, onsite with H1B sponsorship, and relevant fintech experience."
+    },
+    {
+      "jobId": "69e98e130a6e09555303ccf2",
+      "title": "Product Manager / Architect",
+      "company": "MobexHealth",
+      "applyUrl": "https://www.linkedin.com/jobs/view/4404499445",
+      "pick": true,
+      "score": 85,
+      "reason": "Strong fit — Product Manager / Architect at MobexHealth, remote work model, senior level, and H1B sponsorship available."
+    },
+    {
+      "jobId": "69e74f69f8fa2f3ec32a6e57",
+      "title": "Product Manager (Specialist), AI Voice & Contact Center",
+      "company": "Salesforce",
+      "applyUrl": "https://salesforce.wd12.myworkdayjobs.com/External_Career_Site/job/Indiana---Indianapolis/Product-Manager--Specialist---AI-Voice---Contact-Center_JR337244?source=LinkedIn_Jobs",
+      "pick": false,
+      "score": 55,
+      "reason": "Skip — mid-level role with a focus on AI technologies, which may not align with candidate's core product management experience."
+    },
+    {
+      "jobId": "69cd979d366bb95ba5500a0b",
+      "title": "Product Manager",
+      "company": "HealthEquity",
+      "applyUrl": "https://careers-healthequity.icims.com/jobs/8086/product-manager/job?in_iframe=1&source=LinkedIn&mode=job&iis=LinkedIn&iisn=LinkedIntsep",
+      "pick": true,
+      "score": 80,
+      "reason": "Strong fit — Senior Product Manager at HealthEquity, remote work model, senior level, and H1B sponsorship available."
+    },
+    {
+      "jobId": "69e9644f0a6e09555303ba45",
+      "title": "Product Owner",
+      "company": "Ascensus",
+      "applyUrl": "https://careers.ascensus.com/jobs/product-owner-philadelphia-pennsylvania-united-states?source=linkedin_posting&utm_source=linkedin_posting",
+      "pick": false,
+      "score": 50,
+      "reason": "Skip — Product Owner role is a different specialty from Product Manager, and onsite work model conflicts with candidate's preference."
+    },
+    {
+      "jobId": "69e94a1ae0cd471b2f13c5a2",
+      "title": "Senior Product Manager I (PLG Onboarding)",
+      "company": "Housecall Pro",
+      "applyUrl": "https://boards.greenhouse.io/embed/job_app?token=5979285004&utm_source=jobright",
+      "pick": true,
+      "score": 75,
+      "reason": "Strong fit — Senior Product Manager I at Housecall Pro, remote work model, senior level, and H1B sponsorship available."
+    }
+  ],
+  "seenJrIds": [
+    "69e9bd333aa0c479643ab59d",
+    "69e9507958811370cb12c9b9",
+    "69afa78af63f733065b33beb",
+    "69e8f54a4b0fa35a7076a419",
+    "69e08ddd9564e855a25de3b0",
+    "69e8f43f58811370cb1293d7",
+    "69e8de3e58811370cb128c6d",
+    "69e8f5d64b0fa35a7076a50c",
+    "699ff45481476f6176b9d94c",
+    "69e909613aa0c479643a6a09",
+    "699535c481476f6176ad161e",
+    "69b08c3774950064509706ef",
+    "6995144d81476f6176acf319",
+    "69e932e84b0fa35a7076cbf4",
+    "69e9a4eae0cd471b2f13e942",
+    "69e9bdc54b0fa35a7077018c",
+    "69e909474b0fa35a7076b263",
+    "69e903374b0fa35a7076b013",
+    "69cc8d7ecfdc6132f940fc90",
+    "69e8de984b0fa35a70769cb4",
+    "69e98e130a6e09555303ccf2",
+    "69e74f69f8fa2f3ec32a6e57",
+    "69cd979d366bb95ba5500a0b",
+    "69e9644f0a6e09555303ba45",
+    "69e94a1ae0cd471b2f13c5a2"
+  ],
+  "resumedFrom": null,
+  "intent": {
+    "roles": [
+      "Product Manager"
+    ],
+    "locations": [],
+    "seniority": "senior",
+    "companies": [],
+    "workAuth": "F1 OPT",
+    "narrative": "PM salary150",
+    "futurePreferences": "",
+    "exclusions": {
+      "companies": [],
+      "locations": []
+    }
+  },
+  "pagination": {
+    "pagesScanned": 2,
+    "jrJobsSeen": 25,
+    "target": 1,
+    "achieved": 1,
+    "exhausted": false,
+    "hitPageCap": false,
+    "hitAiBatchCap": false
+  }
+}

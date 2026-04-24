@@ -1,0 +1,82 @@
+{
+  "id": "d3ee0fdf-f516-420e-834a-b5301112f5c4",
+  "createdAt": "2026-04-24T03:31:31.901Z",
+  "updatedAt": "2026-04-24T03:31:40.102Z",
+  "phase": "done",
+  "clientEmail": "rijuljain17@gmail.com",
+  "clientName": "rijuljain17",
+  "requestedCount": 4,
+  "abortRequested": false,
+  "progress": {
+    "intent": {
+      "roles": [
+        "Product Manager"
+      ],
+      "locations": [
+        "Chicago",
+        "Los Angeles",
+        "San Francisco",
+        "Austin"
+      ],
+      "seniority": "entry",
+      "companies": [],
+      "workAuth": "F1 OPT",
+      "narrative": "Rijul Jain is an entry-level Product Manager based in the US, seeking opportunities in Chicago, Los Angeles, San Francisco, and Austin. He is currently on F1 OPT work authorization.",
+      "futurePreferences": "",
+      "employmentTypes": [
+        "full-time"
+      ],
+      "workModels": [
+        "hybrid"
+      ],
+      "daysAgo": 30,
+      "minYearsOfExperience": 0,
+      "maxYearsOfExperience": 1,
+      "salaryMinimumUsd": 150000,
+      "industries": null,
+      "skills": [
+        "Product Management",
+        "Agile",
+        "SaaS",
+        "AI",
+        "Automation",
+        "User Experience",
+        "Data Analysis"
+      ],
+      "companyStages": null,
+      "roleType": "ic",
+      "excludedTitles": null,
+      "excludedSkills": null,
+      "excludedIndustries": null,
+      "excludeStaffingAgency": null,
+      "excludeSecurityClearance": false,
+      "excludeUsCitizenOnly": true,
+      "exclusions": {
+        "companies": [],
+        "locations": []
+      },
+      "remarks": "no entry level jobs"
+    },
+    "searched": {
+      "totalReturned": 0,
+      "totalNormalized": 0,
+      "durationMs": 7275,
+      "pages": 1
+    },
+    "filtered": null,
+    "enriched": null,
+    "preflight": null,
+    "pushed": {
+      "total": 0,
+      "pushed": 0,
+      "duplicates": 0,
+      "blocked": 0,
+      "errors": 0,
+      "durationMs": 0
+    }
+  },
+  "picks": [],
+  "error": null,
+  "durationMs": 8201,
+  "eventSeq": 8
+}

@@ -1,0 +1,138 @@
+{
+  "id": "9a3e87ee-195e-4210-b470-51d2b8bb7f89",
+  "createdAt": "2026-04-23T11:02:52.328Z",
+  "updatedAt": "2026-04-23T11:03:19.931Z",
+  "phase": "done",
+  "clientEmail": "riyamate4567@gmail.com",
+  "clientName": "Riya Mate",
+  "requestedCount": 15,
+  "abortRequested": false,
+  "progress": {
+    "intent": {
+      "roles": [
+        "Software Developer",
+        "AI Engineer",
+        "Software Development Engineer",
+        "Backend Engineer"
+      ],
+      "locations": [
+        "California",
+        "Remote"
+      ],
+      "seniority": "entry",
+      "companies": [
+        "Google",
+        "Meta",
+        "Microsoft",
+        "Amazon",
+        "Apple",
+        "NVIDIA",
+        "Oracle",
+        "OpenAI",
+        "Anthropic",
+        "Cohere",
+        "Mistral",
+        "Stability AI",
+        "Hugging Face",
+        "Perplexity",
+        "Replit",
+        "Scale AI",
+        "Runway",
+        "LangChain",
+        "Pinecone",
+        "Weaviate",
+        "Milvus",
+        "Cloud",
+        "Databricks",
+        "Snowflake",
+        "Confluent",
+        "HashiCorp",
+        "VMware",
+        "Red Hat",
+        "Elastic",
+        "MongoDB Inc.",
+        "Palantir",
+        "Atlassian",
+        "GitLab",
+        "CircleCI",
+        "Tesla",
+        "Waymo",
+        "Zoox"
+      ],
+      "workAuth": "H1B required — on F1 OPT until 2027",
+      "narrative": "Riya Mate is an entry-level Software Developer and AI Engineer based in California, open to remote opportunities, and requires H1B sponsorship.",
+      "futurePreferences": "Available to join in 1 week.",
+      "employmentTypes": null,
+      "workModels": [
+        "onsite",
+        "remote"
+      ],
+      "daysAgo": 14,
+      "minYearsOfExperience": 0,
+      "maxYearsOfExperience": 2,
+      "salaryMinimumUsd": 100000,
+      "industries": null,
+      "skills": null,
+      "companyStages": null,
+      "roleType": null,
+      "excludedTitles": null,
+      "excludedSkills": null,
+      "excludedIndustries": null,
+      "excludeStaffingAgency": null,
+      "excludeSecurityClearance": false,
+      "excludeUsCitizenOnly": true,
+      "exclusions": {
+        "companies": [],
+        "locations": []
+      }
+    },
+    "searched": {
+      "totalReturned": 15,
+      "totalNormalized": 15,
+      "durationMs": 8933
+    },
+    "filtered": {
+      "totalJobs": 15,
+      "picked": 2,
+      "skipped": 2,
+      "borderline": 11,
+      "batches": 1,
+      "cacheHits": 0,
+      "durationMs": 12398
+    },
+    "enriched": {
+      "total": 2,
+      "ready": 2,
+      "sparse": 0,
+      "durationMs": 0
+    },
+    "preflight": {
+      "total": 2,
+      "pushable": 2,
+      "blockedCompany": 0,
+      "blockedLocation": 0,
+      "localDuplicate": 0
+    },
+    "pushed": {
+      "total": 2,
+      "pushed": 1,
+      "duplicates": 1,
+      "blocked": 0,
+      "errors": 0,
+      "durationMs": 2985
+    }
+  },
+  "picks": [
+    {
+      "jobId": "69e883e63aa0c479643a358b",
+      "title": "Software Development Engineer",
+      "company": "CVS Health",
+      "applyUrl": "https://jobs.cvshealth.com/us/en/job/CVSCHLUSR0853961EXTERNALENUS/Software-Development-Engineer?utm_source=Linkedin&utm_medium=phenom-feeds",
+      "createdJobId": "69e9fc757bdfe73b36efbee9",
+      "outcome": "pushed"
+    }
+  ],
+  "error": null,
+  "durationMs": 27603,
+  "eventSeq": 15
+}

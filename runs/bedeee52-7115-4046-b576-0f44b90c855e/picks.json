@@ -1,0 +1,158 @@
+{
+  "picks": [
+    {
+      "jobId": "69e081479564e855a25ddf67",
+      "title": "Backend Engineer, Developer Experience & Product Platform",
+      "company": "Stripe",
+      "applyUrl": "https://boards.greenhouse.io/embed/job_app?token=7476555&utm_source=jobright",
+      "createdJobId": "69e9fece7bdfe73b36efc08c",
+      "outcome": "pushed"
+    },
+    {
+      "jobId": "68f41cf89a63986de75743f5",
+      "title": "Backend Software Engineer (Evals)",
+      "company": "OpenAI",
+      "applyUrl": "https://jobs.ashbyhq.com/openai/3d064454-c0c3-4225-bc2c-6d8c0f8735b2/application",
+      "createdJobId": "69e9fece7bdfe73b36efc08a",
+      "outcome": "pushed"
+    },
+    {
+      "jobId": "69c6a26ae565c26a70021894",
+      "title": "Backend Engineer, Music",
+      "company": "Spotify",
+      "applyUrl": "https://jobs.lever.co/spotify/52fe2b49-3c85-4479-b1db-2c5ab74cbcfc?lever-source=LinkedInJobs",
+      "createdJobId": "69e9fed17bdfe73b36efc09c",
+      "outcome": "pushed"
+    },
+    {
+      "jobId": "69e1650cfd1c0456f3fae124",
+      "title": "Founding Backend Engineer",
+      "company": "Socratix AI",
+      "applyUrl": "https://www.linkedin.com/jobs/view/4402195584",
+      "createdJobId": "69e9fed17bdfe73b36efc0a5",
+      "outcome": "pushed"
+    },
+    {
+      "jobId": "69e6363d3cfd986aa6f842b5",
+      "title": "Backend Engineer",
+      "company": "DICE",
+      "applyUrl": "https://boards.greenhouse.io/embed/job_app?token=4770806101&utm_source=jobright",
+      "createdJobId": "69e9fed27bdfe73b36efc0b1",
+      "outcome": "pushed"
+    },
+    {
+      "jobId": "696c28d15fc86241853b4c1a",
+      "title": "Senior Associate, Back-End Engineer",
+      "company": "BNY",
+      "applyUrl": "https://eofe.fa.us2.oraclecloud.com/hcmUI/CandidateExperience/en/job/70179/?utm_medium=jobshare&src=JB-10200",
+      "createdJobId": "69e9fed37bdfe73b36efc0c9",
+      "outcome": "pushed"
+    },
+    {
+      "jobId": "69790c0552f3c27ec645544a",
+      "title": "Backend Engineer, Control Plane",
+      "company": "Tailscale",
+      "applyUrl": "https://job-boards.greenhouse.io/tailscale/jobs/4653722005?gh_src=4fd1e7935us",
+      "createdJobId": "69e9fed37bdfe73b36efc0be",
+      "outcome": "pushed"
+    },
+    {
+      "jobId": "69e97b0d3aa0c479643aaadd",
+      "title": "Senior Software Engineer",
+      "company": "Nametag",
+      "applyUrl": "https://boards.greenhouse.io/embed/job_app?token=4048613009&utm_source=jobright",
+      "createdJobId": "69e9fee77bdfe73b36efc0e6",
+      "outcome": "pushed"
+    },
+    {
+      "jobId": "69cadd3f1b5ad028873a5de9",
+      "title": "Software Engineer, Backend",
+      "company": "Grow Therapy",
+      "applyUrl": "https://boards.greenhouse.io/embed/job_app?token=4678586005&utm_source=jobright",
+      "createdJobId": "69e9fee77bdfe73b36efc0e8",
+      "outcome": "pushed"
+    },
+    {
+      "jobId": "69c7850faa3c2c1995e1916c",
+      "title": "Machine Learning Platform Engineer - Backend Services",
+      "company": "Waystar",
+      "applyUrl": "https://careers.waystar.com/atlanta-ga/machine-learning-platform-engineer-backend-services/5EE1614B92C04E64A0D3D310A397D85D/job/?vs=1606&utm_source=LinkedIn.com-DE&utm_medium=Social%20Media&utm_campaign=LinkedIn.com",
+      "createdJobId": "69e9fee97bdfe73b36efc0f7",
+      "outcome": "pushed"
+    },
+    {
+      "jobId": "69e661fd3aa0c47964393bee",
+      "title": "Senior Integration Platform Engineer (Sales Team)",
+      "company": "Semrush",
+      "applyUrl": "https://semrush.wd5.myworkdayjobs.com/semrushcareers/job/United-States/Senior-Integration-Platform-Engineer_JR100569",
+      "createdJobId": "69e9fee97bdfe73b36efc101",
+      "outcome": "pushed"
+    },
+    {
+      "jobId": "69e848b63aa0c4796439eb40",
+      "title": "Founding Engineer",
+      "company": "Teale",
+      "applyUrl": "https://www.linkedin.com/jobs/view/4404246519",
+      "createdJobId": "69e9feea7bdfe73b36efc10d",
+      "outcome": "pushed"
+    },
+    {
+      "jobId": "697212e4cda18b74386463bd",
+      "title": "Strategy & Ops Engineer",
+      "company": "HappyRobot",
+      "applyUrl": "https://jobs.ashbyhq.com/happyrobot.ai/5d0c0fef-eb44-4ff4-97e7-1fbc5c4e602c/application?utm_source=jobright",
+      "createdJobId": "69e9feeb7bdfe73b36efc122",
+      "outcome": "pushed"
+    },
+    {
+      "jobId": "69c45068d5a1016e98db71ab",
+      "title": "Software Engineer, Backend",
+      "company": "Connecticut Innovations",
+      "applyUrl": "https://www.linkedin.com/jobs/view/4390621462",
+      "createdJobId": "69e9feeb7bdfe73b36efc124",
+      "outcome": "pushed"
+    }
+  ],
+  "blocked": [],
+  "errored": [],
+  "intent": {
+    "roles": [
+      "Backend Engineer"
+    ],
+    "locations": [],
+    "seniority": "mid",
+    "companies": [],
+    "workAuth": "F1",
+    "narrative": "Sai is targeting a mid-level Backend Engineer role. He is currently on an F1 visa and is available to join in one week.",
+    "futurePreferences": "",
+    "employmentTypes": null,
+    "workModels": null,
+    "daysAgo": null,
+    "minYearsOfExperience": 2,
+    "maxYearsOfExperience": 4,
+    "salaryMinimumUsd": 150000,
+    "industries": null,
+    "skills": null,
+    "companyStages": null,
+    "roleType": null,
+    "excludedTitles": null,
+    "excludedSkills": null,
+    "excludedIndustries": null,
+    "excludeStaffingAgency": null,
+    "excludeSecurityClearance": false,
+    "excludeUsCitizenOnly": true,
+    "exclusions": {
+      "companies": [],
+      "locations": []
+    }
+  },
+  "pagination": {
+    "pagesScanned": 3,
+    "jrJobsSeen": 28,
+    "target": 15,
+    "achieved": 14,
+    "exhausted": true,
+    "hitPageCap": false,
+    "hitAiBatchCap": false
+  }
+}

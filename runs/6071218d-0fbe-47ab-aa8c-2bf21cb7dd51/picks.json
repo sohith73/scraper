@@ -1,0 +1,46 @@
+{
+  "picks": [
+    {
+      "jobId": "69e9b2617820c036924e9595",
+      "title": "Product Manager",
+      "company": "Macy's",
+      "applyUrl": "https://jsv3.recruitics.com/redirect?rx_cid=1329&rx_jobId=87310&rx_url=https%3A%2F%2Febwh.fa.us2.oraclecloud.com%2FhcmUI%2FCandidateExperience%2Fen%2Fsites%2FCX_1001%2Frequisitions%2Fpreview%2F87310%3Frx_c%3Dprofessional%26rx_campaign%3DLinkedin1%26rx_ch%3Dconnector%26rx_group%3D126839%26rx_id%3D0dcbbedf-3e78-11f1-b463-e9e2ab018d58%26rx_job%3D87310%26rx_medium%3Dpost%26rx_r%3Dnone%26rx_source%3DLinkedin%26rx_ts%3D20260423T001205Z%26rx_vp%3Dslots%26utm_medium%3Djobboard%26utm_source%3Dlinkedin&src=JB-10820",
+      "createdJobId": "69ea0b677bdfe73b36efc6b7",
+      "outcome": "pushed"
+    }
+  ],
+  "blocked": [
+    {
+      "jobId": "69b0b5b374950064509781e5",
+      "title": "Product Manager",
+      "company": "Simpro Software",
+      "outcome": "duplicate",
+      "reason": "server dedupe hit"
+    }
+  ],
+  "errored": [],
+  "intent": {
+    "roles": [
+      "Product Manager"
+    ],
+    "locations": [],
+    "seniority": "mid",
+    "companies": [],
+    "workAuth": "F1 OPT",
+    "narrative": "PM employmentTypes_full-time",
+    "futurePreferences": "",
+    "exclusions": {
+      "companies": [],
+      "locations": []
+    }
+  },
+  "pagination": {
+    "pagesScanned": 2,
+    "jrJobsSeen": 25,
+    "target": 1,
+    "achieved": 1,
+    "exhausted": false,
+    "hitPageCap": false,
+    "hitAiBatchCap": false
+  }
+}

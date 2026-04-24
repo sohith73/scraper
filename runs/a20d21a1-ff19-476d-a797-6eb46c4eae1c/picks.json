@@ -1,0 +1,38 @@
+{
+  "picks": [
+    {
+      "jobId": "69e9a4eae0cd471b2f13e942",
+      "title": "Product Manager II",
+      "company": "St. Jude Children's Research Hospital - ALSAC",
+      "applyUrl": "https://alsacstjude.wd1.myworkdayjobs.com/en-US/careersalsacstjude/job/Memphis-TN/Product-Manager-II_R0010751?source=LinkedIn",
+      "createdJobId": "69ea0af47bdfe73b36efc629",
+      "outcome": "pushed"
+    }
+  ],
+  "blocked": [],
+  "errored": [],
+  "intent": {
+    "roles": [
+      "Product Manager"
+    ],
+    "locations": [],
+    "seniority": "mid",
+    "companies": [],
+    "workAuth": "F1 OPT",
+    "narrative": "PM workModels_hybrid",
+    "futurePreferences": "",
+    "exclusions": {
+      "companies": [],
+      "locations": []
+    }
+  },
+  "pagination": {
+    "pagesScanned": 1,
+    "jrJobsSeen": 15,
+    "target": 1,
+    "achieved": 1,
+    "exhausted": false,
+    "hitPageCap": false,
+    "hitAiBatchCap": false
+  }
+}

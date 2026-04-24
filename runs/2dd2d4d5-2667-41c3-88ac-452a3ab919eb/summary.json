@@ -1,0 +1,32 @@
+{
+  "id": "2dd2d4d5-2667-41c3-88ac-452a3ab919eb",
+  "phase": "done",
+  "clientEmail": "rijuljain17@gmail.com",
+  "clientName": "rijuljain17",
+  "requestedCount": 1,
+  "picksCount": 1,
+  "stats": {
+    "total": 3,
+    "pushed": 1,
+    "duplicates": 2,
+    "blocked": 0,
+    "errors": 0,
+    "durationMs": 3713
+  },
+  "intent": {
+    "roles": [
+      "Product Manager"
+    ],
+    "locations": [],
+    "seniority": "mid",
+    "companies": [],
+    "workAuth": "F1 OPT",
+    "narrative": "PM salary_100k",
+    "futurePreferences": "",
+    "exclusions": {
+      "companies": [],
+      "locations": []
+    }
+  },
+  "completedAt": "2026-04-23T12:08:49.075Z"
+}

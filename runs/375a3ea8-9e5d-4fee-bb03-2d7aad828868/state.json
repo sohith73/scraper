@@ -1,0 +1,129 @@
+{
+  "id": "375a3ea8-9e5d-4fee-bb03-2d7aad828868",
+  "createdAt": "2026-04-23T11:00:09.236Z",
+  "updatedAt": "2026-04-23T11:00:18.895Z",
+  "phase": "done",
+  "clientEmail": "riyamate4567@gmail.com",
+  "clientName": "Riya Mate",
+  "requestedCount": 15,
+  "abortRequested": false,
+  "progress": {
+    "intent": {
+      "roles": [
+        "Software Developer",
+        "AI Engineer",
+        "Software Development Engineer",
+        "Backend Engineer"
+      ],
+      "locations": [
+        "California",
+        "Remote"
+      ],
+      "seniority": "entry",
+      "companies": [
+        "Google",
+        "Meta",
+        "Microsoft",
+        "Amazon",
+        "Apple",
+        "NVIDIA",
+        "Oracle",
+        "OpenAI",
+        "Anthropic",
+        "Cohere",
+        "Mistral",
+        "Stability AI",
+        "Hugging Face",
+        "Perplexity",
+        "Replit",
+        "Scale AI",
+        "Runway",
+        "LangChain",
+        "Pinecone",
+        "Weaviate",
+        "Milvus",
+        "Cloud",
+        "Databricks",
+        "Snowflake",
+        "Confluent",
+        "HashiCorp",
+        "VMware",
+        "Red Hat",
+        "Elastic",
+        "MongoDB Inc.",
+        "Palantir",
+        "Atlassian",
+        "GitLab",
+        "CircleCI",
+        "Tesla",
+        "Waymo",
+        "Zoox"
+      ],
+      "workAuth": "H1B required — on F1 OPT until 2027",
+      "narrative": "Riya Mate is an entry-level Software Developer and AI Engineer based in California, open to remote opportunities, and requires H1B sponsorship.",
+      "futurePreferences": "Available to join in 1 week.",
+      "employmentTypes": null,
+      "workModels": [
+        "onsite",
+        "remote"
+      ],
+      "daysAgo": 14,
+      "minYearsOfExperience": 0,
+      "maxYearsOfExperience": 2,
+      "salaryMinimumUsd": 100000,
+      "industries": null,
+      "skills": null,
+      "companyStages": null,
+      "roleType": null,
+      "excludedTitles": null,
+      "excludedSkills": null,
+      "excludedIndustries": null,
+      "excludeStaffingAgency": null,
+      "excludeSecurityClearance": false,
+      "excludeUsCitizenOnly": true,
+      "exclusions": {
+        "companies": [],
+        "locations": []
+      }
+    },
+    "searched": {
+      "totalReturned": 0,
+      "totalNormalized": 0,
+      "durationMs": 6664
+    },
+    "filtered": {
+      "totalJobs": 0,
+      "picked": 0,
+      "skipped": 0,
+      "borderline": 0,
+      "batches": 0,
+      "cacheHits": 0,
+      "durationMs": 0
+    },
+    "enriched": {
+      "total": 0,
+      "ready": 0,
+      "sparse": 0,
+      "durationMs": 0
+    },
+    "preflight": {
+      "total": 0,
+      "pushable": 0,
+      "blockedCompany": 0,
+      "blockedLocation": 0,
+      "localDuplicate": 0
+    },
+    "pushed": {
+      "total": 0,
+      "pushed": 0,
+      "duplicates": 0,
+      "blocked": 0,
+      "errors": 0,
+      "durationMs": 0
+    }
+  },
+  "picks": [],
+  "error": null,
+  "durationMs": 9659,
+  "eventSeq": 15
+}

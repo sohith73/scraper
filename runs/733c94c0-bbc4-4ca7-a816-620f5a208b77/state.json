@@ -1,0 +1,67 @@
+{
+  "id": "733c94c0-bbc4-4ca7-a816-620f5a208b77",
+  "createdAt": "2026-04-23T12:07:06.085Z",
+  "updatedAt": "2026-04-23T12:07:59.024Z",
+  "phase": "done",
+  "clientEmail": "rijuljain17@gmail.com",
+  "clientName": "rijuljain17",
+  "requestedCount": 1,
+  "abortRequested": false,
+  "progress": {
+    "intent": {
+      "roles": [
+        "Product Manager"
+      ],
+      "locations": [],
+      "seniority": "mid",
+      "companies": [],
+      "workAuth": "F1 OPT",
+      "narrative": "PM daysAgo_7",
+      "futurePreferences": "",
+      "exclusions": {
+        "companies": [],
+        "locations": []
+      }
+    },
+    "searched": {
+      "totalReturned": 60,
+      "totalNormalized": 30,
+      "durationMs": 26133,
+      "pages": 4
+    },
+    "filtered": {
+      "totalJobs": 30,
+      "picked": 11,
+      "skipped": 16,
+      "borderline": 3,
+      "batches": 3,
+      "cacheHits": 0,
+      "durationMs": 24818
+    },
+    "enriched": {
+      "total": 14,
+      "ready": 14,
+      "sparse": 0,
+      "durationMs": 0
+    },
+    "preflight": {
+      "total": 14,
+      "pushable": 14,
+      "blockedCompany": 0,
+      "blockedLocation": 0,
+      "localDuplicate": 0
+    },
+    "pushed": {
+      "total": 3,
+      "pushed": 0,
+      "duplicates": 3,
+      "blocked": 0,
+      "errors": 0,
+      "durationMs": 401
+    }
+  },
+  "picks": [],
+  "error": null,
+  "durationMs": 52939,
+  "eventSeq": 38
+}

@@ -1,0 +1,33 @@
+{
+  "picks": [],
+  "blocked": [
+    {
+      "jobId": "69c74e7583ea553769fe2328",
+      "title": "Software Engineer I (New Grad) - Consumer Experience",
+      "company": "StubHub",
+      "outcome": "blocked",
+      "code": "BLOCKED_LOCATION",
+      "reason": "This location is blocked for this client."
+    }
+  ],
+  "errored": [],
+  "intent": {
+    "roles": [
+      "Backend Engineer",
+      "Software Engineer",
+      "AI Engineer"
+    ],
+    "locations": [
+      "Remote"
+    ],
+    "seniority": "entry",
+    "companies": [],
+    "workAuth": "Requires H1B sponsorship",
+    "narrative": "",
+    "futurePreferences": "",
+    "exclusions": {
+      "companies": [],
+      "locations": []
+    }
+  }
+}

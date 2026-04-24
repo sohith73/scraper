@@ -1,0 +1,45 @@
+{
+  "picks": [],
+  "blocked": [],
+  "errored": [],
+  "intent": {
+    "roles": [
+      "Data Scientist",
+      "Data Engineer",
+      "Machine Learning Engineer"
+    ],
+    "locations": [
+      "Remote"
+    ],
+    "seniority": "mid",
+    "companies": [],
+    "workAuth": "H1B required — on F1 OPT until 2027",
+    "narrative": "Samhita Sarikonda is targeting mid-level roles in Data Science, Data Engineering, and Machine Learning Engineering, with a preference for remote opportunities. She requires H1B sponsorship as she is currently on F1 OPT.",
+    "futurePreferences": "Open to both established tech companies and startups where she can work on impactful data/AI systems.",
+    "employmentTypes": [
+      "full-time"
+    ],
+    "workModels": [
+      "remote",
+      "hybrid"
+    ],
+    "daysAgo": 3,
+    "minYearsOfExperience": 2,
+    "maxYearsOfExperience": 6,
+    "salaryMinimumUsd": 100000,
+    "industries": null,
+    "skills": null,
+    "companyStages": null,
+    "roleType": null,
+    "excludedTitles": null,
+    "excludedSkills": null,
+    "excludedIndustries": null,
+    "excludeStaffingAgency": true,
+    "excludeSecurityClearance": false,
+    "excludeUsCitizenOnly": true,
+    "exclusions": {
+      "companies": [],
+      "locations": []
+    }
+  }
+}

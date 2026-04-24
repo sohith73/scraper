@@ -1,0 +1,83 @@
+{
+  "picks": [],
+  "blocked": [],
+  "errored": [],
+  "intent": {
+    "roles": [
+      "Software Developer",
+      "AI Engineer",
+      "Software Development Engineer",
+      "Backend Engineer"
+    ],
+    "locations": [
+      "California",
+      "Remote"
+    ],
+    "seniority": "entry",
+    "companies": [
+      "Google",
+      "Meta",
+      "Microsoft",
+      "Amazon",
+      "Apple",
+      "NVIDIA",
+      "Oracle",
+      "OpenAI",
+      "Anthropic",
+      "Cohere",
+      "Mistral",
+      "Stability AI",
+      "Hugging Face",
+      "Perplexity",
+      "Replit",
+      "Scale AI",
+      "Runway",
+      "LangChain",
+      "Pinecone",
+      "Weaviate",
+      "Milvus",
+      "Cloud",
+      "Databricks",
+      "Snowflake",
+      "Confluent",
+      "HashiCorp",
+      "VMware",
+      "Red Hat",
+      "Elastic",
+      "MongoDB Inc.",
+      "Palantir",
+      "Atlassian",
+      "GitLab",
+      "CircleCI",
+      "Tesla",
+      "Waymo",
+      "Zoox"
+    ],
+    "workAuth": "H1B required — on F1 OPT until 2027",
+    "narrative": "Riya Mate is an entry-level Software Developer and AI Engineer based in California, open to remote opportunities, and requires H1B sponsorship.",
+    "futurePreferences": "Available to join in 1 week.",
+    "employmentTypes": null,
+    "workModels": [
+      "onsite",
+      "remote"
+    ],
+    "daysAgo": 14,
+    "minYearsOfExperience": 0,
+    "maxYearsOfExperience": 2,
+    "salaryMinimumUsd": 100000,
+    "industries": null,
+    "skills": null,
+    "companyStages": null,
+    "roleType": null,
+    "excludedTitles": null,
+    "excludedSkills": null,
+    "excludedIndustries": null,
+    "excludeStaffingAgency": null,
+    "excludeSecurityClearance": false,
+    "excludeUsCitizenOnly": true,
+    "exclusions": {
+      "companies": [],
+      "locations": []
+    }
+  }
+}

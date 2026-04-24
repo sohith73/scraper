@@ -1,0 +1,70 @@
+{
+  "id": "b681c9da-2d20-4836-a5e1-9e0c50be39f3",
+  "createdAt": "2026-04-23T09:19:46.003Z",
+  "updatedAt": "2026-04-23T09:20:02.165Z",
+  "phase": "done",
+  "clientEmail": "riyamate4567@gmail.com",
+  "clientName": "Riya Mate",
+  "requestedCount": 5,
+  "abortRequested": false,
+  "progress": {
+    "intent": {
+      "roles": [
+        "Backend Engineer",
+        "Software Engineer",
+        "AI Engineer"
+      ],
+      "locations": [
+        "Remote"
+      ],
+      "seniority": "entry",
+      "companies": [],
+      "workAuth": "Requires H1B sponsorship",
+      "narrative": "",
+      "futurePreferences": "",
+      "exclusions": {
+        "companies": [],
+        "locations": []
+      }
+    },
+    "searched": {
+      "totalReturned": 5,
+      "totalNormalized": 5,
+      "durationMs": 7450
+    },
+    "filtered": {
+      "totalJobs": 5,
+      "picked": 1,
+      "skipped": 2,
+      "borderline": 2,
+      "batches": 1,
+      "cacheHits": 0,
+      "durationMs": 4878
+    },
+    "enriched": {
+      "total": 1,
+      "ready": 1,
+      "sparse": 0,
+      "durationMs": 0
+    },
+    "preflight": {
+      "total": 1,
+      "pushable": 1,
+      "blockedCompany": 0,
+      "blockedLocation": 0,
+      "localDuplicate": 0
+    },
+    "pushed": {
+      "total": 1,
+      "pushed": 0,
+      "duplicates": 0,
+      "blocked": 1,
+      "errors": 0,
+      "durationMs": 607
+    }
+  },
+  "picks": [],
+  "error": null,
+  "durationMs": 16162,
+  "eventSeq": 15
+}

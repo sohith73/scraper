@@ -1,0 +1,192 @@
+{
+  "picks": [
+    {
+      "jobId": "69e8d911e0cd471b2f138862",
+      "title": "Junior Software Engineer - Consumer Team",
+      "company": "Clarity AI",
+      "applyUrl": "https://boards.greenhouse.io/embed/job_app?token=4847799101&utm_source=jobright",
+      "createdJobId": "69ea058a7bdfe73b36efc38e",
+      "outcome": "pushed"
+    },
+    {
+      "jobId": "69e950430a6e09555303b173",
+      "title": "(Entry level) Full Stack Software Engineer (LLM application Development)",
+      "company": "Allstate",
+      "applyUrl": "https://allstateinsurance.contacthr.com/151868470?utm_source=LILimitedListings&source=linkedinjobpostings",
+      "createdJobId": "69ea058a7bdfe73b36efc385",
+      "outcome": "pushed"
+    },
+    {
+      "jobId": "69e9e55d3aa0c479643abf55",
+      "title": "Software Developer",
+      "company": "DLRdmv®",
+      "applyUrl": "https://ats.rippling.com/dlrdmv/jobs/3143e69f-bea5-4a45-8ae6-5bc2863f795d?jobSite=LinkedIn",
+      "createdJobId": "69ea05a57bdfe73b36efc3a7",
+      "outcome": "pushed"
+    },
+    {
+      "jobId": "69e8f5563aa0c479643a5d40",
+      "title": "Progammer Analyst I",
+      "company": "Jabil",
+      "applyUrl": "https://jabil.wd5.myworkdayjobs.com/jabil_careers/job/St-PetersburgTampa-FL/Progammer-Analyst-I_J2439588",
+      "createdJobId": "69ea05a57bdfe73b36efc3a1",
+      "outcome": "pushed"
+    }
+  ],
+  "blocked": [
+    {
+      "jobId": "69e9830a7820c036924e8da5",
+      "title": "Associate AI Developer",
+      "company": "Goodwin",
+      "outcome": "duplicate",
+      "reason": "server dedupe hit"
+    },
+    {
+      "jobId": "69e991bc4b0fa35a7076f63b",
+      "title": "Junior Software Engineer",
+      "company": "Qcells Europe",
+      "outcome": "blocked",
+      "code": "BLOCKED_LOCATION",
+      "reason": "This location is blocked for this client."
+    },
+    {
+      "jobId": "69e978a97820c036924e87af",
+      "title": "Junior Software Engineer",
+      "company": "Qcells North America",
+      "outcome": "blocked",
+      "code": "BLOCKED_LOCATION",
+      "reason": "This location is blocked for this client."
+    },
+    {
+      "jobId": "69e909290a6e095553038812",
+      "title": "AI Algorithm Developer",
+      "company": "Applied Materials",
+      "outcome": "blocked",
+      "code": "BLOCKED_LOCATION",
+      "reason": "This location is blocked for this client."
+    },
+    {
+      "jobId": "69cc796a366bb95ba54efa4b",
+      "title": "Software Engineer, New Grad",
+      "company": "IXL Learning",
+      "outcome": "duplicate",
+      "reason": "server dedupe hit"
+    },
+    {
+      "jobId": "69af6464749500645093dc6a",
+      "title": "Deployment Strategist, New Graduate",
+      "company": "Peregrine",
+      "outcome": "blocked",
+      "code": "BLOCKED_LOCATION",
+      "reason": "This location is blocked for this client."
+    },
+    {
+      "jobId": "69e948643aa0c479643a8cf6",
+      "title": "Software Engineer - Robotics",
+      "company": "Shinkei",
+      "outcome": "blocked",
+      "code": "BLOCKED_LOCATION",
+      "reason": "This location is blocked for this client."
+    }
+  ],
+  "errored": [],
+  "intent": {
+    "roles": [
+      "Software Developer",
+      "AI Engineer",
+      "Software Engineer",
+      "Backend Engineer"
+    ],
+    "locations": [
+      "California",
+      "Remote"
+    ],
+    "seniority": "entry",
+    "companies": [
+      "Google",
+      "Meta",
+      "Microsoft",
+      "Amazon",
+      "Apple",
+      "NVIDIA",
+      "Oracle",
+      "OpenAI",
+      "Anthropic",
+      "Cohere",
+      "Mistral",
+      "Stability AI",
+      "Hugging Face",
+      "Perplexity",
+      "Replit",
+      "Scale AI",
+      "Runway",
+      "LangChain",
+      "Pinecone",
+      "Weaviate",
+      "Milvus",
+      "Databricks",
+      "Snowflake",
+      "Confluent",
+      "HashiCorp",
+      "VMware",
+      "Red Hat",
+      "Elastic",
+      "MongoDB Inc.",
+      "Palantir",
+      "Atlassian",
+      "GitLab",
+      "CircleCI",
+      "Tesla",
+      "Waymo",
+      "Zoox"
+    ],
+    "workAuth": "F1 OPT",
+    "narrative": "Riya Mate is an entry-level Software Developer and AI Engineer based in California, open to remote opportunities, and currently on F1 OPT work authorization.",
+    "futurePreferences": "Open to relocation and seeking opportunities for salary growth.",
+    "employmentTypes": [
+      "full-time"
+    ],
+    "workModels": [
+      "onsite",
+      "remote"
+    ],
+    "daysAgo": 1,
+    "minYearsOfExperience": 0,
+    "maxYearsOfExperience": 2,
+    "salaryMinimumUsd": 100000,
+    "industries": null,
+    "skills": [
+      "Python",
+      "Java",
+      "React",
+      "Kubernetes",
+      "AWS",
+      "CI/CD",
+      "MLOps",
+      "Machine Learning",
+      "FastAPI",
+      "TensorRT"
+    ],
+    "companyStages": null,
+    "roleType": "ic",
+    "excludedTitles": null,
+    "excludedSkills": null,
+    "excludedIndustries": null,
+    "excludeStaffingAgency": null,
+    "excludeSecurityClearance": false,
+    "excludeUsCitizenOnly": true,
+    "exclusions": {
+      "companies": [],
+      "locations": []
+    }
+  },
+  "pagination": {
+    "pagesScanned": 2,
+    "jrJobsSeen": 25,
+    "target": 10,
+    "achieved": 4,
+    "exhausted": true,
+    "hitPageCap": false,
+    "hitAiBatchCap": false
+  }
+}

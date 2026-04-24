@@ -1,0 +1,32 @@
+{
+  "id": "60e4c5cd-8f25-4bee-911e-6b1ec76e0687",
+  "phase": "done",
+  "clientEmail": "rijuljain17@gmail.com",
+  "clientName": "rijuljain17",
+  "requestedCount": 1,
+  "picksCount": 1,
+  "stats": {
+    "total": 2,
+    "pushed": 1,
+    "duplicates": 1,
+    "blocked": 0,
+    "errors": 0,
+    "durationMs": 13718
+  },
+  "intent": {
+    "roles": [
+      "Product Manager"
+    ],
+    "locations": [],
+    "seniority": "mid",
+    "companies": [],
+    "workAuth": "F1 OPT",
+    "narrative": "PM workModels_remote",
+    "futurePreferences": "",
+    "exclusions": {
+      "companies": [],
+      "locations": []
+    }
+  },
+  "completedAt": "2026-04-23T12:06:26.953Z"
+}

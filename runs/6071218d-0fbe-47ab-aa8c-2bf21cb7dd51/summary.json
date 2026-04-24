@@ -1,0 +1,32 @@
+{
+  "id": "6071218d-0fbe-47ab-aa8c-2bf21cb7dd51",
+  "phase": "done",
+  "clientEmail": "rijuljain17@gmail.com",
+  "clientName": "rijuljain17",
+  "requestedCount": 1,
+  "picksCount": 1,
+  "stats": {
+    "total": 2,
+    "pushed": 1,
+    "duplicates": 1,
+    "blocked": 0,
+    "errors": 0,
+    "durationMs": 2926
+  },
+  "intent": {
+    "roles": [
+      "Product Manager"
+    ],
+    "locations": [],
+    "seniority": "mid",
+    "companies": [],
+    "workAuth": "F1 OPT",
+    "narrative": "PM employmentTypes_full-time",
+    "futurePreferences": "",
+    "exclusions": {
+      "companies": [],
+      "locations": []
+    }
+  },
+  "completedAt": "2026-04-23T12:07:05.865Z"
+}

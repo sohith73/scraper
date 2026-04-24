@@ -1,0 +1,40 @@
+{
+  "email": "chandra.sikkem183@gmail.com",
+  "intent": {
+    "roles": [
+      "Backend Engineer"
+    ],
+    "locations": [],
+    "seniority": "mid",
+    "companies": [],
+    "workAuth": "F1",
+    "narrative": "Sai is targeting a mid-level Backend Engineer role. He is currently on an F1 visa and is available to join in one week.",
+    "futurePreferences": "",
+    "employmentTypes": null,
+    "workModels": null,
+    "daysAgo": null,
+    "minYearsOfExperience": 2,
+    "maxYearsOfExperience": 4,
+    "salaryMinimumUsd": 150000,
+    "industries": null,
+    "skills": null,
+    "companyStages": null,
+    "roleType": null,
+    "excludedTitles": null,
+    "excludedSkills": null,
+    "excludedIndustries": null,
+    "excludeStaffingAgency": null,
+    "excludeSecurityClearance": false,
+    "excludeUsCitizenOnly": true,
+    "exclusions": {
+      "companies": [],
+      "locations": []
+    }
+  },
+  "overrides": null,
+  "meta": {
+    "lastRunId": "bedeee52-7115-4046-b576-0f44b90c855e",
+    "source": "ai",
+    "savedAt": "2026-04-23T11:14:05.740Z"
+  }
+}

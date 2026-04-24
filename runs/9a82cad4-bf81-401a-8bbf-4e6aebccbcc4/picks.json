@@ -1,0 +1,185 @@
+{
+  "picks": [
+    {
+      "jobId": "69e9c74858811370cb12f3db",
+      "title": "Software Engineer, Machine Learning (SWE II & SWE I)",
+      "company": "Slack",
+      "applyUrl": "https://salesforce.wd12.myworkdayjobs.com/Slack/job/California---San-Francisco/Software-Engineer--Machine-Learning--Senior--SWE-II---SWE-I-_JR328085?source=LinkedIn_Slack_Jobs",
+      "createdJobId": "69e9fcf17bdfe73b36efbf3d",
+      "outcome": "pushed"
+    },
+    {
+      "jobId": "69e8fb853aa0c479643a60cd",
+      "title": "AI / ML Engineer II",
+      "company": "F5",
+      "applyUrl": "https://ffive.wd5.myworkdayjobs.com/f5jobs/job/Seattle/AI---ML-Engineer-II_RP1037328-1",
+      "createdJobId": "69e9fcf47bdfe73b36efbf50",
+      "outcome": "pushed"
+    },
+    {
+      "jobId": "69e9830a7820c036924e8da5",
+      "title": "Associate AI Developer",
+      "company": "Goodwin",
+      "applyUrl": "https://goodwinprocter.wd5.myworkdayjobs.com/External_Careers/job/San-Francisco/Associate-AI-Developer_R04198?source=LinkedIn",
+      "createdJobId": "69e9fcf17bdfe73b36efbf46",
+      "outcome": "pushed"
+    },
+    {
+      "jobId": "69e7869c0a6e09555302ae9c",
+      "title": "AI Engineer I",
+      "company": "Klaviyo",
+      "applyUrl": "https://boards.greenhouse.io/embed/job_app?token=7621072003&utm_source=jobright",
+      "createdJobId": "69e9fcf57bdfe73b36efbf5c",
+      "outcome": "pushed"
+    },
+    {
+      "jobId": "69af4318dfaeda6ff5976464",
+      "title": "AI Engineer",
+      "company": "Cadence",
+      "applyUrl": "https://cadence.wd1.myworkdayjobs.com/External_Careers/job/SAN-JOSE/Software-Engineer-II_R53569-1?source=LinkedIn",
+      "createdJobId": "69e9fcf67bdfe73b36efbf7c",
+      "outcome": "pushed"
+    }
+  ],
+  "blocked": [
+    {
+      "jobId": "69e7db2658811370cb11ec8f",
+      "title": "Applied AI Inference Engineer",
+      "company": "Baseten",
+      "outcome": "duplicate",
+      "reason": "server dedupe hit"
+    },
+    {
+      "jobId": "69e883e63aa0c479643a358b",
+      "title": "Software Development Engineer",
+      "company": "CVS Health",
+      "outcome": "duplicate",
+      "reason": "server dedupe hit"
+    },
+    {
+      "jobId": "69e66d98e0cd471b2f125a6e",
+      "title": "Machine Learning Engineer I",
+      "company": "Klaviyo",
+      "outcome": "duplicate",
+      "reason": "server dedupe hit"
+    },
+    {
+      "jobId": "69af47a9749500645093cb63",
+      "title": "Software Development Engineer",
+      "company": "Adobe",
+      "outcome": "duplicate",
+      "reason": "server dedupe hit"
+    },
+    {
+      "jobId": "69a9213e2580d3183f0154b9",
+      "title": "Backend Engineer - AI",
+      "company": "Anything",
+      "outcome": "blocked",
+      "code": "BLOCKED_LOCATION",
+      "reason": "This location is blocked for this client."
+    },
+    {
+      "jobId": "69e909290a6e095553038812",
+      "title": "AI Algorithm Developer",
+      "company": "Applied Materials",
+      "outcome": "blocked",
+      "code": "BLOCKED_LOCATION",
+      "reason": "This location is blocked for this client."
+    },
+    {
+      "jobId": "69e00e30aba61f141731f4b0",
+      "title": "AI Research and Automation Specialist",
+      "company": "Illumio",
+      "outcome": "blocked",
+      "code": "BLOCKED_LOCATION",
+      "reason": "This location is blocked for this client."
+    },
+    {
+      "jobId": "69e978a97820c036924e87af",
+      "title": "Junior Software Engineer",
+      "company": "Qcells North America",
+      "outcome": "blocked",
+      "code": "BLOCKED_LOCATION",
+      "reason": "This location is blocked for this client."
+    }
+  ],
+  "errored": [],
+  "intent": {
+    "roles": [
+      "Software Developer",
+      "AI Engineer",
+      "Software Development Engineer",
+      "Backend Engineer"
+    ],
+    "locations": [
+      "California",
+      "Remote"
+    ],
+    "seniority": "entry",
+    "companies": [
+      "Google",
+      "Meta",
+      "Microsoft",
+      "Amazon",
+      "Apple",
+      "NVIDIA",
+      "Oracle",
+      "OpenAI",
+      "Anthropic",
+      "Cohere",
+      "Mistral",
+      "Stability AI",
+      "Hugging Face",
+      "Perplexity",
+      "Replit",
+      "Scale AI",
+      "Runway",
+      "LangChain",
+      "Pinecone",
+      "Weaviate",
+      "Milvus",
+      "Cloud",
+      "Databricks",
+      "Snowflake",
+      "Confluent",
+      "HashiCorp",
+      "VMware",
+      "Red Hat",
+      "Elastic",
+      "MongoDB Inc.",
+      "Palantir",
+      "Atlassian",
+      "GitLab",
+      "CircleCI",
+      "Tesla",
+      "Waymo",
+      "Zoox"
+    ],
+    "workAuth": "H1B required — on F1 OPT until 2027",
+    "narrative": "Riya Mate is an entry-level Software Developer and AI Engineer based in California, open to remote opportunities, and requires H1B sponsorship.",
+    "futurePreferences": "Available to join in 1 week.",
+    "employmentTypes": null,
+    "workModels": [
+      "onsite",
+      "remote"
+    ],
+    "daysAgo": 14,
+    "minYearsOfExperience": 0,
+    "maxYearsOfExperience": 2,
+    "salaryMinimumUsd": 100000,
+    "industries": null,
+    "skills": null,
+    "companyStages": null,
+    "roleType": null,
+    "excludedTitles": null,
+    "excludedSkills": null,
+    "excludedIndustries": null,
+    "excludeStaffingAgency": null,
+    "excludeSecurityClearance": false,
+    "excludeUsCitizenOnly": true,
+    "exclusions": {
+      "companies": [],
+      "locations": []
+    }
+  }
+}

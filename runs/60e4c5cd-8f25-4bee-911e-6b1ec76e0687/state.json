@@ -1,0 +1,76 @@
+{
+  "id": "60e4c5cd-8f25-4bee-911e-6b1ec76e0687",
+  "createdAt": "2026-04-23T12:05:14.010Z",
+  "updatedAt": "2026-04-23T12:06:26.952Z",
+  "phase": "done",
+  "clientEmail": "rijuljain17@gmail.com",
+  "clientName": "rijuljain17",
+  "requestedCount": 1,
+  "abortRequested": false,
+  "progress": {
+    "intent": {
+      "roles": [
+        "Product Manager"
+      ],
+      "locations": [],
+      "seniority": "mid",
+      "companies": [],
+      "workAuth": "F1 OPT",
+      "narrative": "PM workModels_remote",
+      "futurePreferences": "",
+      "exclusions": {
+        "companies": [],
+        "locations": []
+      }
+    },
+    "searched": {
+      "totalReturned": 45,
+      "totalNormalized": 30,
+      "durationMs": 25553,
+      "pages": 3
+    },
+    "filtered": {
+      "totalJobs": 30,
+      "picked": 7,
+      "skipped": 22,
+      "borderline": 1,
+      "batches": 3,
+      "cacheHits": 0,
+      "durationMs": 32164
+    },
+    "enriched": {
+      "total": 8,
+      "ready": 8,
+      "sparse": 0,
+      "durationMs": 0
+    },
+    "preflight": {
+      "total": 8,
+      "pushable": 8,
+      "blockedCompany": 0,
+      "blockedLocation": 0,
+      "localDuplicate": 0
+    },
+    "pushed": {
+      "total": 2,
+      "pushed": 1,
+      "duplicates": 1,
+      "blocked": 0,
+      "errors": 0,
+      "durationMs": 13718
+    }
+  },
+  "picks": [
+    {
+      "jobId": "698f18380f6f7e7a2ceb2165",
+      "title": "Product Manager - Integrations",
+      "company": "Fivetran",
+      "applyUrl": "https://www.fivetran.com/careers/job?gh_jid=7559181003&gh_src=f831fe1b3us",
+      "createdJobId": "69ea0b367bdfe73b36efc685",
+      "outcome": "pushed"
+    }
+  ],
+  "error": null,
+  "durationMs": 72942,
+  "eventSeq": 34
+}

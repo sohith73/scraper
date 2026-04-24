@@ -1,0 +1,53 @@
+{
+  "picks": [
+    {
+      "jobId": "69e9bd704b0fa35a70770045",
+      "title": "Product Business Operations ~ Cybersecurity",
+      "company": "DXC Technology",
+      "applyUrl": "https://DXCTechnology.contacthr.com/151869161?source=Linkedin",
+      "createdJobId": "69ea0bce7bdfe73b36efc712",
+      "outcome": "pushed"
+    }
+  ],
+  "blocked": [
+    {
+      "jobId": "69b0b5b374950064509781e5",
+      "title": "Product Manager",
+      "company": "Simpro Software",
+      "outcome": "duplicate",
+      "reason": "server dedupe hit"
+    },
+    {
+      "jobId": "69e9b2617820c036924e9595",
+      "title": "Product Manager",
+      "company": "Macy's",
+      "outcome": "duplicate",
+      "reason": "server dedupe hit"
+    }
+  ],
+  "errored": [],
+  "intent": {
+    "roles": [
+      "Product Manager"
+    ],
+    "locations": [],
+    "seniority": "mid",
+    "companies": [],
+    "workAuth": "F1 OPT",
+    "narrative": "PM salary_100k",
+    "futurePreferences": "",
+    "exclusions": {
+      "companies": [],
+      "locations": []
+    }
+  },
+  "pagination": {
+    "pagesScanned": 3,
+    "jrJobsSeen": 27,
+    "target": 1,
+    "achieved": 1,
+    "exhausted": false,
+    "hitPageCap": false,
+    "hitAiBatchCap": false
+  }
+}

@@ -1,0 +1,175 @@
+{
+  "id": "a157508e-8394-42f0-8ca1-dc229b472ff7",
+  "createdAt": "2026-04-23T11:41:35.579Z",
+  "updatedAt": "2026-04-23T11:42:40.273Z",
+  "phase": "done",
+  "clientEmail": "riyamate4567@gmail.com",
+  "clientName": "Riya Mate",
+  "requestedCount": 10,
+  "abortRequested": false,
+  "progress": {
+    "intent": {
+      "roles": [
+        "Software Developer",
+        "AI Engineer",
+        "Software Engineer",
+        "Backend Engineer"
+      ],
+      "locations": [
+        "California",
+        "Remote"
+      ],
+      "seniority": "entry",
+      "companies": [
+        "Google",
+        "Meta",
+        "Microsoft",
+        "Amazon",
+        "Apple",
+        "NVIDIA",
+        "Oracle",
+        "OpenAI",
+        "Anthropic",
+        "Cohere",
+        "Mistral",
+        "Stability AI",
+        "Hugging Face",
+        "Perplexity",
+        "Replit",
+        "Scale AI",
+        "Runway",
+        "LangChain",
+        "Pinecone",
+        "Weaviate",
+        "Milvus",
+        "Databricks",
+        "Snowflake",
+        "Confluent",
+        "HashiCorp",
+        "VMware",
+        "Red Hat",
+        "Elastic",
+        "MongoDB Inc.",
+        "Palantir",
+        "Atlassian",
+        "GitLab",
+        "CircleCI",
+        "Tesla",
+        "Waymo",
+        "Zoox"
+      ],
+      "workAuth": "F1 OPT",
+      "narrative": "Riya Mate is an entry-level Software Developer and AI Engineer based in California, open to remote opportunities, and currently on F1 OPT work authorization.",
+      "futurePreferences": "Open to relocation and seeking opportunities for salary growth.",
+      "employmentTypes": [
+        "full-time"
+      ],
+      "workModels": [
+        "onsite",
+        "remote"
+      ],
+      "daysAgo": 1,
+      "minYearsOfExperience": 0,
+      "maxYearsOfExperience": 2,
+      "salaryMinimumUsd": 100000,
+      "industries": null,
+      "skills": [
+        "Python",
+        "Java",
+        "React",
+        "Kubernetes",
+        "AWS",
+        "CI/CD",
+        "MLOps",
+        "Machine Learning",
+        "FastAPI",
+        "TensorRT"
+      ],
+      "companyStages": null,
+      "roleType": "ic",
+      "excludedTitles": null,
+      "excludedSkills": null,
+      "excludedIndustries": null,
+      "excludeStaffingAgency": null,
+      "excludeSecurityClearance": false,
+      "excludeUsCitizenOnly": true,
+      "exclusions": {
+        "companies": [],
+        "locations": []
+      }
+    },
+    "searched": {
+      "totalReturned": 45,
+      "totalNormalized": 25,
+      "durationMs": 24304,
+      "pages": 3
+    },
+    "filtered": {
+      "totalJobs": 25,
+      "picked": 8,
+      "skipped": 14,
+      "borderline": 3,
+      "batches": 2,
+      "cacheHits": 0,
+      "durationMs": 23134
+    },
+    "enriched": {
+      "total": 11,
+      "ready": 11,
+      "sparse": 0,
+      "durationMs": 1
+    },
+    "preflight": {
+      "total": 11,
+      "pushable": 11,
+      "blockedCompany": 0,
+      "blockedLocation": 0,
+      "localDuplicate": 0
+    },
+    "pushed": {
+      "total": 11,
+      "pushed": 4,
+      "duplicates": 2,
+      "blocked": 5,
+      "errors": 0,
+      "durationMs": 15472
+    }
+  },
+  "picks": [
+    {
+      "jobId": "69e8d911e0cd471b2f138862",
+      "title": "Junior Software Engineer - Consumer Team",
+      "company": "Clarity AI",
+      "applyUrl": "https://boards.greenhouse.io/embed/job_app?token=4847799101&utm_source=jobright",
+      "createdJobId": "69ea058a7bdfe73b36efc38e",
+      "outcome": "pushed"
+    },
+    {
+      "jobId": "69e950430a6e09555303b173",
+      "title": "(Entry level) Full Stack Software Engineer (LLM application Development)",
+      "company": "Allstate",
+      "applyUrl": "https://allstateinsurance.contacthr.com/151868470?utm_source=LILimitedListings&source=linkedinjobpostings",
+      "createdJobId": "69ea058a7bdfe73b36efc385",
+      "outcome": "pushed"
+    },
+    {
+      "jobId": "69e9e55d3aa0c479643abf55",
+      "title": "Software Developer",
+      "company": "DLRdmv®",
+      "applyUrl": "https://ats.rippling.com/dlrdmv/jobs/3143e69f-bea5-4a45-8ae6-5bc2863f795d?jobSite=LinkedIn",
+      "createdJobId": "69ea05a57bdfe73b36efc3a7",
+      "outcome": "pushed"
+    },
+    {
+      "jobId": "69e8f5563aa0c479643a5d40",
+      "title": "Progammer Analyst I",
+      "company": "Jabil",
+      "applyUrl": "https://jabil.wd5.myworkdayjobs.com/jabil_careers/job/St-PetersburgTampa-FL/Progammer-Analyst-I_J2439588",
+      "createdJobId": "69ea05a57bdfe73b36efc3a1",
+      "outcome": "pushed"
+    }
+  ],
+  "error": null,
+  "durationMs": 64694,
+  "eventSeq": 28
+}

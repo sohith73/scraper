@@ -1,0 +1,46 @@
+{
+  "picks": [
+    {
+      "jobId": "698f18380f6f7e7a2ceb2165",
+      "title": "Product Manager - Integrations",
+      "company": "Fivetran",
+      "applyUrl": "https://www.fivetran.com/careers/job?gh_jid=7559181003&gh_src=f831fe1b3us",
+      "createdJobId": "69ea0b367bdfe73b36efc685",
+      "outcome": "pushed"
+    }
+  ],
+  "blocked": [
+    {
+      "jobId": "69b0b5b374950064509781e5",
+      "title": "Product Manager",
+      "company": "Simpro Software",
+      "outcome": "duplicate",
+      "reason": "server dedupe hit"
+    }
+  ],
+  "errored": [],
+  "intent": {
+    "roles": [
+      "Product Manager"
+    ],
+    "locations": [],
+    "seniority": "mid",
+    "companies": [],
+    "workAuth": "F1 OPT",
+    "narrative": "PM workModels_remote",
+    "futurePreferences": "",
+    "exclusions": {
+      "companies": [],
+      "locations": []
+    }
+  },
+  "pagination": {
+    "pagesScanned": 3,
+    "jrJobsSeen": 30,
+    "target": 1,
+    "achieved": 1,
+    "exhausted": false,
+    "hitPageCap": false,
+    "hitAiBatchCap": false
+  }
+}

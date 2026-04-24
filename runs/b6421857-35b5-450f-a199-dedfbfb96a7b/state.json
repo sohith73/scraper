@@ -1,0 +1,25 @@
+{
+  "id": "b6421857-35b5-450f-a199-dedfbfb96a7b",
+  "createdAt": "2026-04-23T09:19:15.256Z",
+  "updatedAt": "2026-04-23T09:19:23.255Z",
+  "phase": "failed",
+  "clientEmail": "riyamate4567@gmail.com",
+  "clientName": "Riya Mate",
+  "requestedCount": 5,
+  "abortRequested": false,
+  "progress": {
+    "intent": null,
+    "searched": null,
+    "filtered": null,
+    "enriched": null,
+    "preflight": null,
+    "pushed": null
+  },
+  "picks": [],
+  "error": {
+    "code": "BAD_SHAPE",
+    "message": "model output failed zod validation"
+  },
+  "durationMs": 7999,
+  "eventSeq": 5
+}

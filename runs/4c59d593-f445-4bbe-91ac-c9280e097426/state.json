@@ -1,0 +1,179 @@
+{
+  "id": "4c59d593-f445-4bbe-91ac-c9280e097426",
+  "createdAt": "2026-04-23T11:10:59.653Z",
+  "updatedAt": "2026-04-23T11:11:57.932Z",
+  "phase": "done",
+  "clientEmail": "riyamate4567@gmail.com",
+  "clientName": "Riya Mate",
+  "requestedCount": 15,
+  "abortRequested": false,
+  "progress": {
+    "intent": {
+      "roles": [
+        "Software Developer",
+        "AI Engineer",
+        "Software Development Engineer",
+        "Backend Engineer"
+      ],
+      "locations": [
+        "California",
+        "Remote"
+      ],
+      "seniority": "entry",
+      "companies": [
+        "Google",
+        "Meta",
+        "Microsoft",
+        "Amazon",
+        "Apple",
+        "NVIDIA",
+        "Oracle",
+        "OpenAI",
+        "Anthropic",
+        "Cohere",
+        "Mistral",
+        "Stability AI",
+        "Hugging Face",
+        "Perplexity",
+        "Replit",
+        "Scale AI",
+        "Runway",
+        "LangChain",
+        "Pinecone",
+        "Weaviate",
+        "Milvus",
+        "Cloud",
+        "Databricks",
+        "Snowflake",
+        "Confluent",
+        "HashiCorp",
+        "VMware",
+        "Red Hat",
+        "Elastic",
+        "MongoDB Inc.",
+        "Palantir",
+        "Atlassian",
+        "GitLab",
+        "CircleCI",
+        "Tesla",
+        "Waymo",
+        "Zoox"
+      ],
+      "workAuth": "H1B required — on F1 OPT until 2027",
+      "narrative": "Riya Mate is an entry-level Software Developer and AI Engineer based in California, open to remote opportunities, and requires H1B sponsorship.",
+      "futurePreferences": "Available to join in 1 week.",
+      "employmentTypes": null,
+      "workModels": [
+        "onsite",
+        "remote"
+      ],
+      "daysAgo": 14,
+      "minYearsOfExperience": 0,
+      "maxYearsOfExperience": 2,
+      "salaryMinimumUsd": 100000,
+      "industries": null,
+      "skills": null,
+      "companyStages": null,
+      "roleType": null,
+      "excludedTitles": null,
+      "excludedSkills": null,
+      "excludedIndustries": null,
+      "excludeStaffingAgency": null,
+      "excludeSecurityClearance": false,
+      "excludeUsCitizenOnly": true,
+      "exclusions": {
+        "companies": [],
+        "locations": []
+      }
+    },
+    "searched": {
+      "totalReturned": 45,
+      "totalNormalized": 25,
+      "durationMs": 18041,
+      "pages": 3
+    },
+    "filtered": {
+      "totalJobs": 25,
+      "picked": 2,
+      "skipped": 9,
+      "borderline": 14,
+      "batches": 2,
+      "cacheHits": 0,
+      "durationMs": 19837
+    },
+    "enriched": {
+      "total": 16,
+      "ready": 16,
+      "sparse": 0,
+      "durationMs": 0
+    },
+    "preflight": {
+      "total": 16,
+      "pushable": 16,
+      "blockedCompany": 0,
+      "blockedLocation": 0,
+      "localDuplicate": 0
+    },
+    "pushed": {
+      "total": 16,
+      "pushed": 6,
+      "duplicates": 7,
+      "blocked": 3,
+      "errors": 0,
+      "durationMs": 16988
+    }
+  },
+  "picks": [
+    {
+      "jobId": "69783a6b39f7f96cc6d085f3",
+      "title": "Data Scientist, All Levels",
+      "company": "Ramp",
+      "applyUrl": "https://jobs.ashbyhq.com/ramp/e577622f-6657-4e53-8941-b3a774b04448?src=LinkedIn",
+      "createdJobId": "69e9fe697bdfe73b36efbffe",
+      "outcome": "pushed"
+    },
+    {
+      "jobId": "69e0f1836c20aa114953e767",
+      "title": "AI Process Engineering Analyst",
+      "company": "Voya Financial",
+      "applyUrl": "https://godirect.wd5.myworkdayjobs.com/voya_jobs/job/New-York-NY/Investment-Management-Product-Owner_JR0031294?Codes=lkdin&source=Linkedin",
+      "createdJobId": "69e9fe6d7bdfe73b36efc009",
+      "outcome": "pushed"
+    },
+    {
+      "jobId": "69e7e495f8fa2f3ec32aa395",
+      "title": "New Grad- Software Engineer",
+      "company": "Symbotic",
+      "applyUrl": "https://symbotic.wd504.myworkdayjobs.com/Symbotic/job/USA-Austin-TX/New-Grad--Software-Engineer_R6934?source=LinkedIn",
+      "createdJobId": "69e9fe6f7bdfe73b36efc014",
+      "outcome": "pushed"
+    },
+    {
+      "jobId": "69c6d0abe565c26a70022e90",
+      "title": "Software Engineer",
+      "company": "Jonas Software",
+      "applyUrl": "https://talentmanagementsolution.wd3.myworkdayjobs.com/JonasSoftwareUSA/job/Remote---USA/Software-Engineer_R49759?source=LinkedIn",
+      "createdJobId": "69e9fe707bdfe73b36efc01f",
+      "outcome": "pushed"
+    },
+    {
+      "jobId": "69e63be03aa0c47964392c98",
+      "title": "Software Engineer",
+      "company": "Sun West Mortgage Company, Inc.",
+      "applyUrl": "https://www.linkedin.com/jobs/view/4404099771",
+      "createdJobId": "69e9fe737bdfe73b36efc029",
+      "outcome": "pushed"
+    },
+    {
+      "jobId": "69e85d744b0fa35a70766475",
+      "title": "ML Engineer II",
+      "company": "NYU Langone Health",
+      "applyUrl": "https://NYU.contacthr.com/151852278",
+      "createdJobId": "69e9fe757bdfe73b36efc035",
+      "outcome": "pushed"
+    }
+  ],
+  "error": null,
+  "durationMs": 58279,
+  "eventSeq": 28
+}

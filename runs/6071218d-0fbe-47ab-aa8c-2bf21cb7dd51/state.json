@@ -1,0 +1,76 @@
+{
+  "id": "6071218d-0fbe-47ab-aa8c-2bf21cb7dd51",
+  "createdAt": "2026-04-23T12:06:29.727Z",
+  "updatedAt": "2026-04-23T12:07:05.864Z",
+  "phase": "done",
+  "clientEmail": "rijuljain17@gmail.com",
+  "clientName": "rijuljain17",
+  "requestedCount": 1,
+  "abortRequested": false,
+  "progress": {
+    "intent": {
+      "roles": [
+        "Product Manager"
+      ],
+      "locations": [],
+      "seniority": "mid",
+      "companies": [],
+      "workAuth": "F1 OPT",
+      "narrative": "PM employmentTypes_full-time",
+      "futurePreferences": "",
+      "exclusions": {
+        "companies": [],
+        "locations": []
+      }
+    },
+    "searched": {
+      "totalReturned": 30,
+      "totalNormalized": 25,
+      "durationMs": 11394,
+      "pages": 2
+    },
+    "filtered": {
+      "totalJobs": 25,
+      "picked": 9,
+      "skipped": 12,
+      "borderline": 4,
+      "batches": 2,
+      "cacheHits": 0,
+      "durationMs": 20097
+    },
+    "enriched": {
+      "total": 13,
+      "ready": 13,
+      "sparse": 0,
+      "durationMs": 0
+    },
+    "preflight": {
+      "total": 13,
+      "pushable": 13,
+      "blockedCompany": 0,
+      "blockedLocation": 0,
+      "localDuplicate": 0
+    },
+    "pushed": {
+      "total": 2,
+      "pushed": 1,
+      "duplicates": 1,
+      "blocked": 0,
+      "errors": 0,
+      "durationMs": 2926
+    }
+  },
+  "picks": [
+    {
+      "jobId": "69e9b2617820c036924e9595",
+      "title": "Product Manager",
+      "company": "Macy's",
+      "applyUrl": "https://jsv3.recruitics.com/redirect?rx_cid=1329&rx_jobId=87310&rx_url=https%3A%2F%2Febwh.fa.us2.oraclecloud.com%2FhcmUI%2FCandidateExperience%2Fen%2Fsites%2FCX_1001%2Frequisitions%2Fpreview%2F87310%3Frx_c%3Dprofessional%26rx_campaign%3DLinkedin1%26rx_ch%3Dconnector%26rx_group%3D126839%26rx_id%3D0dcbbedf-3e78-11f1-b463-e9e2ab018d58%26rx_job%3D87310%26rx_medium%3Dpost%26rx_r%3Dnone%26rx_source%3DLinkedin%26rx_ts%3D20260423T001205Z%26rx_vp%3Dslots%26utm_medium%3Djobboard%26utm_source%3Dlinkedin&src=JB-10820",
+      "createdJobId": "69ea0b677bdfe73b36efc6b7",
+      "outcome": "pushed"
+    }
+  ],
+  "error": null,
+  "durationMs": 36137,
+  "eventSeq": 26
+}

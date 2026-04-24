@@ -1,0 +1,413 @@
+{
+  "id": "7f9afb8b-f2bf-4c19-8aab-9566982847ee",
+  "createdAt": "2026-04-23T12:44:23.598Z",
+  "updatedAt": "2026-04-23T12:45:03.781Z",
+  "phase": "done",
+  "clientEmail": "riyamate4567@gmail.com",
+  "clientName": "Riya Mate",
+  "requestedCount": 4,
+  "abortRequested": false,
+  "progress": {
+    "intent": {
+      "roles": [
+        "Software Developer",
+        "AI Engineer",
+        "Software Engineer",
+        "Backend Engineer"
+      ],
+      "locations": [
+        "California",
+        "Remote"
+      ],
+      "seniority": "entry",
+      "companies": [
+        "Google",
+        "Meta",
+        "Microsoft",
+        "Amazon",
+        "Apple",
+        "NVIDIA",
+        "Oracle",
+        "OpenAI",
+        "Anthropic",
+        "Cohere",
+        "Mistral",
+        "Stability AI",
+        "Hugging Face",
+        "Perplexity",
+        "Replit",
+        "Scale AI",
+        "Runway",
+        "LangChain",
+        "Pinecone",
+        "Weaviate",
+        "Milvus",
+        "Databricks",
+        "Snowflake",
+        "Confluent",
+        "HashiCorp",
+        "VMware",
+        "Red Hat",
+        "Elastic",
+        "MongoDB Inc.",
+        "Palantir",
+        "Atlassian",
+        "GitLab",
+        "CircleCI",
+        "Tesla",
+        "Waymo",
+        "Zoox"
+      ],
+      "workAuth": "F1 OPT",
+      "narrative": "Riya Mate is an entry-level Software Developer and AI Engineer based in California, open to remote opportunities, and currently on F1 OPT work authorization.",
+      "futurePreferences": "Open to relocation and seeking opportunities for salary growth.",
+      "employmentTypes": [
+        "full-time"
+      ],
+      "workModels": [
+        "onsite",
+        "remote"
+      ],
+      "daysAgo": 7,
+      "minYearsOfExperience": 0,
+      "maxYearsOfExperience": 2,
+      "salaryMinimumUsd": 100000,
+      "industries": null,
+      "skills": [
+        "Python",
+        "Java",
+        "React",
+        "Kubernetes",
+        "AWS",
+        "CI/CD",
+        "MLOps",
+        "Machine Learning",
+        "FastAPI",
+        "TensorRT"
+      ],
+      "companyStages": null,
+      "roleType": "ic",
+      "excludedTitles": null,
+      "excludedSkills": null,
+      "excludedIndustries": null,
+      "excludeStaffingAgency": null,
+      "excludeSecurityClearance": false,
+      "excludeUsCitizenOnly": true,
+      "exclusions": {
+        "companies": [],
+        "locations": []
+      }
+    },
+    "searched": {
+      "totalReturned": 45,
+      "totalNormalized": 25,
+      "durationMs": 15567,
+      "pages": 3
+    },
+    "filtered": {
+      "totalJobs": 25,
+      "picked": 9,
+      "skipped": 15,
+      "borderline": 1,
+      "batches": 2,
+      "cacheHits": 0,
+      "durationMs": 20975
+    },
+    "enriched": {
+      "total": 10,
+      "ready": 10,
+      "sparse": 0,
+      "durationMs": 0
+    },
+    "preflight": {
+      "total": 10,
+      "pushable": 10,
+      "blockedCompany": 0,
+      "blockedLocation": 0,
+      "localDuplicate": 0
+    },
+    "pushed": {
+      "total": 6,
+      "pushed": 2,
+      "duplicates": 2,
+      "blocked": 2,
+      "errors": 0,
+      "durationMs": 2870
+    },
+    "decisions": [
+      {
+        "jobId": "69e7ea4c7820c036924d904c",
+        "title": "Software Engineer",
+        "company": "Concentrate AI",
+        "applyUrl": "https://www.linkedin.com/jobs/view/4404884492",
+        "pick": true,
+        "score": 75,
+        "reason": "Strong fit — Software Engineer at Concentrate AI, remote opportunity with H1B sponsorship, aligns well with your entry-level profile."
+      },
+      {
+        "jobId": "69e6f7783aa0c479643968a5",
+        "title": "AI Engineer",
+        "company": "Dataro",
+        "applyUrl": "https://www.linkedin.com/jobs/view/4404523953",
+        "pick": true,
+        "score": 70,
+        "reason": "Strong fit — AI Engineer at Dataro, remote position with H1B sponsorship, matches your AI engineering interest."
+      },
+      {
+        "jobId": "69e8fb853aa0c479643a60cd",
+        "title": "AI / ML Engineer II",
+        "company": "F5",
+        "applyUrl": "https://ffive.wd5.myworkdayjobs.com/f5jobs/job/Seattle/AI---ML-Engineer-II_RP1037328-1",
+        "pick": false,
+        "score": 15,
+        "reason": "Skip — seniority mismatch (requires 2 years of experience) for an entry-level candidate."
+      },
+      {
+        "jobId": "69e91ac3e0cd471b2f13a5fe",
+        "title": "Artificial Intelligence Engineer",
+        "company": "Centurion",
+        "applyUrl": "https://www.linkedin.com/jobs/view/4405411380",
+        "pick": false,
+        "score": 15,
+        "reason": "Skip — seniority mismatch (requires 2-3 years of experience) for an entry-level candidate."
+      },
+      {
+        "jobId": "69e66d98e0cd471b2f125a6e",
+        "title": "Machine Learning Engineer I",
+        "company": "Klaviyo",
+        "applyUrl": "https://boards.greenhouse.io/embed/job_app?token=7484845003&utm_source=jobright",
+        "pick": false,
+        "score": 0,
+        "reason": "Skip — onsite position in Palo Alto conflicts with your preference for remote work."
+      },
+      {
+        "jobId": "69e9c74858811370cb12f3db",
+        "title": "Software Engineer, Machine Learning (SWE II & SWE I)",
+        "company": "Slack",
+        "applyUrl": "https://salesforce.wd12.myworkdayjobs.com/Slack/job/California---San-Francisco/Software-Engineer--Machine-Learning--Senior--SWE-II---SWE-I-_JR328085?source=LinkedIn_Slack_Jobs",
+        "pick": false,
+        "score": 0,
+        "reason": "Skip — onsite position in Dallas conflicts with your preference for remote work."
+      },
+      {
+        "jobId": "69e9830a7820c036924e8da5",
+        "title": "Associate AI Developer",
+        "company": "Goodwin",
+        "applyUrl": "https://goodwinprocter.wd5.myworkdayjobs.com/External_Careers/job/San-Francisco/Associate-AI-Developer_R04198?source=LinkedIn",
+        "pick": false,
+        "score": 0,
+        "reason": "Skip — onsite position in San Francisco conflicts with your preference for remote work."
+      },
+      {
+        "jobId": "69e883e63aa0c479643a358b",
+        "title": "Software Development Engineer",
+        "company": "CVS Health",
+        "applyUrl": "https://jobs.cvshealth.com/us/en/job/CVSCHLUSR0853961EXTERNALENUS/Software-Development-Engineer?utm_source=Linkedin&utm_medium=phenom-feeds",
+        "pick": true,
+        "score": 65,
+        "reason": "Good fit — Software Development Engineer at CVS Health, remote entry-level position with H1B sponsorship."
+      },
+      {
+        "jobId": "69e962437820c036924e7ce6",
+        "title": "AI Software Engineer - HP IQ",
+        "company": "HP",
+        "applyUrl": "https://HPINC.contacthr.com/151865875?src=Linkedin+Full+Feed",
+        "pick": false,
+        "score": 0,
+        "reason": "Skip — onsite position in San Francisco conflicts with your preference for remote work."
+      },
+      {
+        "jobId": "69e7869c0a6e09555302ae9c",
+        "title": "AI Engineer I",
+        "company": "Klaviyo",
+        "applyUrl": "https://boards.greenhouse.io/embed/job_app?token=7621072003&utm_source=jobright",
+        "pick": true,
+        "score": 65,
+        "reason": "Good fit — AI Engineer I at Klaviyo, entry-level remote position with H1B sponsorship."
+      },
+      {
+        "jobId": "69e7db2658811370cb11ec8f",
+        "title": "Applied AI Inference Engineer",
+        "company": "Baseten",
+        "applyUrl": "https://jobs.ashbyhq.com/baseten/90e9ff4e-1225-4b1b-b0b4-2362e36d9cfa/application?utm_source=worNde4l4L",
+        "pick": true,
+        "score": 70,
+        "reason": "Strong fit — Applied AI Inference Engineer at Baseten, remote opportunity with H1B sponsorship, aligns with your AI engineering skills."
+      },
+      {
+        "jobId": "69e977bf7820c036924e835a",
+        "title": "AI-ML Engineer 1",
+        "company": "Universal Avionics",
+        "applyUrl": "https://recruiting.ultipro.com/uni1039uasc/JobBoard/6038d855-6c9a-480e-9c31-fccbf1f9f16f/OpportunityDetail?opportunityId=03ed369d-6123-427b-9745-236c1ea62712",
+        "pick": false,
+        "score": 0,
+        "reason": "Skip — onsite position in Tucson conflicts with your preference for remote work."
+      },
+      {
+        "jobId": "69e6d5a43aa0c4796439617f",
+        "title": "Frontend Developer",
+        "company": "Daxwell",
+        "applyUrl": "https://daxwell.quickbase.com/nav/app/bf48m7baf/table/bf48ssjzn/action/dr?rid=66",
+        "pick": false,
+        "score": 0,
+        "reason": "Skip — different discipline (Frontend Developer) for a candidate focused on Software and AI Engineering."
+      },
+      {
+        "jobId": "69e94e2c0a6e09555303af8e",
+        "title": "AI/ML Research Engineer, LLM Post-Training & Evaluation",
+        "company": "Innodata Inc.",
+        "applyUrl": "https://www.linkedin.com/jobs/view/4404483341",
+        "pick": false,
+        "score": 0,
+        "reason": "Skip — seniority mismatch (requires 2-3 years of experience) for an entry-level candidate."
+      },
+      {
+        "jobId": "69e978a97820c036924e87af",
+        "title": "Junior Software Engineer",
+        "company": "Qcells North America",
+        "applyUrl": "https://careers.qcells.com/jobs/17649892-junior-software-engineer?tm_job=2276&tm_event=view&tm_company=92338&bid=56",
+        "pick": true,
+        "score": 65,
+        "reason": "Good fit — Junior Software Engineer at Qcells North America, entry-level position with H1B sponsorship."
+      },
+      {
+        "jobId": "69e97ac80a6e09555303c8ed",
+        "title": "Founding Agent Engineer",
+        "company": "Fastino Labs",
+        "applyUrl": "https://www.linkedin.com/jobs/view/4404484931",
+        "pick": false,
+        "score": 15,
+        "reason": "Skip — different discipline (Founding Agent Engineer), profile is pure Software Development and AI Engineering."
+      },
+      {
+        "jobId": "69e991bc4b0fa35a7076f63b",
+        "title": "Junior Software Engineer",
+        "company": "Qcells Europe",
+        "applyUrl": "https://www.indeed.com/viewjob?jk=226263b674a31a33",
+        "pick": true,
+        "score": 75,
+        "reason": "Strong fit — Junior Software Engineer in Santa Clara, Python required matches candidate's skills, and it's an entry-level position."
+      },
+      {
+        "jobId": "69af47a9749500645093cb63",
+        "title": "Software Development Engineer",
+        "company": "Adobe",
+        "applyUrl": "https://careers.adobe.com/us/en/job/ADOBUSR166371EXTERNALENUS/Software-Development-Engineer?utm_source=linkedin&utm_medium=phenom-feeds&source=LinkedIn",
+        "pick": false,
+        "score": 52,
+        "reason": "Borderline — Software Development Engineer role, but onsite location conflicts with candidate's preference for remote work."
+      },
+      {
+        "jobId": "69e909290a6e095553038812",
+        "title": "AI Algorithm Developer",
+        "company": "Applied Materials",
+        "applyUrl": "https://jobs.appliedmaterials.com/job/-/-/95/89631208912?p_sid=53yO-Lb&p_uid=nTxnRQo8JJ&ss=paid&utm_campaign=engineering_us&utm_content=pj_board&utm_medium=jobad&utm_source=linkedin+slotted&gad_source=7&dclid=CJmWxor6gZQDFTrGzgAdOyUS9A",
+        "pick": true,
+        "score": 70,
+        "reason": "Strong fit — AI Algorithm Developer in Santa Clara, entry-level with Python expertise required, but onsite location is a concern."
+      },
+      {
+        "jobId": "69e9e55d3aa0c479643abf55",
+        "title": "Software Developer",
+        "company": "DLRdmv®",
+        "applyUrl": "https://ats.rippling.com/dlrdmv/jobs/3143e69f-bea5-4a45-8ae6-5bc2863f795d?jobSite=LinkedIn",
+        "pick": false,
+        "score": 51,
+        "reason": "Skip — Software Developer role is onsite in Dallas, which conflicts with candidate's preference for remote opportunities."
+      },
+      {
+        "jobId": "69e00e30aba61f141731f4b0",
+        "title": "AI Research and Automation Specialist",
+        "company": "Illumio",
+        "applyUrl": "https://www.illumio.com/company/job-listing?ashby_jid=6ea46003-cf09-4e6a-8fe7-c59d24df0618&utm_source=mEbqQALQYe",
+        "pick": false,
+        "score": 46,
+        "reason": "Skip — AI Research and Automation Specialist requires 1 year of experience, which exceeds candidate's entry-level profile."
+      },
+      {
+        "jobId": "69af4318dfaeda6ff5976464",
+        "title": "AI Engineer",
+        "company": "Cadence",
+        "applyUrl": "https://cadence.wd1.myworkdayjobs.com/External_Careers/job/SAN-JOSE/Software-Engineer-II_R53569-1?source=LinkedIn",
+        "pick": false,
+        "score": 56,
+        "reason": "Borderline — AI Engineer role is entry-level but located in Pittsburgh, which is not aligned with candidate's location preference."
+      },
+      {
+        "jobId": "69e7ddff0a6e09555302ca13",
+        "title": "Computer Vision & Machine Learning Engineer",
+        "company": "Buzz Solutions",
+        "applyUrl": "https://boards.greenhouse.io/embed/job_app?token=5195601008&utm_source=jobright",
+        "pick": false,
+        "score": 0,
+        "reason": "Skip — Computer Vision & Machine Learning Engineer role does not sponsor H1B, conflicting with candidate's work authorization needs."
+      },
+      {
+        "jobId": "69e8d911e0cd471b2f138862",
+        "title": "Junior Software Engineer - Consumer Team",
+        "company": "Clarity AI",
+        "applyUrl": "https://boards.greenhouse.io/embed/job_app?token=4847799101&utm_source=jobright",
+        "pick": true,
+        "score": 65,
+        "reason": "Strong fit — Junior Software Engineer - Consumer Team is remote, entry-level, and aligns with candidate's skills."
+      },
+      {
+        "jobId": "69e7fe4f7820c036924d96fa",
+        "title": "Applied Machine Learning Engineer (All Levels)",
+        "company": "Allstate",
+        "applyUrl": "https://allstateinsurance.contacthr.com/151846252?utm_source=LILimitedListings&source=linkedinjobpostings",
+        "pick": false,
+        "score": 0,
+        "reason": "Skip — Applied Machine Learning Engineer role does not sponsor H1B, conflicting with candidate's work authorization needs."
+      }
+    ],
+    "seenJrIds": [
+      "69e7ea4c7820c036924d904c",
+      "69e6f7783aa0c479643968a5",
+      "69e8fb853aa0c479643a60cd",
+      "69e91ac3e0cd471b2f13a5fe",
+      "69e66d98e0cd471b2f125a6e",
+      "69e9c74858811370cb12f3db",
+      "69e9830a7820c036924e8da5",
+      "69e883e63aa0c479643a358b",
+      "69e962437820c036924e7ce6",
+      "69e7869c0a6e09555302ae9c",
+      "69e7db2658811370cb11ec8f",
+      "69e977bf7820c036924e835a",
+      "69e6d5a43aa0c4796439617f",
+      "69e94e2c0a6e09555303af8e",
+      "69e978a97820c036924e87af",
+      "69e97ac80a6e09555303c8ed",
+      "69e991bc4b0fa35a7076f63b",
+      "69af47a9749500645093cb63",
+      "69e909290a6e095553038812",
+      "69e9e55d3aa0c479643abf55",
+      "69e00e30aba61f141731f4b0",
+      "69af4318dfaeda6ff5976464",
+      "69e7ddff0a6e09555302ca13",
+      "69e8d911e0cd471b2f138862",
+      "69e7fe4f7820c036924d96fa"
+    ]
+  },
+  "picks": [
+    {
+      "jobId": "69e7ea4c7820c036924d904c",
+      "title": "Software Engineer",
+      "company": "Concentrate AI",
+      "applyUrl": "https://www.linkedin.com/jobs/view/4404884492",
+      "createdJobId": "69ea143a7bdfe73b36efca39",
+      "outcome": "pushed"
+    },
+    {
+      "jobId": "69e6f7783aa0c479643968a5",
+      "title": "AI Engineer",
+      "company": "Dataro",
+      "applyUrl": "https://www.linkedin.com/jobs/view/4404523953",
+      "createdJobId": "69ea143a7bdfe73b36efca37",
+      "outcome": "pushed"
+    }
+  ],
+  "error": null,
+  "durationMs": 40183,
+  "eventSeq": 28
+}

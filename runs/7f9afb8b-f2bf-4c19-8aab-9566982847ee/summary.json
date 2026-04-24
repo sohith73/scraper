@@ -1,0 +1,107 @@
+{
+  "id": "7f9afb8b-f2bf-4c19-8aab-9566982847ee",
+  "phase": "done",
+  "clientEmail": "riyamate4567@gmail.com",
+  "clientName": "Riya Mate",
+  "requestedCount": 4,
+  "picksCount": 2,
+  "stats": {
+    "total": 6,
+    "pushed": 2,
+    "duplicates": 2,
+    "blocked": 2,
+    "errors": 0,
+    "durationMs": 2870
+  },
+  "intent": {
+    "roles": [
+      "Software Developer",
+      "AI Engineer",
+      "Software Engineer",
+      "Backend Engineer"
+    ],
+    "locations": [
+      "California",
+      "Remote"
+    ],
+    "seniority": "entry",
+    "companies": [
+      "Google",
+      "Meta",
+      "Microsoft",
+      "Amazon",
+      "Apple",
+      "NVIDIA",
+      "Oracle",
+      "OpenAI",
+      "Anthropic",
+      "Cohere",
+      "Mistral",
+      "Stability AI",
+      "Hugging Face",
+      "Perplexity",
+      "Replit",
+      "Scale AI",
+      "Runway",
+      "LangChain",
+      "Pinecone",
+      "Weaviate",
+      "Milvus",
+      "Databricks",
+      "Snowflake",
+      "Confluent",
+      "HashiCorp",
+      "VMware",
+      "Red Hat",
+      "Elastic",
+      "MongoDB Inc.",
+      "Palantir",
+      "Atlassian",
+      "GitLab",
+      "CircleCI",
+      "Tesla",
+      "Waymo",
+      "Zoox"
+    ],
+    "workAuth": "F1 OPT",
+    "narrative": "Riya Mate is an entry-level Software Developer and AI Engineer based in California, open to remote opportunities, and currently on F1 OPT work authorization.",
+    "futurePreferences": "Open to relocation and seeking opportunities for salary growth.",
+    "employmentTypes": [
+      "full-time"
+    ],
+    "workModels": [
+      "onsite",
+      "remote"
+    ],
+    "daysAgo": 7,
+    "minYearsOfExperience": 0,
+    "maxYearsOfExperience": 2,
+    "salaryMinimumUsd": 100000,
+    "industries": null,
+    "skills": [
+      "Python",
+      "Java",
+      "React",
+      "Kubernetes",
+      "AWS",
+      "CI/CD",
+      "MLOps",
+      "Machine Learning",
+      "FastAPI",
+      "TensorRT"
+    ],
+    "companyStages": null,
+    "roleType": "ic",
+    "excludedTitles": null,
+    "excludedSkills": null,
+    "excludedIndustries": null,
+    "excludeStaffingAgency": null,
+    "excludeSecurityClearance": false,
+    "excludeUsCitizenOnly": true,
+    "exclusions": {
+      "companies": [],
+      "locations": []
+    }
+  },
+  "completedAt": "2026-04-23T12:45:03.783Z"
+}

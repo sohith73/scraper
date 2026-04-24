@@ -1,0 +1,91 @@
+{
+  "id": "36607325-22b1-416c-ad13-5d0bb2756d56",
+  "createdAt": "2026-04-23T10:20:02.805Z",
+  "updatedAt": "2026-04-23T10:20:29.762Z",
+  "phase": "done",
+  "clientEmail": "samhitasari11@gmail.com",
+  "clientName": "Samhita Sari",
+  "requestedCount": 5,
+  "abortRequested": false,
+  "progress": {
+    "intent": {
+      "roles": [
+        "Data Scientist",
+        "Data Engineer",
+        "Machine Learning Engineer"
+      ],
+      "locations": [
+        "Remote"
+      ],
+      "seniority": "mid",
+      "companies": [],
+      "workAuth": "H1B required — on F1 OPT until 2027",
+      "narrative": "Samhita Sarikonda is targeting mid-level roles in Data Science, Data Engineering, and Machine Learning Engineering, with a preference for remote opportunities. She requires H1B sponsorship as she is currently on F1 OPT.",
+      "futurePreferences": "Open to both established tech companies and startups where she can work on impactful data/AI systems.",
+      "employmentTypes": [
+        "full-time"
+      ],
+      "workModels": [
+        "remote",
+        "hybrid"
+      ],
+      "daysAgo": 3,
+      "minYearsOfExperience": 2,
+      "maxYearsOfExperience": 6,
+      "salaryMinimumUsd": 100000,
+      "industries": null,
+      "skills": null,
+      "companyStages": null,
+      "roleType": null,
+      "excludedTitles": null,
+      "excludedSkills": null,
+      "excludedIndustries": null,
+      "excludeStaffingAgency": true,
+      "excludeSecurityClearance": false,
+      "excludeUsCitizenOnly": true,
+      "exclusions": {
+        "companies": [],
+        "locations": []
+      }
+    },
+    "searched": {
+      "totalReturned": 5,
+      "totalNormalized": 5,
+      "durationMs": 7775
+    },
+    "filtered": {
+      "totalJobs": 5,
+      "picked": 0,
+      "skipped": 4,
+      "borderline": 1,
+      "batches": 1,
+      "cacheHits": 0,
+      "durationMs": 7885
+    },
+    "enriched": {
+      "total": 0,
+      "ready": 0,
+      "sparse": 0,
+      "durationMs": 0
+    },
+    "preflight": {
+      "total": 0,
+      "pushable": 0,
+      "blockedCompany": 0,
+      "blockedLocation": 0,
+      "localDuplicate": 0
+    },
+    "pushed": {
+      "total": 0,
+      "pushed": 0,
+      "duplicates": 0,
+      "blocked": 0,
+      "errors": 0,
+      "durationMs": 0
+    }
+  },
+  "picks": [],
+  "error": null,
+  "durationMs": 26957,
+  "eventSeq": 15
+}

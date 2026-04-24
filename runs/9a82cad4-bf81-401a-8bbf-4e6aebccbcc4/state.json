@@ -1,0 +1,170 @@
+{
+  "id": "9a82cad4-bf81-401a-8bbf-4e6aebccbcc4",
+  "createdAt": "2026-04-23T11:05:07.954Z",
+  "updatedAt": "2026-04-23T11:05:29.774Z",
+  "phase": "done",
+  "clientEmail": "riyamate4567@gmail.com",
+  "clientName": "Riya Mate",
+  "requestedCount": 15,
+  "abortRequested": false,
+  "progress": {
+    "intent": {
+      "roles": [
+        "Software Developer",
+        "AI Engineer",
+        "Software Development Engineer",
+        "Backend Engineer"
+      ],
+      "locations": [
+        "California",
+        "Remote"
+      ],
+      "seniority": "entry",
+      "companies": [
+        "Google",
+        "Meta",
+        "Microsoft",
+        "Amazon",
+        "Apple",
+        "NVIDIA",
+        "Oracle",
+        "OpenAI",
+        "Anthropic",
+        "Cohere",
+        "Mistral",
+        "Stability AI",
+        "Hugging Face",
+        "Perplexity",
+        "Replit",
+        "Scale AI",
+        "Runway",
+        "LangChain",
+        "Pinecone",
+        "Weaviate",
+        "Milvus",
+        "Cloud",
+        "Databricks",
+        "Snowflake",
+        "Confluent",
+        "HashiCorp",
+        "VMware",
+        "Red Hat",
+        "Elastic",
+        "MongoDB Inc.",
+        "Palantir",
+        "Atlassian",
+        "GitLab",
+        "CircleCI",
+        "Tesla",
+        "Waymo",
+        "Zoox"
+      ],
+      "workAuth": "H1B required — on F1 OPT until 2027",
+      "narrative": "Riya Mate is an entry-level Software Developer and AI Engineer based in California, open to remote opportunities, and requires H1B sponsorship.",
+      "futurePreferences": "Available to join in 1 week.",
+      "employmentTypes": null,
+      "workModels": [
+        "onsite",
+        "remote"
+      ],
+      "daysAgo": 14,
+      "minYearsOfExperience": 0,
+      "maxYearsOfExperience": 2,
+      "salaryMinimumUsd": 100000,
+      "industries": null,
+      "skills": null,
+      "companyStages": null,
+      "roleType": null,
+      "excludedTitles": null,
+      "excludedSkills": null,
+      "excludedIndustries": null,
+      "excludeStaffingAgency": null,
+      "excludeSecurityClearance": false,
+      "excludeUsCitizenOnly": true,
+      "exclusions": {
+        "companies": [],
+        "locations": []
+      }
+    },
+    "searched": {
+      "totalReturned": 15,
+      "totalNormalized": 15,
+      "durationMs": 8616
+    },
+    "filtered": {
+      "totalJobs": 15,
+      "picked": 2,
+      "skipped": 2,
+      "borderline": 11,
+      "batches": 1,
+      "cacheHits": 1,
+      "durationMs": 1
+    },
+    "enriched": {
+      "total": 13,
+      "ready": 13,
+      "sparse": 0,
+      "durationMs": 0
+    },
+    "preflight": {
+      "total": 13,
+      "pushable": 13,
+      "blockedCompany": 0,
+      "blockedLocation": 0,
+      "localDuplicate": 0
+    },
+    "pushed": {
+      "total": 13,
+      "pushed": 5,
+      "duplicates": 4,
+      "blocked": 4,
+      "errors": 0,
+      "durationMs": 9803
+    }
+  },
+  "picks": [
+    {
+      "jobId": "69e9c74858811370cb12f3db",
+      "title": "Software Engineer, Machine Learning (SWE II & SWE I)",
+      "company": "Slack",
+      "applyUrl": "https://salesforce.wd12.myworkdayjobs.com/Slack/job/California---San-Francisco/Software-Engineer--Machine-Learning--Senior--SWE-II---SWE-I-_JR328085?source=LinkedIn_Slack_Jobs",
+      "createdJobId": "69e9fcf17bdfe73b36efbf3d",
+      "outcome": "pushed"
+    },
+    {
+      "jobId": "69e8fb853aa0c479643a60cd",
+      "title": "AI / ML Engineer II",
+      "company": "F5",
+      "applyUrl": "https://ffive.wd5.myworkdayjobs.com/f5jobs/job/Seattle/AI---ML-Engineer-II_RP1037328-1",
+      "createdJobId": "69e9fcf47bdfe73b36efbf50",
+      "outcome": "pushed"
+    },
+    {
+      "jobId": "69e9830a7820c036924e8da5",
+      "title": "Associate AI Developer",
+      "company": "Goodwin",
+      "applyUrl": "https://goodwinprocter.wd5.myworkdayjobs.com/External_Careers/job/San-Francisco/Associate-AI-Developer_R04198?source=LinkedIn",
+      "createdJobId": "69e9fcf17bdfe73b36efbf46",
+      "outcome": "pushed"
+    },
+    {
+      "jobId": "69e7869c0a6e09555302ae9c",
+      "title": "AI Engineer I",
+      "company": "Klaviyo",
+      "applyUrl": "https://boards.greenhouse.io/embed/job_app?token=7621072003&utm_source=jobright",
+      "createdJobId": "69e9fcf57bdfe73b36efbf5c",
+      "outcome": "pushed"
+    },
+    {
+      "jobId": "69af4318dfaeda6ff5976464",
+      "title": "AI Engineer",
+      "company": "Cadence",
+      "applyUrl": "https://cadence.wd1.myworkdayjobs.com/External_Careers/job/SAN-JOSE/Software-Engineer-II_R53569-1?source=LinkedIn",
+      "createdJobId": "69e9fcf67bdfe73b36efbf7c",
+      "outcome": "pushed"
+    }
+  ],
+  "error": null,
+  "durationMs": 21820,
+  "eventSeq": 15
+}

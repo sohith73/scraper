@@ -1,0 +1,33 @@
+{
+  "name": "flashfire-jobright-scraper",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Internal JobRight.ai scraper that ingests per-client matched jobs into the Flashfire dashboard.",
+  "type": "module",
+  "engines": {
+    "node": ">=20.0.0"
+  },
+  "main": "src/server.js",
+  "scripts": {
+    "start": "node --env-file-if-exists=.env src/server.js",
+    "dev": "node --env-file-if-exists=.env --watch src/server.js",
+    "test": "node --test --test-reporter=spec \"tests/unit/**/*.test.js\"",
+    "test:watch": "node --test --watch \"tests/unit/**/*.test.js\"",
+    "health": "curl -s http://localhost:${PORT:-8092}/api/health | head -200",
+    "recon": "node recon/jobright-recon.mjs",
+    "recon:install": "playwright install chromium"
+  },
+  "dependencies": {
+    "cors": "^2.8.5",
+    "express": "^4.21.2",
+    "mongodb": "^7.2.0",
+    "openai": "^4.104.0",
+    "pino": "^9.5.0",
+    "pino-http": "^10.3.0",
+    "zod": "^3.23.8"
+  },
+  "devDependencies": {
+    "pino-pretty": "^13.0.0",
+    "playwright": "^1.48.0"
+  }
+}

@@ -1,0 +1,405 @@
+{
+  "id": "ac7f38ef-26aa-4a11-a978-507e43ba3768",
+  "createdAt": "2026-04-24T03:32:14.485Z",
+  "updatedAt": "2026-04-24T03:33:25.068Z",
+  "phase": "done",
+  "clientEmail": "riyamate4567@gmail.com",
+  "clientName": "Riya Mate",
+  "requestedCount": 4,
+  "abortRequested": false,
+  "progress": {
+    "intent": {
+      "roles": [
+        "Software Developer",
+        "AI Engineer",
+        "Software Engineer",
+        "Backend Engineer"
+      ],
+      "locations": [
+        "California",
+        "Remote"
+      ],
+      "seniority": "entry",
+      "companies": [
+        "Google",
+        "Meta",
+        "Microsoft",
+        "Amazon",
+        "Apple",
+        "NVIDIA",
+        "Oracle",
+        "OpenAI",
+        "Anthropic",
+        "Cohere",
+        "Mistral",
+        "Stability AI",
+        "Hugging Face",
+        "Perplexity",
+        "Replit",
+        "Scale AI",
+        "Runway",
+        "LangChain",
+        "Pinecone",
+        "Weaviate",
+        "Milvus",
+        "Databricks",
+        "Snowflake",
+        "Confluent",
+        "HashiCorp",
+        "VMware",
+        "Red Hat",
+        "Elastic",
+        "MongoDB Inc.",
+        "Palantir",
+        "Atlassian",
+        "GitLab",
+        "CircleCI",
+        "Tesla",
+        "Waymo",
+        "Zoox"
+      ],
+      "workAuth": "F1 OPT",
+      "narrative": "Riya Mate is an entry-level Software Developer and AI Engineer based in California, open to remote opportunities, and currently on F1 OPT work authorization.",
+      "futurePreferences": "Open to relocation and seeking opportunities for salary growth.",
+      "employmentTypes": [
+        "full-time"
+      ],
+      "workModels": [
+        "onsite",
+        "remote"
+      ],
+      "daysAgo": 7,
+      "minYearsOfExperience": 0,
+      "maxYearsOfExperience": 2,
+      "salaryMinimumUsd": 100000,
+      "industries": null,
+      "skills": [
+        "Python",
+        "Java",
+        "React",
+        "Kubernetes",
+        "AWS",
+        "CI/CD",
+        "MLOps",
+        "Machine Learning",
+        "FastAPI",
+        "TensorRT"
+      ],
+      "companyStages": null,
+      "roleType": "ic",
+      "excludedTitles": null,
+      "excludedSkills": null,
+      "excludedIndustries": null,
+      "excludeStaffingAgency": null,
+      "excludeSecurityClearance": false,
+      "excludeUsCitizenOnly": true,
+      "exclusions": {
+        "companies": [],
+        "locations": []
+      }
+    },
+    "searched": {
+      "totalReturned": 45,
+      "totalNormalized": 25,
+      "durationMs": 20987,
+      "pages": 3
+    },
+    "filtered": {
+      "totalJobs": 25,
+      "picked": 2,
+      "skipped": 23,
+      "borderline": 0,
+      "batches": 2,
+      "cacheHits": 0,
+      "durationMs": 40901
+    },
+    "enriched": {
+      "total": 2,
+      "ready": 2,
+      "sparse": 0,
+      "durationMs": 0
+    },
+    "preflight": {
+      "total": 2,
+      "pushable": 2,
+      "blockedCompany": 0,
+      "blockedLocation": 0,
+      "localDuplicate": 0
+    },
+    "pushed": {
+      "total": 2,
+      "pushed": 1,
+      "duplicates": 1,
+      "blocked": 0,
+      "errors": 0,
+      "durationMs": 7798
+    },
+    "decisions": [
+      {
+        "jobId": "69ea800b7820c036924ee553",
+        "title": "Software Engineer",
+        "company": "Toyota Financial Services Corporation",
+        "applyUrl": "https://toyota.wd503.myworkdayjobs.com/tmna/job/Plano-Texas/Software-Engineer_10325010",
+        "pick": false,
+        "score": 0,
+        "reason": "Skip — citizen-only posting conflicts with F1 OPT sponsorship need."
+      },
+      {
+        "jobId": "69972977e0bddb6acac5dff4",
+        "title": "AI Engineer I",
+        "company": "Ulbrich Stainless Steels & Special Metals, Inc.",
+        "applyUrl": "https://www.linkedin.com/jobs/view/4375165975",
+        "pick": false,
+        "score": 0,
+        "reason": "Skip — different discipline (AI Engineer I), profile is pure Software Development."
+      },
+      {
+        "jobId": "69ead8c10a6e095553043575",
+        "title": "PHP - Laravel Developer",
+        "company": "AppClone",
+        "applyUrl": "https://app-clone.com/career/#section-b022f61-1",
+        "pick": false,
+        "score": 0,
+        "reason": "Skip — different discipline (PHP Developer), profile is pure Software Development."
+      },
+      {
+        "jobId": "69e7ea4c7820c036924d904c",
+        "title": "Software Engineer",
+        "company": "Concentrate AI",
+        "applyUrl": "https://www.linkedin.com/jobs/view/4404884492",
+        "pick": true,
+        "score": 75,
+        "reason": "Strong fit — Software Engineer at Concentrate AI, remote opportunity with H1B sponsorship, aligns well with your entry-level profile."
+      },
+      {
+        "jobId": "69af47a9749500645093cb63",
+        "title": "Software Development Engineer",
+        "company": "Adobe",
+        "applyUrl": "https://careers.adobe.com/us/en/job/ADOBUSR166371EXTERNALENUS/Software-Development-Engineer?utm_source=linkedin&utm_medium=phenom-feeds&source=LinkedIn",
+        "pick": false,
+        "score": 0,
+        "reason": "Skip — different discipline (Software Development Engineer), profile is pure Software Development."
+      },
+      {
+        "jobId": "69e7869c0a6e09555302ae9c",
+        "title": "AI Engineer I",
+        "company": "Klaviyo",
+        "applyUrl": "https://boards.greenhouse.io/embed/job_app?token=7621072003&utm_source=jobright",
+        "pick": false,
+        "score": 0,
+        "reason": "Skip — different discipline (AI Engineer I), profile is pure Software Development."
+      },
+      {
+        "jobId": "69e7fe4f7820c036924d96fa",
+        "title": "Applied Machine Learning Engineer (All Levels)",
+        "company": "Allstate",
+        "applyUrl": "https://allstateinsurance.contacthr.com/151846252?utm_source=LILimitedListings&source=linkedinjobpostings",
+        "pick": false,
+        "score": 0,
+        "reason": "Skip — different discipline (Applied Machine Learning Engineer), profile is pure Software Development."
+      },
+      {
+        "jobId": "69e883e63aa0c479643a358b",
+        "title": "Software Development Engineer",
+        "company": "CVS Health",
+        "applyUrl": "https://jobs.cvshealth.com/us/en/job/CVSCHLUSR0853961EXTERNALENUS/Software-Development-Engineer?utm_source=Linkedin&utm_medium=phenom-feeds",
+        "pick": false,
+        "score": 0,
+        "reason": "Skip — different discipline (Software Development Engineer), profile is pure Software Development."
+      },
+      {
+        "jobId": "69e7db2658811370cb11ec8f",
+        "title": "Applied AI Inference Engineer",
+        "company": "Baseten",
+        "applyUrl": "https://jobs.ashbyhq.com/baseten/90e9ff4e-1225-4b1b-b0b4-2362e36d9cfa/application?utm_source=worNde4l4L",
+        "pick": false,
+        "score": 0,
+        "reason": "Skip — different discipline (Applied AI Inference Engineer), profile is pure Software Development."
+      },
+      {
+        "jobId": "69e6d5a43aa0c4796439617f",
+        "title": "Frontend Developer",
+        "company": "Daxwell",
+        "applyUrl": "https://daxwell.quickbase.com/nav/app/bf48m7baf/table/bf48ssjzn/action/dr?rid=66",
+        "pick": false,
+        "score": 0,
+        "reason": "Skip — different discipline (Frontend Developer), profile is pure Software Development."
+      },
+      {
+        "jobId": "69cb5b5da8c1822476e263e3",
+        "title": "Product Engineer",
+        "company": "Scrunch",
+        "applyUrl": "https://jobs.ashbyhq.com/scrunch/6a1f3be5-e407-43aa-8a85-ce664edd5b70/application?utm_source=9wrNl5KVzJ",
+        "pick": false,
+        "score": 0,
+        "reason": "Skip — different discipline (Product Engineer), profile is pure Software Development."
+      },
+      {
+        "jobId": "69e3b4b20ddab31db6f9747b",
+        "title": "Applied AI Engineer",
+        "company": "New Resilience",
+        "applyUrl": "https://www.linkedin.com/jobs/view/4403063326",
+        "pick": false,
+        "score": 0,
+        "reason": "Skip — different discipline (Applied AI Engineer), profile is pure Software Development."
+      },
+      {
+        "jobId": "69ea95be7820c036924eebad",
+        "title": "Applied AI Engineer",
+        "company": "adly",
+        "applyUrl": "https://www.linkedin.com/jobs/view/4405856906",
+        "pick": false,
+        "score": 0,
+        "reason": "Skip — different discipline (Applied AI Engineer), profile is pure Software Development."
+      },
+      {
+        "jobId": "69dfefd1433ac8430e0e3108",
+        "title": "AI Process Engineering Analyst",
+        "company": "Voya Financial",
+        "applyUrl": "https://godirect.wd5.myworkdayjobs.com/voya_jobs/job/New-York-NY/Investment-Management-Product-Owner_JR0031294?Codes=lkdin&source=Linkedin",
+        "pick": false,
+        "score": 0,
+        "reason": "Skip — different discipline (AI Process Engineering Analyst), profile is pure Software Development."
+      },
+      {
+        "jobId": "69e962437820c036924e7ce6",
+        "title": "AI Software Engineer - HP IQ",
+        "company": "HP",
+        "applyUrl": "https://HPINC.contacthr.com/151865875?src=Linkedin+Full+Feed",
+        "pick": false,
+        "score": 0,
+        "reason": "Skip — different discipline (AI Software Engineer), profile is pure Software Development."
+      },
+      {
+        "jobId": "69e2292fcda04a63293a0090",
+        "title": "AI Engineer",
+        "company": "dynamism",
+        "applyUrl": "https://www.linkedin.com/jobs/view/4403437211",
+        "pick": false,
+        "score": 15,
+        "reason": "Skip — different discipline (AI Engineer role requires 2+ years of experience, while candidate is entry-level)."
+      },
+      {
+        "jobId": "69e8d14c7820c036924e3327",
+        "title": "Software Engineer, AI Native",
+        "company": "Meta",
+        "applyUrl": "https://jsv3.recruitics.com/redirect?rx_cid=3239&rx_jobId=a1KDp00000CZMSTMA5_1001&rx_url=https%3A%2F%2Fwww.metacareers.com%2Fjobs%2F877951731747100%2F%3Frx_campaign%3DLinkedin1%26rx_ch%3Dconnector%26rx_group%3D126320%26rx_id%3D22ca6b04-3a58-11f1-b752-e34ab3045b57%26rx_job%3Da1KDp00000CZMSTMA5_1001%26rx_medium%3Dpost%26rx_r%3Dnone%26rx_source%3DLinkedin%26rx_ts%3D20260422T061202Z%26rx_vp%3Dslots%26utm_campaign%3DJob%252Bboard%26utm_medium%3Djobs%26utm_source%3DLIpaid",
+        "pick": false,
+        "score": 15,
+        "reason": "Skip — different discipline (Software Engineer, AI Native requires 2+ years of experience, while candidate is entry-level)."
+      },
+      {
+        "jobId": "69ea53493aa0c479643aeff7",
+        "title": "AI Applications Developer",
+        "company": "Texas Regional Physicians",
+        "applyUrl": "https://recruiting.paylocity.com/Recruiting/Jobs/Details/4098506",
+        "pick": false,
+        "score": 15,
+        "reason": "Skip — different discipline (AI Applications Developer requires 2+ years of experience, while candidate is entry-level)."
+      },
+      {
+        "jobId": "69ea189b3aa0c479643ae000",
+        "title": "Software Engineer (SWE/SWE II), AI Platform- Slack",
+        "company": "Salesforce",
+        "applyUrl": "https://salesforce.wd12.myworkdayjobs.com/external_career_site/job/Washington---Seattle/Software-Engineer--SWE-SWE-II---AI-Platform--Slack_JR328732",
+        "pick": false,
+        "score": 53,
+        "reason": "Borderline — Software Engineer role but requires experience in building developer tooling, which candidate may not have as an entry-level applicant."
+      },
+      {
+        "jobId": "69ea7a5358811370cb133b13",
+        "title": "AI Prompt & Agent Developer",
+        "company": "OpenCall.ai (YC W24)",
+        "applyUrl": "https://www.ycombinator.com/companies/opencall/jobs/P7Gr3zT-ai-prompt-agent-developer?utm_source=syn_li",
+        "pick": false,
+        "score": 15,
+        "reason": "Skip — different discipline (AI Prompt & Agent Developer requires 2+ years of experience, while candidate is entry-level)."
+      },
+      {
+        "jobId": "69e94e2c0a6e09555303af8e",
+        "title": "AI/ML Research Engineer, LLM Post-Training & Evaluation",
+        "company": "Innodata Inc.",
+        "applyUrl": "https://www.linkedin.com/jobs/view/4404483341",
+        "pick": false,
+        "score": 15,
+        "reason": "Skip — different discipline (AI/ML Research Engineer requires 2-3 years of experience, while candidate is entry-level)."
+      },
+      {
+        "jobId": "69e6f7783aa0c479643968a5",
+        "title": "AI Engineer",
+        "company": "Dataro",
+        "applyUrl": "https://www.linkedin.com/jobs/view/4404523953",
+        "pick": false,
+        "score": 15,
+        "reason": "Skip — different discipline (AI Engineer role requires 2+ years of experience, while candidate is entry-level)."
+      },
+      {
+        "jobId": "69e8d8fd3aa0c479643a55a0",
+        "title": "Software Engineer",
+        "company": "Gumloop",
+        "applyUrl": "https://www.linkedin.com/jobs/view/4405233819",
+        "pick": false,
+        "score": 15,
+        "reason": "Skip — different discipline (Software Engineer role requires experience in building applications, which candidate may not have as an entry-level applicant)."
+      },
+      {
+        "jobId": "69620eb12cbf4e44756c06a1",
+        "title": "Machine Learning Engineer",
+        "company": "PitchBook",
+        "applyUrl": "https://job-boards.greenhouse.io/pitchbookdata/jobs/4614594006?gh_src=b1fb49bb6us",
+        "pick": false,
+        "score": 0,
+        "reason": "Skip — citizen-only posting conflicts with F1 OPT sponsorship need."
+      },
+      {
+        "jobId": "69c6ec52b773006330b74246",
+        "title": "Software Engineer I, AI Product",
+        "company": "Attentive",
+        "applyUrl": "https://job-boards.greenhouse.io/attentive/jobs/4195625009?gh_src=63pk6gu69us",
+        "pick": true,
+        "score": 65,
+        "reason": "Strong fit — Software Engineer I, AI Product is an entry-level role at Attentive, remote opportunity with H1B sponsorship, aligns well with your profile."
+      }
+    ],
+    "seenJrIds": [
+      "69ea800b7820c036924ee553",
+      "69972977e0bddb6acac5dff4",
+      "69ead8c10a6e095553043575",
+      "69e7ea4c7820c036924d904c",
+      "69af47a9749500645093cb63",
+      "69e7869c0a6e09555302ae9c",
+      "69e7fe4f7820c036924d96fa",
+      "69e883e63aa0c479643a358b",
+      "69e7db2658811370cb11ec8f",
+      "69e6d5a43aa0c4796439617f",
+      "69cb5b5da8c1822476e263e3",
+      "69e3b4b20ddab31db6f9747b",
+      "69ea95be7820c036924eebad",
+      "69dfefd1433ac8430e0e3108",
+      "69e962437820c036924e7ce6",
+      "69e2292fcda04a63293a0090",
+      "69e8d14c7820c036924e3327",
+      "69ea53493aa0c479643aeff7",
+      "69ea189b3aa0c479643ae000",
+      "69ea7a5358811370cb133b13",
+      "69e94e2c0a6e09555303af8e",
+      "69e6f7783aa0c479643968a5",
+      "69e8d8fd3aa0c479643a55a0",
+      "69620eb12cbf4e44756c06a1",
+      "69c6ec52b773006330b74246"
+    ]
+  },
+  "picks": [
+    {
+      "jobId": "69c6ec52b773006330b74246",
+      "title": "Software Engineer I, AI Product",
+      "company": "Attentive",
+      "applyUrl": "https://job-boards.greenhouse.io/attentive/jobs/4195625009?gh_src=63pk6gu69us",
+      "createdJobId": "69eae4777bdfe73b36efcca0",
+      "outcome": "pushed"
+    }
+  ],
+  "error": null,
+  "durationMs": 70583,
+  "eventSeq": 28
+}

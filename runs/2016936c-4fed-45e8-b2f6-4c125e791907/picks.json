@@ -1,0 +1,33 @@
+{
+  "picks": [
+    {
+      "jobId": "69e8df0a3aa0c479643a57fe",
+      "title": "Software Engineer",
+      "company": "Arkhya Tech. Inc.",
+      "applyUrl": "https://www.linkedin.com/jobs/view/4405239903",
+      "createdJobId": "69e9e8f07bdfe73b36efbb27",
+      "outcome": "pushed"
+    }
+  ],
+  "blocked": [],
+  "errored": [],
+  "intent": {
+    "roles": [
+      "Data Scientist",
+      "Data Engineer",
+      "Machine Learning Engineer"
+    ],
+    "locations": [
+      "Remote"
+    ],
+    "seniority": "mid",
+    "companies": [],
+    "workAuth": "H1B required — on F1 OPT until 2027",
+    "narrative": "Samhita Sarikonda is targeting mid-level roles in Data Science, Data Engineering, and Machine Learning Engineering, with a preference for remote opportunities. She requires H1B sponsorship as she is currently on F1 OPT.",
+    "futurePreferences": "Open to relocation; expects a salary in the range of 100k-150k.",
+    "exclusions": {
+      "companies": [],
+      "locations": []
+    }
+  }
+}

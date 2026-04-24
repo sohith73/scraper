@@ -1,0 +1,230 @@
+{
+  "id": "80e6449b-b45f-4c26-a94b-e0a1d0ae0b85",
+  "createdAt": "2026-04-23T12:38:06.994Z",
+  "updatedAt": "2026-04-23T12:38:29.780Z",
+  "phase": "done",
+  "clientEmail": "rijuljain17@gmail.com",
+  "clientName": "rijuljain17",
+  "requestedCount": 1,
+  "abortRequested": false,
+  "progress": {
+    "intent": {
+      "roles": [
+        "Product Manager"
+      ],
+      "locations": [],
+      "seniority": "senior",
+      "companies": [],
+      "workAuth": "F1 OPT",
+      "narrative": "PM past14",
+      "futurePreferences": "",
+      "exclusions": {
+        "companies": [],
+        "locations": []
+      }
+    },
+    "searched": {
+      "totalReturned": 15,
+      "totalNormalized": 15,
+      "durationMs": 6127,
+      "pages": 1
+    },
+    "filtered": {
+      "totalJobs": 15,
+      "picked": 2,
+      "skipped": 5,
+      "borderline": 8,
+      "batches": 1,
+      "cacheHits": 0,
+      "durationMs": 15200
+    },
+    "enriched": {
+      "total": 10,
+      "ready": 10,
+      "sparse": 0,
+      "durationMs": 0
+    },
+    "preflight": {
+      "total": 10,
+      "pushable": 10,
+      "blockedCompany": 0,
+      "blockedLocation": 0,
+      "localDuplicate": 0
+    },
+    "pushed": {
+      "total": 1,
+      "pushed": 1,
+      "duplicates": 0,
+      "blocked": 0,
+      "errors": 0,
+      "durationMs": 859
+    },
+    "decisions": [
+      {
+        "jobId": "69e9bd333aa0c479643ab59d",
+        "title": "Product Manager",
+        "company": "Abbott",
+        "applyUrl": "https://www.jobs.abbott/us/en/job/ABLAUS31147643ENUSEXTERNAL/Product-Manager?utm_source=linkedin&utm_medium=phenom-feeds",
+        "pick": false,
+        "score": 55,
+        "reason": "Borderline — senior level Product Manager role, but onsite location conflicts with candidate's preference for remote work."
+      },
+      {
+        "jobId": "69e9507958811370cb12c9b9",
+        "title": "Product Manager",
+        "company": "Nearsite",
+        "applyUrl": "https://www.linkedin.com/jobs/view/4405453396",
+        "pick": false,
+        "score": 55,
+        "reason": "Borderline — senior level Product Manager role, but onsite location conflicts with candidate's preference for remote work."
+      },
+      {
+        "jobId": "69afa78af63f733065b33beb",
+        "title": "Product Manager - Core Product Experiences",
+        "company": "Abridge",
+        "applyUrl": "https://jobs.ashbyhq.com/abridge/c45524b6-96b2-49f0-9cd5-176b998d6ba7/application?utm_source=jobright",
+        "pick": false,
+        "score": 55,
+        "reason": "Borderline — senior level Product Manager role, but hybrid location conflicts with candidate's preference for remote work."
+      },
+      {
+        "jobId": "69e8f54a4b0fa35a7076a419",
+        "title": "Principal Product Manager, AI Solutions",
+        "company": "Memorial Sloan Kettering Cancer Center",
+        "applyUrl": "https://msk.wd108.myworkdayjobs.com/MSKCC_Careers_Primary/job/New-York-NY/Principal-Product-Manager--AI-Solutions_94899-1",
+        "pick": false,
+        "score": 55,
+        "reason": "Borderline — senior level Product Manager role, but hybrid location conflicts with candidate's preference for remote work."
+      },
+      {
+        "jobId": "69e08ddd9564e855a25de3b0",
+        "title": "Product Manager",
+        "company": "Salesforce",
+        "applyUrl": "https://salesforce.wd12.myworkdayjobs.com/External_Career_Site/job/California---San-Francisco/Product-Manager_JR336692?source=LinkedIn_Jobs",
+        "pick": false,
+        "score": 55,
+        "reason": "Borderline — senior level Product Manager role, but onsite location conflicts with candidate's preference for remote work."
+      },
+      {
+        "jobId": "69e8f43f58811370cb1293d7",
+        "title": "Lead Product Management & Develop",
+        "company": "AT&T",
+        "applyUrl": "https://www.att.jobs/job/-/lead-product-management-and-develop/117/94230504736?source=jb_linkedin_org&utm_source=linkedin.com&utm_medium=organic&utm_campaign=organic&utm_content=social_media&utm_term=418039193",
+        "pick": false,
+        "score": 50,
+        "reason": "Skip — senior level Lead Product Management role is too far from candidate's core Product Manager focus."
+      },
+      {
+        "jobId": "69e8de3e58811370cb128c6d",
+        "title": "Product Manager - Connectivity",
+        "company": "NSI Industries",
+        "applyUrl": "https://nsiindustries.applytojob.com/apply/E6TJM88PG3/Product-Manager-Connectivity?source=LILI&source=LINKEDIN",
+        "pick": false,
+        "score": 50,
+        "reason": "Skip — senior level Product Manager role, but onsite location conflicts with candidate's preference for remote work."
+      },
+      {
+        "jobId": "69e8f5d64b0fa35a7076a50c",
+        "title": "Product Manager (Temp to Perm)",
+        "company": "Fora Financial",
+        "applyUrl": "https://www.linkedin.com/jobs/view/4405245877",
+        "pick": true,
+        "score": 75,
+        "reason": "Strong fit — remote Product Manager role with H1B sponsorship, aligns well with candidate's experience in financial services."
+      },
+      {
+        "jobId": "699ff45481476f6176b9d94c",
+        "title": "Senior Product Manager - Commercial",
+        "company": "O2E Brands",
+        "applyUrl": "https://recruiting.ultipro.ca/OEB5000OEBI/JobBoard/9eca249f-c54e-407e-b0ac-e9b01432f1d9/OpportunityDetail?opportunityId=b2f1e890-2f8f-4aae-83ab-eae98f8e7554&source=LinkedIn",
+        "pick": false,
+        "score": 55,
+        "reason": "Borderline — senior level Product Manager role, but hybrid location conflicts with candidate's preference for remote work."
+      },
+      {
+        "jobId": "69e909613aa0c479643a6a09",
+        "title": "Product Manager - Payroll",
+        "company": "HiBob",
+        "applyUrl": "https://easyapply.jobs/r/GFOn3AG26khSmG2Fjrhu",
+        "pick": false,
+        "score": 55,
+        "reason": "Borderline — mid/senior level Product Manager role, but remote location conflicts with candidate's preference for remote work."
+      },
+      {
+        "jobId": "699535c481476f6176ad161e",
+        "title": "Product Management, Research",
+        "company": "Anthropic",
+        "applyUrl": "https://job-boards.greenhouse.io/anthropic/jobs/5123082008?gh_src=LinkedIn",
+        "pick": true,
+        "score": 70,
+        "reason": "Strong fit — hybrid Senior Product Manager role with H1B sponsorship, aligns with candidate's experience and interests."
+      },
+      {
+        "jobId": "69b08c3774950064509706ef",
+        "title": "Senior Product Manager, Workday",
+        "company": "Zillow",
+        "applyUrl": "https://zillow.wd5.myworkdayjobs.com/Zillow_Group_External/job/Remote-USA/Senior-Product-Manager--Workday_P749459-2?source=LinkedIn",
+        "pick": false,
+        "score": 50,
+        "reason": "Skip — senior level Product Manager role, but remote location conflicts with candidate's preference for remote work."
+      },
+      {
+        "jobId": "6995144d81476f6176acf319",
+        "title": "Senior Product Manager (Menlo Park, CA or Durham NC) - #4564",
+        "company": "GRAIL",
+        "applyUrl": "https://www.linkedin.com/jobs/view/4373035917",
+        "pick": false,
+        "score": 50,
+        "reason": "Skip — senior level Product Manager role, but hybrid location conflicts with candidate's preference for remote work."
+      },
+      {
+        "jobId": "69e932e84b0fa35a7076cbf4",
+        "title": "Senior Product Manager, Hosted Runners",
+        "company": "GitLab",
+        "applyUrl": "https://job-boards.greenhouse.io/gitlab/jobs/8465712002?lever-origin=applied&lever-source=LINKEDIN",
+        "pick": false,
+        "score": 50,
+        "reason": "Skip — senior level Product Manager role, but remote location conflicts with candidate's preference for remote work."
+      },
+      {
+        "jobId": "69e9a4eae0cd471b2f13e942",
+        "title": "Product Manager II",
+        "company": "St. Jude Children's Research Hospital - ALSAC",
+        "applyUrl": "https://alsacstjude.wd1.myworkdayjobs.com/en-US/careersalsacstjude/job/Memphis-TN/Product-Manager-II_R0010751?source=LinkedIn",
+        "pick": false,
+        "score": 55,
+        "reason": "Borderline — mid/senior level Product Manager role, but hybrid location conflicts with candidate's preference for remote work."
+      }
+    ],
+    "seenJrIds": [
+      "69e9bd333aa0c479643ab59d",
+      "69e9507958811370cb12c9b9",
+      "69afa78af63f733065b33beb",
+      "69e8f54a4b0fa35a7076a419",
+      "69e08ddd9564e855a25de3b0",
+      "69e8f43f58811370cb1293d7",
+      "69e8de3e58811370cb128c6d",
+      "69e8f5d64b0fa35a7076a50c",
+      "699ff45481476f6176b9d94c",
+      "69e909613aa0c479643a6a09",
+      "699535c481476f6176ad161e",
+      "69b08c3774950064509706ef",
+      "6995144d81476f6176acf319",
+      "69e932e84b0fa35a7076cbf4",
+      "69e9a4eae0cd471b2f13e942"
+    ]
+  },
+  "picks": [
+    {
+      "jobId": "69e8f5d64b0fa35a7076a50c",
+      "title": "Product Manager (Temp to Perm)",
+      "company": "Fora Financial",
+      "applyUrl": "https://www.linkedin.com/jobs/view/4405245877",
+      "createdJobId": "69ea12c57bdfe73b36efc94d",
+      "outcome": "pushed"
+    }
+  ],
+  "error": null,
+  "durationMs": 22786,
+  "eventSeq": 16
+}

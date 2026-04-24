@@ -1,0 +1,79 @@
+{
+  "id": "2016936c-4fed-45e8-b2f6-4c125e791907",
+  "createdAt": "2026-04-23T09:39:47.940Z",
+  "updatedAt": "2026-04-23T09:40:07.280Z",
+  "phase": "done",
+  "clientEmail": "samhitasari11@gmail.com",
+  "clientName": "Samhita",
+  "requestedCount": 3,
+  "abortRequested": false,
+  "progress": {
+    "intent": {
+      "roles": [
+        "Data Scientist",
+        "Data Engineer",
+        "Machine Learning Engineer"
+      ],
+      "locations": [
+        "Remote"
+      ],
+      "seniority": "mid",
+      "companies": [],
+      "workAuth": "H1B required — on F1 OPT until 2027",
+      "narrative": "Samhita Sarikonda is targeting mid-level roles in Data Science, Data Engineering, and Machine Learning Engineering, with a preference for remote opportunities. She requires H1B sponsorship as she is currently on F1 OPT.",
+      "futurePreferences": "Open to relocation; expects a salary in the range of 100k-150k.",
+      "exclusions": {
+        "companies": [],
+        "locations": []
+      }
+    },
+    "searched": {
+      "totalReturned": 3,
+      "totalNormalized": 3,
+      "durationMs": 5826
+    },
+    "filtered": {
+      "totalJobs": 3,
+      "picked": 1,
+      "skipped": 2,
+      "borderline": 0,
+      "batches": 1,
+      "cacheHits": 0,
+      "durationMs": 3906
+    },
+    "enriched": {
+      "total": 1,
+      "ready": 1,
+      "sparse": 0,
+      "durationMs": 0
+    },
+    "preflight": {
+      "total": 1,
+      "pushable": 1,
+      "blockedCompany": 0,
+      "blockedLocation": 0,
+      "localDuplicate": 0
+    },
+    "pushed": {
+      "total": 1,
+      "pushed": 1,
+      "duplicates": 0,
+      "blocked": 0,
+      "errors": 0,
+      "durationMs": 6884
+    }
+  },
+  "picks": [
+    {
+      "jobId": "69e8df0a3aa0c479643a57fe",
+      "title": "Software Engineer",
+      "company": "Arkhya Tech. Inc.",
+      "applyUrl": "https://www.linkedin.com/jobs/view/4405239903",
+      "createdJobId": "69e9e8f07bdfe73b36efbb27",
+      "outcome": "pushed"
+    }
+  ],
+  "error": null,
+  "durationMs": 19340,
+  "eventSeq": 15
+}

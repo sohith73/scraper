@@ -1,0 +1,76 @@
+{
+  "id": "a3d1394e-e9a6-43db-8583-4710ccee8aec",
+  "createdAt": "2026-04-23T12:03:51.118Z",
+  "updatedAt": "2026-04-23T12:04:14.996Z",
+  "phase": "done",
+  "clientEmail": "rijuljain17@gmail.com",
+  "clientName": "rijuljain17",
+  "requestedCount": 1,
+  "abortRequested": false,
+  "progress": {
+    "intent": {
+      "roles": [
+        "Product Manager"
+      ],
+      "locations": [],
+      "seniority": "mid",
+      "companies": [],
+      "workAuth": "F1 OPT",
+      "narrative": "PM candidate",
+      "futurePreferences": "",
+      "exclusions": {
+        "companies": [],
+        "locations": []
+      }
+    },
+    "searched": {
+      "totalReturned": 15,
+      "totalNormalized": 15,
+      "durationMs": 5981,
+      "pages": 1
+    },
+    "filtered": {
+      "totalJobs": 15,
+      "picked": 7,
+      "skipped": 7,
+      "borderline": 1,
+      "batches": 1,
+      "cacheHits": 0,
+      "durationMs": 13645
+    },
+    "enriched": {
+      "total": 8,
+      "ready": 8,
+      "sparse": 0,
+      "durationMs": 0
+    },
+    "preflight": {
+      "total": 8,
+      "pushable": 8,
+      "blockedCompany": 0,
+      "blockedLocation": 0,
+      "localDuplicate": 0
+    },
+    "pushed": {
+      "total": 1,
+      "pushed": 1,
+      "duplicates": 0,
+      "blocked": 0,
+      "errors": 0,
+      "durationMs": 2589
+    }
+  },
+  "picks": [
+    {
+      "jobId": "69b0b5b374950064509781e5",
+      "title": "Product Manager",
+      "company": "Simpro Software",
+      "applyUrl": "https://simpro.wd3.myworkdayjobs.com/simPRO_External_Careers/job/Miami-Office/Product-Manager_JR101811?source=Linkedin_Job_Wrapping",
+      "createdJobId": "69ea0abd7bdfe73b36efc5fa",
+      "outcome": "pushed"
+    }
+  ],
+  "error": null,
+  "durationMs": 23878,
+  "eventSeq": 16
+}

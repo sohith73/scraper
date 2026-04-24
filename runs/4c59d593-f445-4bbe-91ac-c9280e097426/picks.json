@@ -1,0 +1,215 @@
+{
+  "picks": [
+    {
+      "jobId": "69783a6b39f7f96cc6d085f3",
+      "title": "Data Scientist, All Levels",
+      "company": "Ramp",
+      "applyUrl": "https://jobs.ashbyhq.com/ramp/e577622f-6657-4e53-8941-b3a774b04448?src=LinkedIn",
+      "createdJobId": "69e9fe697bdfe73b36efbffe",
+      "outcome": "pushed"
+    },
+    {
+      "jobId": "69e0f1836c20aa114953e767",
+      "title": "AI Process Engineering Analyst",
+      "company": "Voya Financial",
+      "applyUrl": "https://godirect.wd5.myworkdayjobs.com/voya_jobs/job/New-York-NY/Investment-Management-Product-Owner_JR0031294?Codes=lkdin&source=Linkedin",
+      "createdJobId": "69e9fe6d7bdfe73b36efc009",
+      "outcome": "pushed"
+    },
+    {
+      "jobId": "69e7e495f8fa2f3ec32aa395",
+      "title": "New Grad- Software Engineer",
+      "company": "Symbotic",
+      "applyUrl": "https://symbotic.wd504.myworkdayjobs.com/Symbotic/job/USA-Austin-TX/New-Grad--Software-Engineer_R6934?source=LinkedIn",
+      "createdJobId": "69e9fe6f7bdfe73b36efc014",
+      "outcome": "pushed"
+    },
+    {
+      "jobId": "69c6d0abe565c26a70022e90",
+      "title": "Software Engineer",
+      "company": "Jonas Software",
+      "applyUrl": "https://talentmanagementsolution.wd3.myworkdayjobs.com/JonasSoftwareUSA/job/Remote---USA/Software-Engineer_R49759?source=LinkedIn",
+      "createdJobId": "69e9fe707bdfe73b36efc01f",
+      "outcome": "pushed"
+    },
+    {
+      "jobId": "69e63be03aa0c47964392c98",
+      "title": "Software Engineer",
+      "company": "Sun West Mortgage Company, Inc.",
+      "applyUrl": "https://www.linkedin.com/jobs/view/4404099771",
+      "createdJobId": "69e9fe737bdfe73b36efc029",
+      "outcome": "pushed"
+    },
+    {
+      "jobId": "69e85d744b0fa35a70766475",
+      "title": "ML Engineer II",
+      "company": "NYU Langone Health",
+      "applyUrl": "https://NYU.contacthr.com/151852278",
+      "createdJobId": "69e9fe757bdfe73b36efc035",
+      "outcome": "pushed"
+    }
+  ],
+  "blocked": [
+    {
+      "jobId": "69e7db2658811370cb11ec8f",
+      "title": "Applied AI Inference Engineer",
+      "company": "Baseten",
+      "outcome": "duplicate",
+      "reason": "server dedupe hit"
+    },
+    {
+      "jobId": "69e883e63aa0c479643a358b",
+      "title": "Software Development Engineer",
+      "company": "CVS Health",
+      "outcome": "duplicate",
+      "reason": "server dedupe hit"
+    },
+    {
+      "jobId": "69e7869c0a6e09555302ae9c",
+      "title": "AI Engineer I",
+      "company": "Klaviyo",
+      "outcome": "duplicate",
+      "reason": "server dedupe hit"
+    },
+    {
+      "jobId": "69e9830a7820c036924e8da5",
+      "title": "Associate AI Developer",
+      "company": "Goodwin",
+      "outcome": "duplicate",
+      "reason": "server dedupe hit"
+    },
+    {
+      "jobId": "69af47a9749500645093cb63",
+      "title": "Software Development Engineer",
+      "company": "Adobe",
+      "outcome": "duplicate",
+      "reason": "server dedupe hit"
+    },
+    {
+      "jobId": "69af4318dfaeda6ff5976464",
+      "title": "AI Engineer",
+      "company": "Cadence",
+      "outcome": "duplicate",
+      "reason": "server dedupe hit"
+    },
+    {
+      "jobId": "69e909290a6e095553038812",
+      "title": "AI Algorithm Developer",
+      "company": "Applied Materials",
+      "outcome": "blocked",
+      "code": "BLOCKED_LOCATION",
+      "reason": "This location is blocked for this client."
+    },
+    {
+      "jobId": "69e00e30aba61f141731f4b0",
+      "title": "AI Research and Automation Specialist",
+      "company": "Illumio",
+      "outcome": "blocked",
+      "code": "BLOCKED_LOCATION",
+      "reason": "This location is blocked for this client."
+    },
+    {
+      "jobId": "69e978a97820c036924e87af",
+      "title": "Junior Software Engineer",
+      "company": "Qcells North America",
+      "outcome": "blocked",
+      "code": "BLOCKED_LOCATION",
+      "reason": "This location is blocked for this client."
+    },
+    {
+      "jobId": "69e7cd5b0a6e09555302c31e",
+      "title": "Applied AI & ML Engineer",
+      "company": "Bose Corporation",
+      "outcome": "duplicate",
+      "reason": "server dedupe hit"
+    }
+  ],
+  "errored": [],
+  "intent": {
+    "roles": [
+      "Software Developer",
+      "AI Engineer",
+      "Software Development Engineer",
+      "Backend Engineer"
+    ],
+    "locations": [
+      "California",
+      "Remote"
+    ],
+    "seniority": "entry",
+    "companies": [
+      "Google",
+      "Meta",
+      "Microsoft",
+      "Amazon",
+      "Apple",
+      "NVIDIA",
+      "Oracle",
+      "OpenAI",
+      "Anthropic",
+      "Cohere",
+      "Mistral",
+      "Stability AI",
+      "Hugging Face",
+      "Perplexity",
+      "Replit",
+      "Scale AI",
+      "Runway",
+      "LangChain",
+      "Pinecone",
+      "Weaviate",
+      "Milvus",
+      "Cloud",
+      "Databricks",
+      "Snowflake",
+      "Confluent",
+      "HashiCorp",
+      "VMware",
+      "Red Hat",
+      "Elastic",
+      "MongoDB Inc.",
+      "Palantir",
+      "Atlassian",
+      "GitLab",
+      "CircleCI",
+      "Tesla",
+      "Waymo",
+      "Zoox"
+    ],
+    "workAuth": "H1B required — on F1 OPT until 2027",
+    "narrative": "Riya Mate is an entry-level Software Developer and AI Engineer based in California, open to remote opportunities, and requires H1B sponsorship.",
+    "futurePreferences": "Available to join in 1 week.",
+    "employmentTypes": null,
+    "workModels": [
+      "onsite",
+      "remote"
+    ],
+    "daysAgo": 14,
+    "minYearsOfExperience": 0,
+    "maxYearsOfExperience": 2,
+    "salaryMinimumUsd": 100000,
+    "industries": null,
+    "skills": null,
+    "companyStages": null,
+    "roleType": null,
+    "excludedTitles": null,
+    "excludedSkills": null,
+    "excludedIndustries": null,
+    "excludeStaffingAgency": null,
+    "excludeSecurityClearance": false,
+    "excludeUsCitizenOnly": true,
+    "exclusions": {
+      "companies": [],
+      "locations": []
+    }
+  },
+  "pagination": {
+    "pagesScanned": 2,
+    "jrJobsSeen": 25,
+    "target": 15,
+    "achieved": 6,
+    "exhausted": true,
+    "hitPageCap": false,
+    "hitAiBatchCap": false
+  }
+}

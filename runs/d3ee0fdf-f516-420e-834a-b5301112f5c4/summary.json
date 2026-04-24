@@ -1,0 +1,66 @@
+{
+  "id": "d3ee0fdf-f516-420e-834a-b5301112f5c4",
+  "phase": "done",
+  "clientEmail": "rijuljain17@gmail.com",
+  "clientName": "rijuljain17",
+  "requestedCount": 4,
+  "picksCount": 0,
+  "stats": {
+    "total": 0,
+    "pushed": 0,
+    "duplicates": 0,
+    "blocked": 0,
+    "errors": 0,
+    "durationMs": 0
+  },
+  "intent": {
+    "roles": [
+      "Product Manager"
+    ],
+    "locations": [
+      "Chicago",
+      "Los Angeles",
+      "San Francisco",
+      "Austin"
+    ],
+    "seniority": "entry",
+    "companies": [],
+    "workAuth": "F1 OPT",
+    "narrative": "Rijul Jain is an entry-level Product Manager based in the US, seeking opportunities in Chicago, Los Angeles, San Francisco, and Austin. He is currently on F1 OPT work authorization.",
+    "futurePreferences": "",
+    "employmentTypes": [
+      "full-time"
+    ],
+    "workModels": [
+      "hybrid"
+    ],
+    "daysAgo": 30,
+    "minYearsOfExperience": 0,
+    "maxYearsOfExperience": 1,
+    "salaryMinimumUsd": 150000,
+    "industries": null,
+    "skills": [
+      "Product Management",
+      "Agile",
+      "SaaS",
+      "AI",
+      "Automation",
+      "User Experience",
+      "Data Analysis"
+    ],
+    "companyStages": null,
+    "roleType": "ic",
+    "excludedTitles": null,
+    "excludedSkills": null,
+    "excludedIndustries": null,
+    "excludeStaffingAgency": null,
+    "excludeSecurityClearance": false,
+    "excludeUsCitizenOnly": true,
+    "exclusions": {
+      "companies": [],
+      "locations": []
+    },
+    "remarks": "no entry level jobs"
+  },
+  "completedAt": "2026-04-24T03:31:40.104Z"
+}

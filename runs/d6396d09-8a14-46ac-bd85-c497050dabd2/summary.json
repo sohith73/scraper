@@ -1,0 +1,32 @@
+{
+  "id": "d6396d09-8a14-46ac-bd85-c497050dabd2",
+  "phase": "done",
+  "clientEmail": "rijuljain17@gmail.com",
+  "clientName": "rijuljain17",
+  "requestedCount": 1,
+  "picksCount": 1,
+  "stats": {
+    "total": 1,
+    "pushed": 1,
+    "duplicates": 0,
+    "blocked": 0,
+    "errors": 0,
+    "durationMs": 870
+  },
+  "intent": {
+    "roles": [
+      "Product Manager"
+    ],
+    "locations": [],
+    "seniority": "senior",
+    "companies": [],
+    "workAuth": "F1 OPT",
+    "narrative": "PM default",
+    "futurePreferences": "",
+    "exclusions": {
+      "companies": [],
+      "locations": []
+    }
+  },
+  "completedAt": "2026-04-23T12:37:23.520Z"
+}

@@ -1,0 +1,19 @@
+{
+  "email": "riyamate4567@gmail.com",
+  "entries": [
+    {
+      "id": "61796d62-e975-4dae-ad74-7cb5fff86b53",
+      "ts": "2026-04-23T12:44:51.869Z",
+      "jobId": "69e7ea4c7820c036924d904c",
+      "title": "Software Engineer",
+      "company": "Concentrate AI",
+      "verdict": "good_pick",
+      "aiPick": true,
+      "aiScore": 75,
+      "aiReason": "Strong fit — Software Engineer at Concentrate AI, remote opportunity with H1B sponsorship, aligns well with your entry-level profile.",
+      "note": "",
+      "sourceRunId": "7f9afb8b-f2bf-4c19-8aab-9566982847ee"
+    }
+  ],
+  "updatedAt": "2026-04-23T12:44:51.869Z"
+}

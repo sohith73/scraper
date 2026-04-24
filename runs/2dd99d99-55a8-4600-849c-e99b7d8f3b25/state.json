@@ -1,0 +1,70 @@
+{
+  "id": "2dd99d99-55a8-4600-849c-e99b7d8f3b25",
+  "createdAt": "2026-04-23T09:32:27.469Z",
+  "updatedAt": "2026-04-23T09:32:45.898Z",
+  "phase": "done",
+  "clientEmail": "samhitasari11@gmail.com",
+  "clientName": "Samhita Sari",
+  "requestedCount": 5,
+  "abortRequested": false,
+  "progress": {
+    "intent": {
+      "roles": [
+        "Data Scientist",
+        "Data Engineer",
+        "Machine Learning Engineer"
+      ],
+      "locations": [
+        "Remote"
+      ],
+      "seniority": "mid",
+      "companies": [],
+      "workAuth": "H1B required — on F1 OPT until 2027",
+      "narrative": "Samhita Sarikonda is targeting mid-level roles in Data Science, Data Engineering, and Machine Learning Engineering, with a preference for remote opportunities. She requires H1B sponsorship as she is currently on F1 OPT.",
+      "futurePreferences": "Open to relocation; expects a salary in the range of 100k-150k.",
+      "exclusions": {
+        "companies": [],
+        "locations": []
+      }
+    },
+    "searched": {
+      "totalReturned": 5,
+      "totalNormalized": 5,
+      "durationMs": 6913
+    },
+    "filtered": {
+      "totalJobs": 5,
+      "picked": 0,
+      "skipped": 5,
+      "borderline": 0,
+      "batches": 1,
+      "cacheHits": 0,
+      "durationMs": 4758
+    },
+    "enriched": {
+      "total": 0,
+      "ready": 0,
+      "sparse": 0,
+      "durationMs": 0
+    },
+    "preflight": {
+      "total": 0,
+      "pushable": 0,
+      "blockedCompany": 0,
+      "blockedLocation": 0,
+      "localDuplicate": 0
+    },
+    "pushed": {
+      "total": 0,
+      "pushed": 0,
+      "duplicates": 0,
+      "blocked": 0,
+      "errors": 0,
+      "durationMs": 0
+    }
+  },
+  "picks": [],
+  "error": null,
+  "durationMs": 18429,
+  "eventSeq": 15
+}

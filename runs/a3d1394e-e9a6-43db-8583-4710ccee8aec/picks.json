@@ -1,0 +1,38 @@
+{
+  "picks": [
+    {
+      "jobId": "69b0b5b374950064509781e5",
+      "title": "Product Manager",
+      "company": "Simpro Software",
+      "applyUrl": "https://simpro.wd3.myworkdayjobs.com/simPRO_External_Careers/job/Miami-Office/Product-Manager_JR101811?source=Linkedin_Job_Wrapping",
+      "createdJobId": "69ea0abd7bdfe73b36efc5fa",
+      "outcome": "pushed"
+    }
+  ],
+  "blocked": [],
+  "errored": [],
+  "intent": {
+    "roles": [
+      "Product Manager"
+    ],
+    "locations": [],
+    "seniority": "mid",
+    "companies": [],
+    "workAuth": "F1 OPT",
+    "narrative": "PM candidate",
+    "futurePreferences": "",
+    "exclusions": {
+      "companies": [],
+      "locations": []
+    }
+  },
+  "pagination": {
+    "pagesScanned": 1,
+    "jrJobsSeen": 15,
+    "target": 1,
+    "achieved": 1,
+    "exhausted": false,
+    "hitPageCap": false,
+    "hitAiBatchCap": false
+  }
+}

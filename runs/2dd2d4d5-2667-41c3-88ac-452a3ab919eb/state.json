@@ -1,0 +1,76 @@
+{
+  "id": "2dd2d4d5-2667-41c3-88ac-452a3ab919eb",
+  "createdAt": "2026-04-23T12:08:00.578Z",
+  "updatedAt": "2026-04-23T12:08:49.074Z",
+  "phase": "done",
+  "clientEmail": "rijuljain17@gmail.com",
+  "clientName": "rijuljain17",
+  "requestedCount": 1,
+  "abortRequested": false,
+  "progress": {
+    "intent": {
+      "roles": [
+        "Product Manager"
+      ],
+      "locations": [],
+      "seniority": "mid",
+      "companies": [],
+      "workAuth": "F1 OPT",
+      "narrative": "PM salary_100k",
+      "futurePreferences": "",
+      "exclusions": {
+        "companies": [],
+        "locations": []
+      }
+    },
+    "searched": {
+      "totalReturned": 45,
+      "totalNormalized": 27,
+      "durationMs": 18397,
+      "pages": 3
+    },
+    "filtered": {
+      "totalJobs": 27,
+      "picked": 9,
+      "skipped": 16,
+      "borderline": 2,
+      "batches": 3,
+      "cacheHits": 0,
+      "durationMs": 24970
+    },
+    "enriched": {
+      "total": 11,
+      "ready": 11,
+      "sparse": 0,
+      "durationMs": 0
+    },
+    "preflight": {
+      "total": 11,
+      "pushable": 11,
+      "blockedCompany": 0,
+      "blockedLocation": 0,
+      "localDuplicate": 0
+    },
+    "pushed": {
+      "total": 3,
+      "pushed": 1,
+      "duplicates": 2,
+      "blocked": 0,
+      "errors": 0,
+      "durationMs": 3713
+    }
+  },
+  "picks": [
+    {
+      "jobId": "69e9bd704b0fa35a70770045",
+      "title": "Product Business Operations ~ Cybersecurity",
+      "company": "DXC Technology",
+      "applyUrl": "https://DXCTechnology.contacthr.com/151869161?source=Linkedin",
+      "createdJobId": "69ea0bce7bdfe73b36efc712",
+      "outcome": "pushed"
+    }
+  ],
+  "error": null,
+  "durationMs": 48496,
+  "eventSeq": 36
+}

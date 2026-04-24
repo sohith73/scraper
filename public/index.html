@@ -1,0 +1,250 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Flashfire · JobRight Scraper</title>
+    <link rel="stylesheet" href="/styles.css" />
+</head>
+<body>
+    <header>
+        <h1>Flashfire · JobRight Scraper</h1>
+        <div class="subtitle" id="header-status">loading…</div>
+    </header>
+    <main class="three-pane">
+        <!-- LEFT: client list -->
+        <aside class="pane pane-clients">
+            <div class="pane-head">
+                <h2>Clients</h2>
+                <input id="client-search" type="search" placeholder="Search name or email…" autocomplete="off" />
+            </div>
+            <ul id="client-list" class="client-list" aria-live="polite"></ul>
+            <div id="client-list-status" class="pane-status"></div>
+        </aside>
+
+        <!-- MIDDLE: selected client profile + scrape controls -->
+        <section class="pane pane-profile">
+            <div class="pane-head">
+                <h2 id="profile-heading">Select a client</h2>
+                <div class="action-group">
+                    <button id="build-summary" class="btn-secondary" disabled>Build Summary</button>
+                    <label class="count-field">
+                        N <input id="scrape-count" type="number" min="1" max="50" value="10" />
+                    </label>
+                    <button id="start-scrape" class="btn-primary" disabled>Scrape</button>
+                </div>
+            </div>
+            <div class="pane-body">
+                <section id="profile-preferences" class="profile-section" hidden>
+                    <h3>Preferences</h3>
+                    <dl id="profile-preferences-list"></dl>
+                </section>
+                <section id="profile-exclusions-editor" class="profile-section" hidden>
+                    <h3>Exclusions (synced with dashboard)</h3>
+                    <div class="exclusion-editor">
+                        <div class="exclusion-col">
+                            <div class="muted">Excluded companies</div>
+                            <ul id="excl-companies-list" class="chip-list"></ul>
+                            <div class="exclusion-add-row">
+                                <input id="excl-company-input" type="text" placeholder="Add company…" />
+                                <button id="excl-add-company" class="btn-secondary">+</button>
+                            </div>
+                        </div>
+                        <div class="exclusion-col">
+                            <div class="muted">Excluded locations</div>
+                            <ul id="excl-locations-list" class="chip-list"></ul>
+                            <div class="exclusion-add-row">
+                                <input id="excl-location-input" type="text" placeholder="Add location…" />
+                                <button id="excl-add-location" class="btn-secondary">+</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="filter-actions">
+                        <button id="excl-save" class="btn-primary" disabled>Save to Dashboard</button>
+                        <button id="excl-reset" class="btn-secondary" disabled>Reset</button>
+                        <span class="muted" id="excl-status"></span>
+                    </div>
+                </section>
+
+                <section id="advanced-filters" class="profile-section">
+                    <details class="advanced-filters-details">
+                        <summary><h3 style="display:inline-block;margin:0">Advanced filters (overrides)</h3></summary>
+                        <div class="filter-grid">
+                            <label>
+                                Date posted
+                                <select id="filter-daysAgo">
+                                    <option value="">all time (no date filter)</option>
+                                    <option value="1">past 24 h</option>
+                                    <option value="3">past 3 days</option>
+                                    <option value="7">past week</option>
+                                    <option value="14">past 2 weeks</option>
+                                    <option value="30">past month</option>
+                                    <option value="60">past 2 months</option>
+                                    <option value="90">past 3 months</option>
+                                    <option value="180">past 6 months</option>
+                                </select>
+                            </label>
+                            <label>
+                                Seniority
+                                <select id="filter-seniority">
+                                    <option value="">any (let AI choose)</option>
+                                    <option value="intern">Intern</option>
+                                    <option value="entry">Entry (0–2 yrs)</option>
+                                    <option value="mid">Mid (2–5 yrs)</option>
+                                    <option value="senior">Senior (5–8 yrs)</option>
+                                    <option value="lead">Lead / Staff (8–12 yrs)</option>
+                                    <option value="exec">Executive (12+ yrs)</option>
+                                </select>
+                            </label>
+                            <label>
+                                Years of experience
+                                <select id="filter-yoe">
+                                    <option value="">any</option>
+                                    <option value="0-1">0–1 (new grad)</option>
+                                    <option value="0-2">0–2 (entry)</option>
+                                    <option value="2-4">2–4 (mid)</option>
+                                    <option value="4-6">4–6 (senior-ish)</option>
+                                    <option value="5-8">5–8 (senior)</option>
+                                    <option value="8-12">8–12 (lead / staff)</option>
+                                    <option value="10-40">10+ (exec)</option>
+                                </select>
+                            </label>
+                            <label>
+                                Min salary (USD)
+                                <select id="filter-salary">
+                                    <option value="">any</option>
+                                    <option value="60000">$60k+</option>
+                                    <option value="80000">$80k+</option>
+                                    <option value="100000">$100k+</option>
+                                    <option value="120000">$120k+</option>
+                                    <option value="150000">$150k+</option>
+                                    <option value="180000">$180k+</option>
+                                    <option value="200000">$200k+</option>
+                                    <option value="250000">$250k+</option>
+                                </select>
+                            </label>
+                            <fieldset>
+                                <legend>Employment type</legend>
+                                <label><input type="checkbox" value="full-time" name="employmentTypes" /> Full-time</label>
+                                <label><input type="checkbox" value="contract" name="employmentTypes" /> Contract</label>
+                                <label><input type="checkbox" value="part-time" name="employmentTypes" /> Part-time</label>
+                                <label><input type="checkbox" value="internship" name="employmentTypes" /> Internship</label>
+                            </fieldset>
+                            <fieldset>
+                                <legend>Work model</legend>
+                                <label><input type="checkbox" value="onsite" name="workModels" /> Onsite</label>
+                                <label><input type="checkbox" value="remote" name="workModels" /> Remote</label>
+                                <label><input type="checkbox" value="hybrid" name="workModels" /> Hybrid</label>
+                            </fieldset>
+                            <fieldset>
+                                <legend>Company stages</legend>
+                                <label><input type="checkbox" value="seed" name="companyStages" /> Seed</label>
+                                <label><input type="checkbox" value="early-stage" name="companyStages" /> Early</label>
+                                <label><input type="checkbox" value="growth-stage" name="companyStages" /> Growth</label>
+                                <label><input type="checkbox" value="late-stage" name="companyStages" /> Late</label>
+                                <label><input type="checkbox" value="public" name="companyStages" /> Public</label>
+                            </fieldset>
+                            <fieldset>
+                                <legend>Other</legend>
+                                <label><input id="filter-excludeStaffing" type="checkbox" /> Exclude staffing agencies</label>
+                                <label><input id="filter-excludeClearance" type="checkbox" /> Exclude security-clearance jobs</label>
+                                <label><input id="filter-excludeCitizen" type="checkbox" /> Exclude US-citizen-only jobs</label>
+                            </fieldset>
+                            <label class="filter-remarks">
+                                Remarks for AI (operator notes — passed to the relevance filter)
+                                <textarea id="filter-remarks" rows="3" maxlength="1000" placeholder="e.g. client does not want entry-level jobs; prefers fintech / health; remote only"></textarea>
+                                <span class="muted" id="filter-remarks-count">0 / 1000</span>
+                            </label>
+                        </div>
+                        <div class="filter-actions">
+                            <button id="save-filters" class="btn-secondary" disabled>Save Filters</button>
+                            <button id="clear-filters" class="btn-secondary" disabled>Clear Saved</button>
+                            <span class="muted" id="filters-saved-indicator"></span>
+                        </div>
+                        <div class="muted">Empty = let AI decide from the profile. Set any value to override the AI's choice. Save persists to disk so the next Scrape is instant.</div>
+                    </details>
+                </section>
+
+                <section id="summary-banner" class="summary-banner" hidden></section>
+                <section id="profile-raw" class="profile-section" hidden>
+                    <h3>Raw profile</h3>
+                    <pre id="profile-raw-json"></pre>
+                </section>
+                <div id="profile-status" class="pane-status"></div>
+            </div>
+        </section>
+
+        <!-- RIGHT: run console -->
+        <section class="pane pane-console">
+            <div class="pane-head">
+                <h2>Run Console</h2>
+                <button id="resume-run" class="btn-secondary" hidden>Resume</button>
+                <button id="abort-run" class="btn-danger" hidden>Abort</button>
+            </div>
+            <div class="pane-body">
+                <section id="run-empty" class="profile-section">
+                    <div class="muted">No active run. Select a client and click <strong>Scrape</strong> to start.</div>
+                </section>
+                <section id="run-section" class="profile-section" hidden>
+                    <h3 id="run-heading">Run</h3>
+                    <div id="run-meta" class="muted"></div>
+                    <ol id="run-timeline" class="timeline"></ol>
+                    <div id="run-error" class="error-banner" hidden></div>
+                    <div id="no-jobs-hint" class="warn-banner" hidden></div>
+                    <div id="run-stats" class="stats-grid" hidden></div>
+                </section>
+                <section id="picks-section" class="profile-section" hidden>
+                    <h3>Picks <span id="picks-count" class="muted"></span></h3>
+                    <table id="picks-table">
+                        <thead>
+                            <tr>
+                                <th>Status</th>
+                                <th>Title</th>
+                                <th>Company</th>
+                                <th>Link</th>
+                                <th>Calibrate</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                </section>
+                <section id="decisions-section" class="profile-section" hidden>
+                    <h3>
+                        AI Decisions <span id="decisions-count" class="muted"></span>
+                        <label class="decisions-toggle-label">
+                            <input id="decisions-toggle" type="checkbox" checked />
+                            show
+                        </label>
+                    </h3>
+                    <div class="decisions-filter-row muted">
+                        <label><input type="radio" name="decisions-filter" value="all" checked /> all</label>
+                        <label><input type="radio" name="decisions-filter" value="pick" /> picked only</label>
+                        <label><input type="radio" name="decisions-filter" value="skip" /> skipped only</label>
+                    </div>
+                    <table id="decisions-table">
+                        <thead>
+                            <tr>
+                                <th>Verdict</th>
+                                <th>Score</th>
+                                <th>Title</th>
+                                <th>Company</th>
+                                <th>Reason</th>
+                                <th>Calibrate</th>
+                            </tr>
+                        </thead>
+                        <tbody></tbody>
+                    </table>
+                    <div class="muted" id="feedback-status"></div>
+                </section>
+                <section id="intent-section" class="profile-section" hidden>
+                    <h3>Search Intent</h3>
+                    <pre id="summary-json"></pre>
+                    <div class="muted" id="summary-meta"></div>
+                </section>
+                <div id="console-status" class="pane-status"></div>
+            </div>
+        </section>
+    </main>
+    <script type="module" src="/app.js"></script>
+</body>
+</html>

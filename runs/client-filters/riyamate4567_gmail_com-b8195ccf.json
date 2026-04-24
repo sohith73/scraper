@@ -1,0 +1,99 @@
+{
+  "email": "riyamate4567@gmail.com",
+  "intent": {
+    "roles": [
+      "Software Developer",
+      "AI Engineer",
+      "Software Engineer",
+      "Backend Engineer"
+    ],
+    "locations": [
+      "California",
+      "Remote"
+    ],
+    "seniority": "entry",
+    "companies": [
+      "Google",
+      "Meta",
+      "Microsoft",
+      "Amazon",
+      "Apple",
+      "NVIDIA",
+      "Oracle",
+      "OpenAI",
+      "Anthropic",
+      "Cohere",
+      "Mistral",
+      "Stability AI",
+      "Hugging Face",
+      "Perplexity",
+      "Replit",
+      "Scale AI",
+      "Runway",
+      "LangChain",
+      "Pinecone",
+      "Weaviate",
+      "Milvus",
+      "Databricks",
+      "Snowflake",
+      "Confluent",
+      "HashiCorp",
+      "VMware",
+      "Red Hat",
+      "Elastic",
+      "MongoDB Inc.",
+      "Palantir",
+      "Atlassian",
+      "GitLab",
+      "CircleCI",
+      "Tesla",
+      "Waymo",
+      "Zoox"
+    ],
+    "workAuth": "F1 OPT",
+    "narrative": "Riya Mate is an entry-level Software Developer and AI Engineer based in California, open to remote opportunities, and currently on F1 OPT work authorization.",
+    "futurePreferences": "Open to relocation and seeking opportunities for salary growth.",
+    "employmentTypes": [
+      "full-time"
+    ],
+    "workModels": [
+      "onsite",
+      "remote"
+    ],
+    "daysAgo": 7,
+    "minYearsOfExperience": 0,
+    "maxYearsOfExperience": 2,
+    "salaryMinimumUsd": 100000,
+    "industries": null,
+    "skills": [
+      "Python",
+      "Java",
+      "React",
+      "Kubernetes",
+      "AWS",
+      "CI/CD",
+      "MLOps",
+      "Machine Learning",
+      "FastAPI",
+      "TensorRT"
+    ],
+    "companyStages": null,
+    "roleType": "ic",
+    "excludedTitles": null,
+    "excludedSkills": null,
+    "excludedIndustries": null,
+    "excludeStaffingAgency": null,
+    "excludeSecurityClearance": false,
+    "excludeUsCitizenOnly": true,
+    "exclusions": {
+      "companies": [],
+      "locations": []
+    }
+  },
+  "overrides": null,
+  "meta": {
+    "lastRunId": "ac7f38ef-26aa-4a11-a978-507e43ba3768",
+    "source": "override-intent",
+    "savedAt": "2026-04-24T03:33:25.069Z"
+  }
+}
