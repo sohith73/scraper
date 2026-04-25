@@ -78,6 +78,8 @@ export async function fetchJrJobByUrl({ browser, session, env, url, logger = nul
     }
 
     let captured = null;
+    let domFallback = null;
+    const swanUrls = []; // for diagnostics if both paths fail
     const targetUrl = `${env.JOBRIGHT_BASE.replace(/\/+$/, '')}/jobs/info/${jobId}`;
     try {
         await browser.withContext({}, async (context) => {
@@ -85,6 +87,7 @@ export async function fetchJrJobByUrl({ browser, session, env, url, logger = nul
             const onResponse = async (resp) => {
                 try {
                     if (!resp.url().includes('/swan/')) return;
+                    swanUrls.push(resp.url());
                     const ct = resp.headers()['content-type'] || '';
                     if (!ct.includes('json')) return;
                     const body = await resp.json().catch(() => null);
@@ -106,18 +109,100 @@ export async function fetchJrJobByUrl({ browser, session, env, url, logger = nul
                 await new Promise((r) => setTimeout(r, 250));
             }
             page.off('response', onResponse);
+
+            // DOM fallback. JR's React app sometimes hydrates the job from
+            // a server-rendered blob or a different swan endpoint we don't
+            // recognise. Either way the title/company/location/JD render
+            // into the DOM — scrape them to build a "good-enough" canonical
+            // Job. The relevance verdict only needs description + title +
+            // company; flags/seniority are best-effort.
+            if (!captured) {
+                try {
+                    domFallback = await page.evaluate(() => {
+                        const grab = (sel) => {
+                            const el = document.querySelector(sel);
+                            return el ? el.textContent.trim() : '';
+                        };
+                        const grabAll = (sel) =>
+                            [...document.querySelectorAll(sel)]
+                                .map((el) => el.textContent.trim())
+                                .filter(Boolean);
+                        // JR uses Material-UI / their own classes; search
+                        // generously by tag + nearby keywords. Title is the
+                        // largest h1/h2 on the page.
+                        const title =
+                            grab('h1') ||
+                            grab('[data-testid="job-title"]') ||
+                            grab('[class*="JobTitle"]');
+                        const allText = document.body.innerText || '';
+                        // Company often sits next to the title; first line
+                        // after the h1 is a reasonable heuristic.
+                        const companyEl =
+                            document.querySelector('[data-testid="company-name"]') ||
+                            document.querySelector('[class*="CompanyName"]');
+                        const company = companyEl ? companyEl.textContent.trim() : '';
+                        const location =
+                            grab('[data-testid="job-location"]') ||
+                            grab('[class*="Location"]');
+                        // Description: longest <div> with > 400 chars that
+                        // sits in the main panel. Fall back to body text
+                        // sliced to first 8 KB.
+                        const candidates = grabAll('article, [class*="Description"], [class*="JobDetail"], main p, main div')
+                            .filter((t) => t.length > 400)
+                            .sort((a, b) => b.length - a.length);
+                        const description = candidates[0] || allText.slice(0, 8000);
+                        return { title, company, location, description };
+                    });
+                } catch (e) {
+                    logger?.warn?.({ err: e.message }, 'fetchJrJobByUrl: DOM fallback failed');
+                }
+            }
         });
     } catch (e) {
         return err('NETWORK', `failed to load job page: ${e.message}`);
     }
 
-    if (!captured) {
-        return err('NOT_FOUND', `JR did not surface job ${jobId} within ${SWAN_INTERCEPT_TIMEOUT_MS}ms`);
+    if (captured) {
+        const job = normalizeJobRightJob(captured);
+        if (!job) {
+            return err('BAD_SHAPE', 'captured JR payload could not be normalised', { jobId });
+        }
+        return ok({ job, jobId, source: 'api-intercept' });
     }
 
-    const job = normalizeJobRightJob(captured);
-    if (!job) {
-        return err('BAD_SHAPE', 'captured JR payload could not be normalised', { jobId });
+    if (domFallback && (domFallback.title || domFallback.description)) {
+        // Build a minimal Job out of the DOM. Lots of fields are unknown
+        // (flags, seniority, applicantsCount) — the AI verdict still works
+        // because it primarily needs title + company + description.
+        const job = {
+            id: jobId,
+            impId: '',
+            title: domFallback.title || '(unknown title)',
+            companyName: domFallback.company || '(unknown company)',
+            jobLocation: domFallback.location || '',
+            workModel: '',
+            isRemote: false,
+            employmentType: '',
+            seniority: '',
+            minYearsOfExperience: 0,
+            publishedAt: '',
+            publishedAtRelative: '',
+            applicantsCount: 0,
+            applyUrl: targetUrl,
+            description: domFallback.description || '',
+            requirements: { must: [], preferred: [] },
+            tags: [],
+            flags: { h1bSponsor: false, citizenOnly: false, clearanceRequired: false, workAuthRequired: false },
+            score: { raw: 0, label: '' },
+            company: { name: domFallback.company || '', size: '', description: '', categories: [], linkedinUrl: '', website: '', location: domFallback.location || '', foundYear: '', fundingStage: '', totalFunding: '' },
+            raw: null,
+        };
+        return ok({ job, jobId, source: 'dom-fallback' });
     }
-    return ok({ job, jobId });
+
+    return err(
+        'NOT_FOUND',
+        `JR did not surface job ${jobId} within ${SWAN_INTERCEPT_TIMEOUT_MS}ms; DOM fallback also empty`,
+        { jobId, swanUrlsSeen: swanUrls.slice(0, 10) },
+    );
 }
