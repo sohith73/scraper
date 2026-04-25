@@ -1,4 +1,4 @@
-# Flashfire JobRight Scraper
+#  Scraper
 
 Internal tool that scrapes jobs from **jobright.ai** against a Flashfire
 client's onboarding profile and pushes matched jobs into the dashboard
