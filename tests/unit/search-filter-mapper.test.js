@@ -273,13 +273,18 @@ test('workModels: explicit override wins over Remote-in-locations signal', () =>
     assert.deepEqual(f.workModel, [1]);
 });
 
-test('daysAgo: intent > base > null', () => {
-    const f1 = searchIntentToJRFilter({ intent: { ...MIN_INTENT, daysAgo: 7 } });
-    assert.equal(f1.daysAgo, 7);
-    const f2 = searchIntentToJRFilter({ intent: MIN_INTENT, existing: { daysAgo: 14 } });
-    assert.equal(f2.daysAgo, 14);
-    const f3 = searchIntentToJRFilter({ intent: MIN_INTENT });
-    assert.equal(f3.daysAgo, null);
+test('daysAgo: HARDCODED to 1 — ignores intent + base override', () => {
+    // Product direction: only past-24-h jobs ever reach the AI filter.
+    // intent.daysAgo and existing.daysAgo are intentionally ignored.
+    assert.equal(
+        searchIntentToJRFilter({ intent: { ...MIN_INTENT, daysAgo: 7 } }).daysAgo,
+        1,
+    );
+    assert.equal(
+        searchIntentToJRFilter({ intent: MIN_INTENT, existing: { daysAgo: 14 } }).daysAgo,
+        1,
+    );
+    assert.equal(searchIntentToJRFilter({ intent: MIN_INTENT }).daysAgo, 1);
 });
 
 test('YoE range: minOnly→[min,40]; maxOnly→[0,max]; both→[min,max]; neither→null', () => {

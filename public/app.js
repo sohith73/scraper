@@ -132,6 +132,11 @@ async function selectClient(email) {
     renderClients();
     renderProfile();
     renderSummary();
+    // Reset the explain-job panel so a previous client's verdict isn't
+    // shown next to the newly-selected client's name.
+    if ($('explain-result')) { $('explain-result').hidden = true; $('explain-result').innerHTML = ''; }
+    if ($('explain-url')) $('explain-url').value = '';
+    if ($('explain-go')) $('explain-go').disabled = true;
     setStatus('profile-status', 'loading profile…');
 
     try {
@@ -551,6 +556,150 @@ async function buildSummary() {
     }
 }
 
+// buildAllSummaries: walk every client in `state.clients` sequentially
+// and call /summary. Skips errors (RESUME_MISSING / NOT_FOUND / network)
+// with a per-client note instead of aborting the whole batch. The
+// progress banner under the client list lists every client + outcome,
+// so an operator can see at a glance which profiles still need work.
+//
+// Sequential — not parallel — because /summary calls gpt-4o-mini and
+// we don't want to fan out 50+ requests at once. ~2-5 s per client when
+// uncached, near-zero when the per-prompt disk cache hits.
+async function buildAllSummaries() {
+    if (!Array.isArray(state.clients) || state.clients.length === 0) return;
+    const banner = $('build-all-modal');
+    const btn = $('build-all-summaries');
+    if (btn) {
+        btn.disabled = true;
+        btn.textContent = 'Building…';
+    }
+    if (banner) {
+        banner.hidden = false;
+        banner.innerHTML = '<strong>Building summaries…</strong><div id="build-all-list" style="margin-top:6px;font-size:11px;max-height:240px;overflow:auto"></div>';
+    }
+    const list = document.getElementById('build-all-list');
+    let ok = 0, skipped = 0, failed = 0;
+    for (const c of state.clients) {
+        const row = document.createElement('div');
+        row.style.padding = '2px 0';
+        row.textContent = `… ${c.name || c.email}`;
+        list?.appendChild(row);
+        try {
+            const res = await fetch(
+                `${API}/clients/${encodeURIComponent(c.email)}/summary`,
+                { method: 'POST' },
+            );
+            const body = await res.json().catch(() => ({}));
+            if (body.success) {
+                ok += 1;
+                row.innerHTML = `✅ <strong>${c.name || c.email}</strong> ${body.cacheHit ? '(cached)' : ''}`;
+            } else {
+                const reason = body.error === 'RESUME_MISSING' ? 'no resume — skipping'
+                    : body.error === 'NOT_FOUND' ? 'no profile — skipping'
+                    : `error: ${body.error || 'unknown'} — skipping`;
+                row.innerHTML = `⚠ <strong>${c.name || c.email}</strong> · <span style="color:#e6a700">${reason}</span>`;
+                skipped += 1;
+            }
+        } catch (e) {
+            row.innerHTML = `❌ <strong>${c.name || c.email}</strong> · network error: ${e.message} — skipping`;
+            failed += 1;
+        }
+        // Auto-scroll the list so the latest line stays visible.
+        if (list) list.scrollTop = list.scrollHeight;
+    }
+    if (banner) {
+        const summary = document.createElement('div');
+        summary.style.marginTop = '8px';
+        summary.innerHTML = `<strong>Done.</strong> ${ok} built · ${skipped} skipped · ${failed} failed.
+            <button id="build-all-close" class="btn-secondary" style="margin-left:8px">Close</button>`;
+        banner.appendChild(summary);
+        document.getElementById('build-all-close')?.addEventListener('click', () => {
+            banner.hidden = true;
+            banner.innerHTML = '';
+        });
+    }
+    if (btn) {
+        btn.disabled = false;
+        btn.textContent = 'Build All Summaries';
+    }
+}
+
+// explainJobUrl: paste a JR job URL → fetch + AI verdict → render in
+// the "Why didn't this get picked?" panel. Reuses the per-client
+// summary cache so repeated explains for the same client are cheap.
+async function explainJobUrl() {
+    if (!state.selectedEmail) return;
+    const url = ($('explain-url').value || '').trim();
+    if (!url) return;
+    const btn = $('explain-go');
+    const out = $('explain-result');
+    btn.disabled = true;
+    const orig = btn.textContent;
+    btn.textContent = 'Explaining…';
+    out.hidden = false;
+    out.innerHTML = '<em class="muted">Fetching JR job + asking gpt-4o-mini…</em>';
+    try {
+        const res = await fetch(
+            `${API}/clients/${encodeURIComponent(state.selectedEmail)}/explain-job`,
+            {
+                method: 'POST',
+                headers: { 'content-type': 'application/json' },
+                body: JSON.stringify({ jobUrl: url }),
+            },
+        );
+        const body = await res.json();
+        if (!body.success) {
+            out.innerHTML = `<strong>Failed:</strong> ${body.error || 'unknown'} — ${body.message || ''}`;
+            return;
+        }
+        const v = body.verdict || {};
+        const verdictLabel = v.pick
+            ? `<span style="color:#4ade80">✓ Would pick</span>`
+            : `<span style="color:#f87171">✗ Would skip</span>`;
+        const findings = (body.pipelineFindings || []).map((f) => `<li>${escapeHtml(f)}</li>`).join('');
+        const blockers = (body.blockingCandidates || []).map((f) => `<li>${escapeHtml(f)}</li>`).join('');
+        const fixBlock = v.fix
+            ? `<div style="margin-top:6px"><strong>How to fix:</strong> ${escapeHtml(v.fix)}</div>`
+            : '';
+        out.innerHTML = `
+            <div style="display:flex;gap:12px;align-items:baseline;flex-wrap:wrap">
+                <strong>${escapeHtml(body.job?.title || '(unknown title)')}</strong>
+                <span class="muted">${escapeHtml(body.job?.company || '')}</span>
+                <span class="muted">· ${escapeHtml(body.job?.location || '')}</span>
+            </div>
+            <div style="margin-top:6px">${verdictLabel}
+                <span class="muted">score ${v.score ?? '?'} / 100</span></div>
+            <div style="margin-top:4px">${escapeHtml(v.primaryReason || '')}</div>
+            ${fixBlock}
+            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px;font-size:11px;color:#aaa">
+                <div><strong>Roles</strong><br>${escapeHtml(v.rolesAlignment || '—')}</div>
+                <div><strong>Seniority</strong><br>${escapeHtml(v.seniorityAlignment || '—')}</div>
+                <div><strong>Location</strong><br>${escapeHtml(v.locationAlignment || '—')}</div>
+            </div>
+            ${findings ? `<div style="margin-top:8px"><strong>Pipeline checks (passed):</strong><ul>${findings}</ul></div>` : ''}
+            ${blockers ? `<div style="margin-top:6px"><strong>Pipeline blockers:</strong><ul>${blockers}</ul></div>` : ''}
+            <div class="muted" style="margin-top:6px;font-size:10px">
+                Apply URL: <a href="${escapeHtml(body.job?.applyUrl || '#')}" target="_blank" rel="noopener">${escapeHtml(body.job?.applyUrl || '')}</a>
+            </div>
+        `;
+    } catch (err) {
+        out.innerHTML = `<strong>Error:</strong> ${escapeHtml(err.message)}`;
+    } finally {
+        btn.disabled = false;
+        btn.textContent = orig;
+    }
+}
+
+// escapeHtml: tiny — only used by explainJobUrl's innerHTML render.
+function escapeHtml(s) {
+    return String(s || '')
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+}
+
 // persistIntentSilently: best-effort write of the AI-built intent +
 // current Advanced-Filter overrides to the server. Same endpoint as the
 // "Save filters" button; calling it from buildSummary turns the summary
@@ -896,15 +1045,26 @@ function onRunTerminal() {
     if (phase === 'done') {
         const n = state.run.progress?.pushed?.pushed ?? 0;
         const searched = state.run.progress?.searched?.totalNormalized ?? 0;
+        // Add a "found X for [roles] · past 24h" sub-line so the operator
+        // knows exactly what JR returned for the configured filter.
+        const roles = (state.run.progress?.intent?.roles || []).slice(0, 4).join(', ');
+        const ctx = roles ? ` · roles=[${roles}] · past 24 h` : ' · past 24 h';
         if (n === 0 && searched === 0) {
-            setStatus('console-status', 'done — 0 jobs (see banner above for why)', { error: true });
+            setStatus(
+                'console-status',
+                `done — 0 jobs found${ctx} (see banner above for why)`,
+                { error: true },
+            );
         } else if (n === 0) {
             setStatus(
                 'console-status',
-                `done — ${searched} jobs scanned but 0 pushed. All were skipped, blocked, or duplicates.`,
+                `done — found ${searched}${ctx} · 0 pushed (all skipped/blocked/duplicate)`,
             );
         } else {
-            setStatus('console-status', `done — ${n} pushed in ${fmtMs(state.run.durationMs)}`);
+            setStatus(
+                'console-status',
+                `done — ${n} pushed · found ${searched}${ctx} (${fmtMs(state.run.durationMs)})`,
+            );
         }
     } else if (phase === 'failed') {
         const code = state.run.error?.code || '';
@@ -1534,6 +1694,12 @@ $('client-search').addEventListener('input', (e) => {
     renderClients();
 });
 $('build-summary').addEventListener('click', buildSummary);
+$('build-all-summaries')?.addEventListener('click', buildAllSummaries);
+$('explain-go')?.addEventListener('click', explainJobUrl);
+$('explain-url')?.addEventListener('input', () => {
+    const ok = !!state.selectedEmail && /\/jobs\/info\/[a-f0-9]/i.test($('explain-url').value || '');
+    $('explain-go').disabled = !ok;
+});
 $('start-scrape').addEventListener('click', startScrape);
 $('abort-run').addEventListener('click', abortRun);
 $('clear-run')?.addEventListener('click', clearRun);

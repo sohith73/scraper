@@ -60,6 +60,16 @@ export const CompanyStageEnum = z.enum([
 export const AiIntent = z.object({
     // Core (v1)
     roles: z.array(z.string().min(1)).max(15),
+    // relatedRoles (v3): adjacent disciplines the candidate is realistically
+    // qualified for — gpt-4o-mini infers them from the resume + onboarding
+    // narrative. Threaded into the JR taxonomy resolution so we surface a
+    // wider candidate pool when past-24-h matches in `roles` are thin.
+    // The relevance filter still scores against `roles` as primary fit;
+    // related-role hits land lower but are not auto-skipped. Examples:
+    //   roles=["AI Engineer"]  → relatedRoles=["ML Engineer","Data Engineer","Backend Engineer"]
+    //   roles=["Data Engineer"] → relatedRoles=["Analytics Engineer","ML Engineer","Backend Engineer"]
+    //   roles=["Product Manager"] → relatedRoles=["Program Manager","Technical Product Manager"]
+    relatedRoles: z.array(z.string().min(1)).max(8).nullable().optional(),
     locations: z.array(z.string().min(1)).max(15),
     seniority: SeniorityEnum,
     companies: z.array(z.string()).max(50),
@@ -128,6 +138,7 @@ export const AI_INTENT_JSON_SCHEMA = {
     additionalProperties: false,
     required: [
         'roles',
+        'relatedRoles',
         'locations',
         'seniority',
         'companies',
@@ -155,6 +166,7 @@ export const AI_INTENT_JSON_SCHEMA = {
     properties: {
         // Core
         roles: { type: 'array', items: { type: 'string' } },
+        relatedRoles: { type: ['array', 'null'], items: { type: 'string' } },
         locations: { type: 'array', items: { type: 'string' } },
         seniority: {
             type: 'string',

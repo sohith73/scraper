@@ -187,9 +187,18 @@ export async function runSearch({
                 // canonical taxonomy IDs. If resolution fails, fall back to
                 // whatever the existing filter had (best-effort).
                 const catalog = await fetchCatalog({ page, env });
+                // Combine primary + adjacent roles for taxonomy resolution.
+                // Past-24-h-only filter (hardcoded) often returns very few
+                // hits when the candidate has narrow primary roles. Adding
+                // AI-suggested adjacent disciplines (`intent.relatedRoles`)
+                // widens JR's candidate pool while the relevance phase
+                // still scores against `intent.roles` as the primary fit.
+                const primary = Array.isArray(intent?.roles) ? intent.roles : [];
+                const related = Array.isArray(intent?.relatedRoles) ? intent.relatedRoles : [];
+                const combinedRoles = [...new Set([...primary, ...related].map((s) => String(s).trim()).filter(Boolean))];
                 const { resolved, unresolved } = resolveRoles({
                     catalog,
-                    roles: intent?.roles,
+                    roles: combinedRoles,
                 });
                 if (unresolved.length) {
                     logger?.warn?.(
@@ -197,6 +206,14 @@ export async function runSearch({
                         'runSearch: some intent roles did not resolve to JR taxonomy IDs',
                     );
                 }
+                logger?.info?.(
+                    {
+                        primaryRoles: primary,
+                        relatedRoles: related,
+                        resolvedCount: resolved.length,
+                    },
+                    'runSearch: taxonomy resolution (primary + related)',
+                );
                 const taxonomyList = resolved.length
                     ? resolved
                     : (Array.isArray(merged?.jobTaxonomyList) && merged.jobTaxonomyList.length

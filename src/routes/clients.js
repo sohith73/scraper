@@ -9,6 +9,7 @@
 // the API surface and centralises the error-code → HTTP-status policy.
 
 import { Router } from 'express';
+import { explainJobForClient } from '../services/explain/index.js';
 
 // resultCodeToStatus: the single source of truth for mapping our internal
 // domain codes onto HTTP status. When adding a new error code anywhere in
@@ -322,6 +323,27 @@ export function clientsRouter({ container }) {
             }
             const removed = await container.clientFilters.remove(email);
             respondOk(res, req, { removed });
+        } catch (e) {
+            next(e);
+        }
+    });
+
+    // POST /api/clients/:email/explain-job — body { jobUrl }
+    // Self-learning loop: paste a JR URL, get an AI verdict on why this
+    // candidate would / wouldn't have been picked + a concrete fix.
+    router.post('/clients/:email/explain-job', async (req, res, next) => {
+        try {
+            const email = decodeEmailParam(req.params.email);
+            if (!email) {
+                return respondErr(res, req, { code: 'BAD_INPUT', message: 'invalid email param' });
+            }
+            const jobUrl = (req.body || {}).jobUrl;
+            if (typeof jobUrl !== 'string' || !jobUrl.trim()) {
+                return respondErr(res, req, { code: 'BAD_INPUT', message: 'jobUrl required' });
+            }
+            const r = await explainJobForClient({ container, clientEmail: email, jobUrl });
+            if (!r.ok) return respondErr(res, req, r.error);
+            respondOk(res, req, r.value);
         } catch (e) {
             next(e);
         }

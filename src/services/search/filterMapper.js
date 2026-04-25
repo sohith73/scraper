@@ -302,10 +302,12 @@ export function searchIntentToJRFilter({ intent, existing = null, resolvedTaxono
         return [];
     })();
 
-    // Scalar overrides — intent wins; fall back to base; fall back to null.
-    const daysAgo = Number.isInteger(intent.daysAgo) && intent.daysAgo > 0
-        ? intent.daysAgo
-        : (base.daysAgo ?? null);
+    // daysAgo is HARDCODED to 1 (past 24 h) per product direction.
+    // Stale jobs cause low pick rates + duplicates against the
+    // dashboard. Operators wanting wider can run multiple times —
+    // the dedupe naturally handles overlap. Saved-record `daysAgo`
+    // and intent.daysAgo are intentionally ignored here.
+    const daysAgo = 1;
 
     const annualSalaryMinimum = Number.isInteger(intent.salaryMinimumUsd)
         ? intent.salaryMinimumUsd

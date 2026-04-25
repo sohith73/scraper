@@ -22,6 +22,22 @@ Core rules (ALWAYS fill these):
     non-tech:       preserve the candidate's canonical terms (e.g. "Paralegal",
                     "Licensed Clinical Social Worker", "Line Cook", "Patient Care Technician").
   Derive from preferredRoles, then resume if preferredRoles is empty.
+- relatedRoles: 3–6 ADJACENT job titles the candidate is realistically
+  qualified for, used as a wider net when past-24-h matches in 'roles'
+  are thin. Stay within the SAME domain — never bridge tech↔medical etc.
+  Examples (NOT verbatim — derive from the real profile):
+    roles=["AI Engineer","ML Engineer"]
+      → relatedRoles=["Data Engineer","Backend Engineer","Applied Scientist","NLP Engineer"]
+    roles=["Data Engineer"]
+      → relatedRoles=["Analytics Engineer","ML Engineer","Backend Engineer","Data Platform Engineer"]
+    roles=["Frontend Engineer"]
+      → relatedRoles=["Full-Stack Engineer","UI Engineer","Web Engineer","React Engineer"]
+    roles=["Product Manager"]
+      → relatedRoles=["Technical Product Manager","Program Manager","Product Operations Manager"]
+    roles=["Registered Nurse"]
+      → relatedRoles=["Charge Nurse","Clinical Nurse","Staff Nurse","Patient Care Coordinator"]
+  Empty/null when the primary roles already span the discipline (e.g. a
+  generalist with 5+ roles listed). NEVER copy any string from 'roles'.
 - locations: canonical US city/state strings, plus "Remote" if the candidate
   is open to remote. Empty array = no location filter (country-wide).
 - seniority: one of intern | entry | mid | senior | lead | exec. Pick the

@@ -17,9 +17,11 @@
             <div class="pane-head">
                 <h2>Clients</h2>
                 <input id="client-search" type="search" placeholder="Search name or email…" autocomplete="off" />
+                <button id="build-all-summaries" class="btn-secondary" title="Build summary for every client sequentially. Skips errors with a note.">Build All Summaries</button>
             </div>
             <ul id="client-list" class="client-list" aria-live="polite"></ul>
             <div id="client-list-status" class="pane-status"></div>
+            <div id="build-all-modal" class="warn-banner" hidden style="margin:8px"></div>
         </aside>
 
         <!-- MIDDLE: selected client profile + scrape controls -->
@@ -93,16 +95,8 @@
                             </label>
                             <label>
                                 Date posted
-                                <select id="filter-daysAgo">
-                                    <option value="">all time (no date filter)</option>
-                                    <option value="1">past 24 h</option>
-                                    <option value="3">past 3 days</option>
-                                    <option value="7">past week</option>
-                                    <option value="14">past 2 weeks</option>
-                                    <option value="30">past month</option>
-                                    <option value="60">past 2 months</option>
-                                    <option value="90">past 3 months</option>
-                                    <option value="180">past 6 months</option>
+                                <select id="filter-daysAgo" disabled title="Hardcoded to past 24 h — see filterMapper.js">
+                                    <option value="1" selected>past 24 h (locked)</option>
                                 </select>
                             </label>
                             <label>
@@ -215,6 +209,21 @@
                     <div id="no-jobs-hint" class="warn-banner" hidden></div>
                     <div id="relaxation-prompt" class="warn-banner" hidden></div>
                     <div id="run-stats" class="stats-grid" hidden></div>
+                </section>
+                <section id="explain-section" class="profile-section">
+                    <h3>Why didn't a JR job get picked? <span class="muted">(self-learning)</span></h3>
+                    <p class="muted" style="font-size:11px;margin:0 0 6px">
+                        Paste a JR job URL (<code>https://jobright.ai/jobs/info/&lt;jobId&gt;</code>).
+                        We fetch it, run the same AI verdict against the selected client, and tell you
+                        which filter or profile field would need to change.
+                    </p>
+                    <div class="action-group">
+                        <input id="explain-url" type="url"
+                               placeholder="https://jobright.ai/jobs/info/abc123…"
+                               style="flex:1;min-width:280px" />
+                        <button id="explain-go" class="btn-secondary" disabled>Explain</button>
+                    </div>
+                    <div id="explain-result" class="warn-banner" hidden style="margin-top:8px"></div>
                 </section>
                 <section id="picks-section" class="profile-section" hidden>
                     <h3>Picks <span id="picks-count" class="muted"></span></h3>
