@@ -46,6 +46,10 @@ need_node() {
 }
 
 install_node_lts_nvm() {
+    # nvm.sh uses variables like $PROVIDED_VERSION before assignment; that breaks bash -u.
+    set +u
+    trap 'set -u' RETURN
+
     export NVM_DIR="${NVM_DIR:-$HOME/.nvm}"
     if [[ ! -s "$NVM_DIR/nvm.sh" ]]; then
         log "Installing nvm ($NVM_VERSION) under $NVM_DIR"
