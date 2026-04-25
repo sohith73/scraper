@@ -69,8 +69,11 @@ export async function fetchJrJobByUrl({ browser, session, env, url, logger = nul
     if (!jobId) {
         return err('BAD_INPUT', `not a JR job URL — expected /jobs/info/<jobId>: ${url}`);
     }
-    const probe = await session.probeSession({ silent: true });
-    if (!probe?.loggedIn) {
+    const probe = await session.probeSession();
+    // probeSession returns Result<{ loggedIn, status, userInfo }>. Read
+    // the inner value — earlier `probe.loggedIn` was always undefined and
+    // every explain call returned NEEDS_REAUTH even with a live session.
+    if (!probe?.ok || !probe.value?.loggedIn) {
         return err('NEEDS_REAUTH', 'JR session expired — re-login via /api/admin/login');
     }
 
