@@ -22,10 +22,15 @@ import {
     createSessionService,
 } from './playwright/index.js';
 import { createRunsService } from './services/runner/index.js';
+import { createBatchRunner } from './services/runner/batchRunner.js';
 import { createClientFilterStore } from './services/clientFilters/store.js';
 import { createMongoClientFilterStore } from './services/clientFilters/mongoStore.js';
 import { createFeedbackStore } from './services/feedback/index.js';
 import { createMongoFeedbackStore } from './services/feedback/mongoStore.js';
+import {
+    createClientSettingsStore,
+    createMongoClientSettingsStore,
+} from './services/clientSettings/index.js';
 import { createMongoConnection } from './storage/mongo.js';
 import { createDiscordNotifier } from './services/notify/index.js';
 
@@ -93,6 +98,7 @@ export function buildContainer({ overrides = {}, logger = rootLogger } = {}) {
     let mongo = null;
     let clientFilters;
     let feedback;
+    let clientSettings;
     if (env.MONGO_URI) {
         mongo = createMongoConnection({
             uri: env.MONGO_URI,
@@ -101,11 +107,13 @@ export function buildContainer({ overrides = {}, logger = rootLogger } = {}) {
         });
         clientFilters = createMongoClientFilterStore({ connection: mongo, logger });
         feedback = createMongoFeedbackStore({ connection: mongo, logger });
+        clientSettings = createMongoClientSettingsStore({ connection: mongo, logger });
         // Fire-and-forget: connect + index creation. Failures log but don't
         // block boot — the first actual read/write will surface real errors.
         mongo.connect()
             .then(() => clientFilters.ensureIndexes())
             .then(() => feedback.ensureIndexes())
+            .then(() => clientSettings.ensureIndexes())
             .then(() => logger?.info?.({ dbName: env.MONGO_DB }, 'mongo stores ready'))
             .catch((e) =>
                 logger?.error?.({ err: e.message }, 'mongo init failed — reads will error'),
@@ -117,6 +125,10 @@ export function buildContainer({ overrides = {}, logger = rootLogger } = {}) {
         });
         feedback = createFeedbackStore({
             dir: `${env.RUNS_DIR.replace(/\/+$/, '')}/client-feedback`,
+            logger,
+        });
+        clientSettings = createClientSettingsStore({
+            dir: `${env.RUNS_DIR.replace(/\/+$/, '')}/client-settings`,
             logger,
         });
     }
@@ -143,6 +155,7 @@ export function buildContainer({ overrides = {}, logger = rootLogger } = {}) {
         session,
         clientFilters,
         feedback,
+        clientSettings,
         notifier,
         mongo,  // null when using file store — health route uses for ping
     };
@@ -157,6 +170,10 @@ export function buildContainer({ overrides = {}, logger = rootLogger } = {}) {
             runsDir: env.RUNS_DIR,
             logger,
         });
+    // Batch runner sits on top of the runs service so the Scrape All flow
+    // reuses the same pipeline, mutex, and cooldown handling.
+    const batches = overrides.batches
+        || createBatchRunner({ runsService: runs, logger });
 
-    return Object.freeze({ ...assembled, runs });
+    return Object.freeze({ ...assembled, runs, batches });
 }

@@ -251,6 +251,60 @@ export function clientsRouter({ container }) {
         }
     });
 
+    // ---- Per-client scrape settings (Scrape-count, etc.) -------------
+    // Used by the Client Job Analysis admin page: each row has a number
+    // input that persists to DB so the next page load + the Scrape All
+    // button both see the same value.
+
+    // GET /api/client-settings — bulk fetch for the whole admin page.
+    router.get('/client-settings', async (req, res, next) => {
+        try {
+            if (!container.clientSettings) return respondOk(res, req, { settings: [] });
+            const settings = await container.clientSettings.listAll();
+            respondOk(res, req, { settings });
+        } catch (e) {
+            next(e);
+        }
+    });
+
+    // GET /api/client-settings/:email — single client.
+    router.get('/client-settings/:email', async (req, res, next) => {
+        try {
+            const email = decodeEmailParam(req.params.email);
+            if (!email) {
+                return respondErr(res, req, { code: 'BAD_INPUT', message: 'invalid email param' });
+            }
+            if (!container.clientSettings) return respondOk(res, req, { setting: null });
+            const setting = await container.clientSettings.get(email);
+            respondOk(res, req, { setting });
+        } catch (e) {
+            next(e);
+        }
+    });
+
+    // PUT /api/client-settings/:email — body { scrapeCount }
+    router.put('/client-settings/:email', async (req, res, next) => {
+        try {
+            const email = decodeEmailParam(req.params.email);
+            if (!email) {
+                return respondErr(res, req, { code: 'BAD_INPUT', message: 'invalid email param' });
+            }
+            if (!container.clientSettings) {
+                return respondErr(res, req, { code: 'BAD_INPUT', message: 'client settings store unavailable' });
+            }
+            try {
+                const setting = await container.clientSettings.put(email, {
+                    scrapeCount: req.body?.scrapeCount,
+                });
+                respondOk(res, req, { setting });
+            } catch (err) {
+                return respondErr(res, req, { code: 'BAD_INPUT', message: err.message });
+            }
+        } catch (e) {
+            next(e);
+        }
+    });
+
     // DELETE /api/clients/:email/filters — forget the saved record.
     router.delete('/clients/:email/filters', async (req, res, next) => {
         try {

@@ -17,6 +17,7 @@ import { healthRouter } from './routes/health.js';
 import { clientsRouter } from './routes/clients.js';
 import { adminRouter } from './routes/admin.js';
 import { runsRouter } from './routes/runs.js';
+import { batchesRouter } from './routes/batches.js';
 import { buildContainer } from './container.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -73,10 +74,14 @@ export function buildApp({ container = buildContainer() } = {}) {
         .split(',')
         .map((s) => s.trim())
         .filter(Boolean);
-    const allowedOrigins = [...defaultOrigins, ...extra];
+    // CORS_EXTRA_ORIGINS=`*` opens the API to any origin — used during
+    // local cross-port testing where the clients-tracking page is served
+    // from an unexpected host. Otherwise we keep a strict allowlist.
+    const allowAnyOrigin = extra.includes('*');
+    const allowedOrigins = [...defaultOrigins, ...extra.filter((o) => o !== '*')];
     app.use(
         cors({
-            origin: allowedOrigins,
+            origin: allowAnyOrigin ? true : allowedOrigins,
             credentials: false,
             maxAge: 600,
         }),
@@ -99,6 +104,11 @@ export function buildApp({ container = buildContainer() } = {}) {
     app.use('/api', clientsRouter({ container }));
     app.use('/api', adminRouter({ container }));
     app.use('/api', runsRouter({ container }));
+    // Batches router is optional — tests that stub out the full run graph
+    // don't necessarily wire up a batch runner.
+    if (container.batches) {
+        app.use('/api', batchesRouter({ container }));
+    }
 
     // Static UI. Served AFTER /api so a stray public/api.html can't shadow.
     app.use(
