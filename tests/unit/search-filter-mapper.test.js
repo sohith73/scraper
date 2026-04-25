@@ -60,11 +60,15 @@ test('produces a payload with all JR keys present', () => {
     }
 });
 
-test('roles are joined as comma-separated jobTitle (first 2 only — JR 400s on long strings)', () => {
+test('roles are joined as comma-separated jobTitle (up to 4 — capped at 80 chars)', () => {
+    // We bumped the cap from 2 → 4 so multi-role profiles
+    // (Software Eng + AI Eng + Cloud) all surface in the JR free-text
+    // hint. Length still bounded at 80 chars to avoid the 400 JR
+    // throws on overly-long strings.
     const f = searchIntentToJRFilter({
         intent: { ...MIN_INTENT, roles: ['Backend', 'Platform', 'Infra'] },
     });
-    assert.equal(f.jobTitle, 'Backend, Platform');
+    assert.equal(f.jobTitle, 'Backend, Platform, Infra');
 });
 
 test('seniority maps to JR integer array', () => {
@@ -392,7 +396,7 @@ test('strips trailing ", USA" / ", US" from city strings (JR rejects 3-part form
     assert.deepEqual(f.locations.map((l) => l.city), ['Cambridge, MA', 'Austin, TX']);
 });
 
-test('jobTitle trims to first two roles + 80-char cap', () => {
+test('jobTitle trims to first four roles + 80-char cap', () => {
     const f = searchIntentToJRFilter({
         intent: {
             ...MIN_INTENT,
@@ -406,9 +410,11 @@ test('jobTitle trims to first two roles + 80-char cap', () => {
         },
     });
     assert.ok(f.jobTitle.length <= 80, `jobTitle too long: ${f.jobTitle.length}`);
-    // Only the first 2 roles should appear.
-    assert.match(f.jobTitle, /^Biostatistician.*Epidemiologist/);
-    assert.equal(f.jobTitle.includes('Program Manager'), false);
+    // First role must always appear; remaining squeezed in until 80 cap.
+    assert.match(f.jobTitle, /^Biostatistician/);
+    // The very last role (Data Analyst …) should be cut by the 80-char
+    // cap — the trailing ellipsis confirms the truncation kicked in.
+    assert.match(f.jobTitle, /\.\.\.$/);
 });
 
 test('country: defaults to US when intent omits it', () => {

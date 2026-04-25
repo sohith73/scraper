@@ -1412,44 +1412,30 @@ function renderNoJobsHint(r) {
     `;
 }
 
-// renderRelaxationPrompt: shown when run.phase === 'awaiting-relaxation'.
-// Presents the computed widening options as radios + accept/decline.
+// renderRelaxationPrompt: pipeline now auto-relaxes (no operator pause),
+// so this banner becomes a passive read-out of which filters got widened
+// during the run. Shows up while pagination is still running AND in the
+// final state so the operator can see "we asked for 4, here's what we
+// changed to get them".
 function renderRelaxationPrompt(r) {
     const el = $('relaxation-prompt');
     if (!el) return;
-    const pr = r.pendingRelaxation;
-    if (r.phase !== 'awaiting-relaxation' || !pr || !Array.isArray(pr.plans) || pr.plans.length === 0) {
+    const applied = Array.isArray(r.progress?.appliedRelaxations)
+        ? r.progress.appliedRelaxations
+        : [];
+    if (applied.length === 0) {
         el.hidden = true;
         return;
     }
     el.hidden = false;
-
-    const header = `<strong>⏸ Paused — got ${pr.achieved}/${pr.target} jobs.</strong>
-        Relaxation round ${pr.round}. Pick one filter to widen, or stop here.`;
-
-    const radios = pr.plans.map((p, i) => `
-        <label class="relaxation-option">
-            <input type="radio" name="relaxation-choice" value="${i}" ${i === 0 ? 'checked' : ''} />
-            <span><strong>${p.label}</strong>: <code>${p.from}</code> → <code>${p.to}</code>
-            <span class="muted">— ${p.reason}</span></span>
-        </label>
-    `).join('');
-
-    const applied = Array.isArray(pr.appliedRelaxations) && pr.appliedRelaxations.length > 0
-        ? `<div class="muted" style="margin-top:6px">Already widened in this run: ${pr.appliedRelaxations.map((a) => `${a.label} (${a.to})`).join(' · ')}</div>`
-        : '';
-
+    const list = applied
+        .map((a) => `<li><strong>${a.label}</strong>: <code>${a.from}</code> → <code>${a.to}</code></li>`)
+        .join('');
     el.innerHTML = `
-        <div>${header}</div>
-        <div class="relaxation-options">${radios}</div>
-        ${applied}
-        <div class="relaxation-actions">
-            <button id="relaxation-accept" class="btn-primary">Widen + continue</button>
-            <button id="relaxation-decline" class="btn-secondary">Stop here</button>
-        </div>
+        <div><strong>🔧 Auto-changed filters</strong>
+        <span class="muted">— pipeline widened these to hit the target count.</span></div>
+        <ul style="margin:6px 0 0 18px;padding:0">${list}</ul>
     `;
-    $('relaxation-accept').addEventListener('click', () => submitRelaxation(true));
-    $('relaxation-decline').addEventListener('click', () => submitRelaxation(false));
 }
 
 async function submitRelaxation(accept) {

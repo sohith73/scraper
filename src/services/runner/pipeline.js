@@ -307,8 +307,8 @@ export async function runPipeline({
         // live throughout.
 
         const PAGE_SIZE = Math.max(requestedCount, 15);
-        const MAX_PAGES = 8;                // up to 8 × PAGE_SIZE candidates scanned
-        const MAX_AI_BATCHES = 6;           // cap AI spend: ~6 × 20-job batches
+        const MAX_PAGES = 12;               // up to 12 × PAGE_SIZE candidates scanned
+        const MAX_AI_BATCHES = 10;          // cap AI spend: ~10 × 20-job batches
 
         const traceDir = env?.DEBUG_CAPTURE ? runArtDir : null;
         // resumeFrom may preload previously-seen JR ids so a retried run
@@ -334,7 +334,7 @@ export async function runPipeline({
         // Outer "relaxation rounds" loop. Every inner pass is a full
         // pagination over JR with the current intent. If we exhaust below
         // target, we pause and ask the operator which filter to widen.
-        const MAX_RELAXATION_ROUNDS = 5;
+        const MAX_RELAXATION_ROUNDS = 8;
         const appliedRelaxations = Array.isArray(resumeFrom?.appliedRelaxations)
             ? [...resumeFrom.appliedRelaxations]
             : [];
@@ -620,46 +620,14 @@ export async function runPipeline({
             break;
         }
 
-        store.update(runId, {
-            phase: PHASES.AWAITING_RELAXATION,
-            pendingRelaxation: {
-                round: relaxationRound + 1,
-                achieved: allPicks.length,
-                target: requestedCount,
-                plans: serialisePlan(plans),
-                appliedRelaxations,
-                createdAt: new Date().toISOString(),
-                decision: null,
-            },
-        });
-        logger?.info?.(
-            { achieved: allPicks.length, target: requestedCount, options: plans.length },
-            'awaiting-relaxation: operator input required',
-        );
-
-        const decision = await waitForRelaxationDecision(store, runId);
-        if (decision.action === 'abort') {
-            logger?.info?.('relaxation aborted — stopping');
-            // Flip phase to ABORTED here. We can't rely on checkAbort()
-            // running again because awaiting-relaxation is a non-terminal
-            // phase the pipeline `return`s from immediately — without this
-            // explicit transition the run gets stuck visible-as-running
-            // in the UI and the SSE stream never closes.
-            store.update(runId, {
-                phase: PHASES.ABORTED,
-                pendingRelaxation: null,
-            });
-            return;
-        }
-        if (decision.action !== 'accept') {
-            logger?.info?.({ action: decision.action }, 'relaxation declined/timeout — stopping');
-            declinedOrTimedOut = true;
-            break;
-        }
-
-        // Accept — apply the chosen plan entry and start another inner pass.
-        const chosenIdx = Number.isInteger(decision.planIndex) ? decision.planIndex : 0;
-        const chosenPlan = plans[chosenIdx] || plans[0];
+        // AUTO-RELAX: previous behaviour parked the run in AWAITING_RELAXATION
+        // and waited 30 min for the operator to pick a plan. Operators
+        // never want that — they want N jobs, full stop. We now auto-pick
+        // the highest-priority plan and surface what was changed in
+        // `progress.appliedRelaxations` so the UI can show "auto-changed
+        // filters: <field> <from> → <to>". The loop continues until target
+        // met OR we hit MAX_RELAXATION_ROUNDS / no more plans / abort.
+        const chosenPlan = plans[0];
         const nextIntent = applyRelaxation(intent, chosenPlan);
         appliedRelaxations.push({
             round: relaxationRound + 1,

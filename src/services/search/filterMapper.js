@@ -359,7 +359,7 @@ export function searchIntentToJRFilter({ intent, existing = null, resolvedTaxono
                     ? jobTaxonomyList.map((t) => t.title || '').filter(Boolean)
                     : roles;
             const joined = sourceTitles
-                .slice(0, 2)
+                .slice(0, 4)
                 .map((s) =>
                     String(s)
                         .replace(/&/g, ' and ')
