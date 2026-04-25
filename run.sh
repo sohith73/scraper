@@ -6,6 +6,8 @@
 # Optional: SKIP_PLAYWRIGHT=1 ./run.sh — skip browser install
 # Optional: PLAYWRIGHT_WITH_DEPS=1 ./run.sh — same as Render: npx playwright install --with-deps chromium (may need sudo / apt)
 # Optional: SKIP_FREE_PORT=1 ./run.sh — do not kill whatever is already listening on PORT
+# Optional: RUN_FOREGROUND=1 ./run.sh — stay attached (default: background via nohup, survives closing SSH)
+# Optional: SERVER_LOG=path ./run.sh — server stdout/stderr when background (default: $ROOT/server.log)
 
 # No `set -u`: nvm.sh and other sourced tools use unset variables; nounset breaks `nvm use`.
 set -eo pipefail
@@ -154,4 +156,16 @@ else
 fi
 
 log "Starting server on port $LISTEN_PORT (loads .env if present: npm run start)"
-exec npm start
+
+if [[ "${RUN_FOREGROUND:-0}" == 1 ]]; then
+    log "RUN_FOREGROUND=1 — attached to terminal (Ctrl+C stops the server)"
+    exec npm start
+fi
+
+SERVER_LOG="${SERVER_LOG:-$ROOT/server.log}"
+mkdir -p "$(dirname "$SERVER_LOG")"
+nohup npm start >>"$SERVER_LOG" 2>&1 &
+SERVER_PID=$!
+log "Server running in background (PID $SERVER_PID). Close this terminal safely."
+log "Tail logs: tail -f $SERVER_LOG"
+log "Stop: kill $SERVER_PID   or re-run ./run.sh (frees port then starts a new instance)"
