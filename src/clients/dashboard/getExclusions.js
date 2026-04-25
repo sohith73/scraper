@@ -42,6 +42,11 @@ export async function getExclusions({ http, email }) {
         }
         throw e;
     }
+    if (res.status === 429) {
+        return err('RATE_LIMITED', 'dashboard rate-limited (429); try again in a moment', {
+            status: 429, bodyJson: res.bodyJson,
+        });
+    }
     if (res.status !== 200) {
         return err('BAD_STATUS', `unexpected status ${res.status}`, {
             status: res.status,

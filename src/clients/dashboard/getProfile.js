@@ -29,6 +29,14 @@ export async function getProfile({ http, email }) {
     if (res.status === 404) {
         return err('NOT_FOUND', 'profile not onboarded for this email', { status: 404 });
     }
+    // The HTTP client already retried 429s with backoff. Reaching this
+    // branch means the dashboard kept rate-limiting us — surface that
+    // distinctly so the run console shows "RATE_LIMITED" not "BAD_STATUS".
+    if (res.status === 429) {
+        return err('RATE_LIMITED', 'dashboard rate-limited (429); try again in a moment', {
+            status: 429, bodyJson: res.bodyJson,
+        });
+    }
     if (res.status !== 200) {
         return err('BAD_STATUS', `unexpected status ${res.status}`, {
             status: res.status,

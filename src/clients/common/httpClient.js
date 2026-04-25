@@ -49,8 +49,32 @@ function shouldRetry({ error, status }) {
         if (error.name === 'AbortError') return Boolean(error.__timeout);
         return true; // any other network-level error
     }
+    // 429 = "Too Many Requests". Always safe to back off + retry. Without
+    // this, transient dashboard rate-limit hiccups (Express express-rate-limit
+    // / Cloudflare bot-throttle) bubble straight up as BAD_STATUS and fail
+    // the whole run on the very first phase.
+    if (status === 429) return true;
     if (status && status >= 500 && status <= 599) return true;
     return false;
+}
+
+// retryDelay: returns the ms to wait before the next attempt. Honours the
+// server's `Retry-After` header (seconds OR HTTP-date) when present, else
+// falls back to exponential 300ms · 2^attempt.
+//   input  : { attempt, headers? }
+//   output : ms
+function retryDelay({ attempt, headers }) {
+    const base = RETRY_BASE_DELAY_MS * 2 ** attempt;
+    const ra = headers?.get?.('retry-after');
+    if (!ra) return base;
+    const asInt = Number.parseInt(ra, 10);
+    if (Number.isFinite(asInt) && asInt >= 0) return Math.min(asInt * 1000, 30_000);
+    const asDate = Date.parse(ra);
+    if (!Number.isNaN(asDate)) {
+        const ms = asDate - Date.now();
+        if (ms > 0) return Math.min(ms, 30_000);
+    }
+    return base;
 }
 
 // createHttpClient: factory. Returns an object with .get / .postJson
@@ -139,8 +163,11 @@ export function createHttpClient({
             }
 
             if (shouldRetry({ status: response.status }) && attempt < retries) {
-                const delay = RETRY_BASE_DELAY_MS * 2 ** attempt;
-                logger?.debug?.({ url, attempt, status: response.status }, 'retrying after 5xx');
+                const delay = retryDelay({ attempt, headers: response.headers });
+                logger?.warn?.(
+                    { url, attempt, status: response.status, delayMs: delay },
+                    `retrying after ${response.status}`,
+                );
                 await sleep(delay);
                 attempt += 1;
                 continue;

@@ -793,11 +793,47 @@ async function abortRun() {
     btn.disabled = true;
     btn.textContent = 'Aborting…';
     try {
-        await fetch(`${API}/runs/${encodeURIComponent(state.run.id)}/abort`, { method: 'POST' });
+        // If the run is parked at awaiting-relaxation, /abort sets the
+        // flag but the pipeline poll only re-checks every 500ms. Also
+        // post a `decline` to /expand so the relaxation poll exits even
+        // if the abort flag race-loses; both paths flip phase to terminal.
+        const runId = state.run.id;
+        if (state.run.phase === 'awaiting-relaxation') {
+            try {
+                await fetch(`${API}/runs/${encodeURIComponent(runId)}/expand`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ accept: false }),
+                });
+            } catch { /* ignore — the abort POST below is the real exit */ }
+        }
+        await fetch(`${API}/runs/${encodeURIComponent(runId)}/abort`, { method: 'POST' });
     } finally {
         btn.disabled = false;
         btn.textContent = 'Abort';
     }
+}
+
+// clearRun: wipe the run-console UI without aborting the in-flight run.
+// Useful when the operator wants to start a new run for another client
+// while the previous one is still phasing through. The run keeps going
+// in the background; subscription is dropped here. State machine on the
+// server is unchanged.
+function clearRun() {
+    closeEventSource();
+    state.run = null;
+    state.picks = null;
+    setStatus('console-status', '');
+    setStatus('picks-status', '');
+    renderRun();
+    // Reset the client-side decisions panel + 0-jobs hint banner so the
+    // console looks like a fresh page load.
+    const dec = $('decisions-section');
+    if (dec) dec.hidden = true;
+    const hint = $('no-jobs-hint');
+    if (hint) hint.hidden = true;
+    const relax = $('relaxation-prompt');
+    if (relax) relax.hidden = true;
 }
 
 function onRunTerminal() {
@@ -1460,6 +1496,7 @@ $('client-search').addEventListener('input', (e) => {
 $('build-summary').addEventListener('click', buildSummary);
 $('start-scrape').addEventListener('click', startScrape);
 $('abort-run').addEventListener('click', abortRun);
+$('clear-run')?.addEventListener('click', clearRun);
 $('save-filters')?.addEventListener('click', saveFiltersForCurrentClient);
 $('clear-filters')?.addEventListener('click', clearSavedFiltersForCurrentClient);
 

@@ -640,7 +640,16 @@ export async function runPipeline({
         const decision = await waitForRelaxationDecision(store, runId);
         if (decision.action === 'abort') {
             logger?.info?.('relaxation aborted — stopping');
-            return; // checkAbort flow flips phase to aborted next loop tick
+            // Flip phase to ABORTED here. We can't rely on checkAbort()
+            // running again because awaiting-relaxation is a non-terminal
+            // phase the pipeline `return`s from immediately — without this
+            // explicit transition the run gets stuck visible-as-running
+            // in the UI and the SSE stream never closes.
+            store.update(runId, {
+                phase: PHASES.ABORTED,
+                pendingRelaxation: null,
+            });
+            return;
         }
         if (decision.action !== 'accept') {
             logger?.info?.({ action: decision.action }, 'relaxation declined/timeout — stopping');
