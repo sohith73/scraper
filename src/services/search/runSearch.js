@@ -224,10 +224,65 @@ export async function runSearch({
                     body: filterPayload,
                 });
                 if (upd.status !== 200 || upd.body?.success !== true) {
-                    return err('FILTER_UPDATE_FAILED', `filter-update status=${upd.status}`, {
-                        status: upd.status,
-                        bodyJson: upd.body,
-                    });
+                    // Log the full payload + JR's response so prod failures
+                    // are diagnosable from /api/runs/:id/log without a
+                    // re-run. JR's 400 body has the actual rejection reason
+                    // (e.g. "city not recognised", "jobTitle invalid char").
+                    logger?.error?.(
+                        {
+                            status: upd.status,
+                            jrResponseBody: upd.body,
+                            filterPayload,
+                        },
+                        'runSearch: JR rejected filter update',
+                    );
+
+                    // Auto-fallback: most 400s we've seen in prod are city
+                    // names JR's geocoder doesn't recognise (bare "Durham"
+                    // etc.). Retry once with the country-wide "Within US"
+                    // pseudo-city so the operator gets results instead of
+                    // a hard fail. AI-relevance phase still filters the
+                    // jobs by intent.locations narrative-side.
+                    const hasNonFallbackCity =
+                        Array.isArray(filterPayload?.locations) &&
+                        filterPayload.locations.some(
+                            (l) => l?.city && l.city !== 'Within US',
+                        );
+                    if (upd.status === 400 && hasNonFallbackCity) {
+                        const retryPayload = {
+                            ...filterPayload,
+                            locations: [{ city: 'Within US', radiusRange: 25 }],
+                        };
+                        logger?.warn?.(
+                            { originalLocations: filterPayload.locations },
+                            'runSearch: retrying filter-update with Within-US fallback',
+                        );
+                        const retry = await pageFetch(page, {
+                            url: `${base}${FILTER_UPDATE_PATH}`,
+                            method: 'POST',
+                            body: retryPayload,
+                        });
+                        if (retry.status === 200 && retry.body?.success === true) {
+                            // Mutate so subsequent list-fetch + return value
+                            // reflect the payload that JR actually accepted.
+                            filterPayload.locations = retryPayload.locations;
+                            logger?.info?.('runSearch: fallback accepted; continuing with Within-US');
+                        } else {
+                            logger?.error?.(
+                                { retryStatus: retry.status, retryBody: retry.body },
+                                'runSearch: Within-US fallback also rejected',
+                            );
+                            return err('FILTER_UPDATE_FAILED', `filter-update status=${upd.status}`, {
+                                status: upd.status,
+                                bodyJson: upd.body,
+                            });
+                        }
+                    } else {
+                        return err('FILTER_UPDATE_FAILED', `filter-update status=${upd.status}`, {
+                            status: upd.status,
+                            bodyJson: upd.body,
+                        });
+                    }
                 }
 
                 // 5. Fetch jobs list. Pagination: caller passes `position`

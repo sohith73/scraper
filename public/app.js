@@ -537,11 +537,49 @@ async function buildSummary() {
         renderAboutCandidate();
         renderSummary();
         setStatus('console-status', body.cacheHit ? 'cached — $0 replay' : 'fresh summary computed');
+        // Auto-persist the freshly-built intent so subsequent sessions see
+        // it pre-populated. Saves to Mongo (scraper_client_filters) when
+        // MONGO_URI is set, else to runs/client-filters/*.json. Fire-and-
+        // forget — UI doesn't block on the save round-trip; failures only
+        // log to console.
+        persistIntentSilently(state.selectedEmail, body.intent);
     } catch (err) {
         setStatus('console-status', `error: ${err.message}`, { error: true });
     } finally {
         btn.disabled = false;
         btn.textContent = orig;
+    }
+}
+
+// persistIntentSilently: best-effort write of the AI-built intent +
+// current Advanced-Filter overrides to the server. Same endpoint as the
+// "Save filters" button; calling it from buildSummary turns the summary
+// build into the persistence trigger so operators don't have to remember
+// to press Save afterwards. Only refreshes state.savedRecord on success
+// so the SAVED-banner accurately reflects DB truth.
+async function persistIntentSilently(email, intent) {
+    if (!email || !intent) return;
+    try {
+        const overrides = collectFilterOverrides();
+        const res = await fetch(
+            `${API}/clients/${encodeURIComponent(email)}/filters`,
+            {
+                method: 'PUT',
+                headers: { 'content-type': 'application/json' },
+                body: JSON.stringify({
+                    intent,
+                    overrides: Object.keys(overrides).length ? overrides : null,
+                }),
+            },
+        );
+        const body = await res.json();
+        if (body.success && body.record && state.selectedEmail === email) {
+            state.savedRecord = body.record;
+            renderSummaryBanner();
+            renderFilterActions();
+        }
+    } catch (e) {
+        console.warn('persistIntentSilently failed:', e.message);
     }
 }
 
