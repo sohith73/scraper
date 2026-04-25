@@ -349,11 +349,23 @@ test('roleType alias → JR string', () => {
     );
 });
 
-test('excludedTitles joined into JR string', () => {
+test('excludedTitles passed as ARRAY (JR deserializer rejects strings)', () => {
+    // Real prod failure 2026-04-25: sending a comma-joined string for
+    // excludedTitle made JR return 400 with
+    // "Cannot construct instance of java.util.ArrayList ... String value ('Technician')"
+    // because their server expects an array of titles.
     const f = searchIntentToJRFilter({
         intent: { ...MIN_INTENT, excludedTitles: ['QA Engineer', 'Test Engineer'] },
     });
-    assert.equal(f.excludedTitle, 'QA Engineer, Test Engineer');
+    assert.deepEqual(f.excludedTitle, ['QA Engineer', 'Test Engineer']);
+});
+
+test('excludedTitle: stale string in `existing` is split into array', () => {
+    const f = searchIntentToJRFilter({
+        intent: MIN_INTENT,
+        existing: { excludedTitle: 'Technician, Intern' },
+    });
+    assert.deepEqual(f.excludedTitle, ['Technician', 'Intern']);
 });
 
 test('excludeStaffingAgency / excludeSecurityClearance / excludeUsCitizenOnly pass through', () => {

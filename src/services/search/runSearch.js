@@ -21,6 +21,7 @@ import { ok, err } from '../../clients/common/result.js';
 import { pageFetch } from '../../playwright/pageFetch.js';
 import { normalizeJobRightJob } from '../../adapters/jobright.js';
 import { searchIntentToJRFilter } from './filterMapper.js';
+import { validateJRFilter } from './filterSchema.js';
 import { fetchCatalog, resolveRoles } from './taxonomyCatalog.js';
 
 const MIN_COUNT = 1;
@@ -207,6 +208,25 @@ export async function runSearch({
                     existing: merged,
                     resolvedTaxonomyList: taxonomyList,
                 });
+
+                // Schema gate: catch type mismatches BEFORE JR's Java
+                // backend rejects the deserialisation. Failing here gives
+                // us a precise field path + expected/received types
+                // instead of an opaque 400 with a Jackson stack trace.
+                const validation = validateJRFilter(filterPayload);
+                if (!validation.ok) {
+                    logger?.error?.(
+                        { issues: validation.issues, filterPayload },
+                        'runSearch: filter payload failed JR_FILTER_SCHEMA',
+                    );
+                    return err(
+                        'FILTER_SCHEMA_INVALID',
+                        `filter payload type mismatch: ${validation.issues
+                            .map((i) => `${i.path}=${i.expected || i.message}`)
+                            .join('; ')}`,
+                        { issues: validation.issues },
+                    );
+                }
                 logger?.info?.(
                     {
                         filter: summariseFilter(filterPayload),

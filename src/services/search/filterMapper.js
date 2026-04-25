@@ -279,13 +279,28 @@ export function searchIntentToJRFilter({ intent, existing = null, resolvedTaxono
         ? [...new Set(intentExcludedSkills.map((s) => String(s).trim()).filter(Boolean))]
         : (base.excludedSkills ?? null);
 
-    // Excluded titles.
+    // Excluded titles. JR's deserializer expects an ARRAY of strings;
+    // sending a single joined string triggers a 400 with
+    //   "JSON parse error: Cannot construct instance of `java.util.ArrayList`...
+    //    no String-argument constructor/factory method to deserialize from
+    //    String value ('Technician')"
+    // Pass through as array; preserve whatever shape `existing` had only
+    // when intent didn't supply its own list.
     const intentExcludedTitles = Array.isArray(intent.excludedTitles)
         ? intent.excludedTitles
         : null;
-    const excludedTitle = intentExcludedTitles && intentExcludedTitles.length
-        ? intentExcludedTitles.join(', ')
-        : (base.excludedTitle ?? null);
+    const excludedTitle = (() => {
+        if (intentExcludedTitles && intentExcludedTitles.length) {
+            return [...new Set(intentExcludedTitles.map((s) => String(s).trim()).filter(Boolean))];
+        }
+        const baseVal = base.excludedTitle;
+        if (Array.isArray(baseVal)) return baseVal;
+        if (typeof baseVal === 'string' && baseVal.trim()) {
+            // Stale string from a previous bad save — split + rehydrate.
+            return baseVal.split(',').map((s) => s.trim()).filter(Boolean);
+        }
+        return [];
+    })();
 
     // Scalar overrides — intent wins; fall back to base; fall back to null.
     const daysAgo = Number.isInteger(intent.daysAgo) && intent.daysAgo > 0

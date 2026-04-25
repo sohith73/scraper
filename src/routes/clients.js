@@ -15,6 +15,8 @@ import { Router } from 'express';
 // the codebase, add it here too.
 const CODE_TO_STATUS = {
     BAD_INPUT: 400,
+    FILTER_SCHEMA_INVALID: 400,
+    FILTER_UPDATE_FAILED: 502,
     NOT_FOUND: 404,
     DUPLICATE: 409,
     BLOCKED_COMPANY: 403,
