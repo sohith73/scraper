@@ -1,0 +1,36 @@
+{
+  "id": "ded2392c-ca23-4f6d-ab7f-302e1a0f0899",
+  "phase": "done",
+  "clientEmail": "kanchanyad90@gmail.com",
+  "clientName": "Kanchan Yadav",
+  "requestedCount": 1,
+  "picksCount": 1,
+  "stats": {
+    "total": 1,
+    "pushed": 1,
+    "duplicates": 0,
+    "blocked": 0,
+    "errors": 0,
+    "durationMs": 2855
+  },
+  "intent": {
+    "roles": [
+      "Program Manager",
+      "Public Health Program Manager",
+      "Clinical Research Coordinator"
+    ],
+    "locations": [],
+    "seniority": "mid",
+    "companies": [],
+    "workAuth": "F1 OPT",
+    "narrative": "Public health / data analytics mid-level",
+    "futurePreferences": "",
+    "aboutCandidate": "Public health professional on F1 OPT with biostatistics and data analytics strengths; mid-level; open to research and coordinator roles in healthcare and public health organisations.",
+    "exclusions": {
+      "companies": [],
+      "locations": []
+    },
+    "remarks": "Do not push Associate Director level roles."
+  },
+  "completedAt": "2026-04-24T08:11:02.722Z"
+}

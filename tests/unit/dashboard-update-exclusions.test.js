@@ -37,7 +37,7 @@ test('PUTs normalised body to /operations/client-operations', async () => {
             clientEmail: 'alice@co.com',
             excludedCompanies: ['Acme', 'BetaCo'],
             excludedLocations: ['New York', 'SF'],
-            operatorName: 'JobRightScraper',
+            operatorName: 'JRA',
         },
     });
 });
@@ -73,11 +73,11 @@ test('HttpError kind surfaces as typed Result', async () => {
     assert.equal(r.error.code, 'TIMEOUT');
 });
 
-test('default operatorName is JobRightScraper', async () => {
+test('default operatorName is JRA', async () => {
     const calls = [];
     const http = fakeHttp({ calls, envelope: { status: 200, bodyJson: {} } });
     await updateExclusions({ http, email: 'a@b.com' });
-    assert.equal(calls[0].body.operatorName, 'JobRightScraper');
+    assert.equal(calls[0].body.operatorName, 'JRA');
 });
 
 test('empty lists accepted + passed through', async () => {

@@ -1,0 +1,80 @@
+{
+  "picks": [
+    {
+      "jobId": "69ce26fccdb525785fb946b5",
+      "title": "Biospecimen Research Coordinator",
+      "company": "Hartford HealthCare",
+      "applyUrl": "https://www.hhccareers.org/us/en/job/26154573/Biospecimen-Research-Coordinator?src=UNS-10164",
+      "createdJobId": "69eb25941d73ef07343acfaa",
+      "outcome": "pushed"
+    }
+  ],
+  "blocked": [],
+  "errored": [],
+  "decisions": [
+    {
+      "jobId": "69eb0bebdc35f7132c4ad387",
+      "title": "Clinical Data Management Specialist",
+      "company": "bioMérieux",
+      "applyUrl": "https://jobs.jobvite.com/biofiredx/job/ovU1zfwJ?__jvst=Job+Board&__jvsd=LinkedIn",
+      "pick": false,
+      "score": 0,
+      "reason": "Skip — different discipline; role is focused on clinical data management, while candidate prefers public health and research roles."
+    },
+    {
+      "jobId": "69ea72db58811370cb1333d9",
+      "title": "Senior Clinical Programmer",
+      "company": "Cytel",
+      "applyUrl": "https://iblyjb.fa.ocs.oraclecloud.com/hcmUI/CandidateExperience/en/job/1482/?utm_medium=jobboard&utm_source=linkedin",
+      "pick": false,
+      "score": 0,
+      "reason": "Skip — seniority mismatch; this is a Senior role, while candidate is mid-level."
+    },
+    {
+      "jobId": "69ce26fccdb525785fb946b5",
+      "title": "Biospecimen Research Coordinator",
+      "company": "Hartford HealthCare",
+      "applyUrl": "https://www.hhccareers.org/us/en/job/26154573/Biospecimen-Research-Coordinator?src=UNS-10164",
+      "pick": true,
+      "score": 70,
+      "reason": "Strong fit — Biospecimen Research Coordinator role aligns with candidate's public health background and mid-level experience, plus it offers H1B sponsorship."
+    }
+  ],
+  "seenJrIds": [
+    "69eb0bebdc35f7132c4ad387",
+    "69ea72db58811370cb1333d9",
+    "69ce26fccdb525785fb946b5"
+  ],
+  "resumedFrom": null,
+  "intent": {
+    "roles": [
+      "Program Manager",
+      "Public Health Program Manager",
+      "Clinical Research Coordinator"
+    ],
+    "locations": [],
+    "seniority": "mid",
+    "companies": [],
+    "workAuth": "F1 OPT",
+    "narrative": "Public health / data analytics mid-level",
+    "futurePreferences": "",
+    "aboutCandidate": "Public health professional on F1 OPT with biostatistics and data analytics strengths; mid-level; open to research and coordinator roles in healthcare and public health organisations.",
+    "exclusions": {
+      "companies": [],
+      "locations": []
+    },
+    "remarks": "Do not push Associate Director level roles."
+  },
+  "appliedRelaxations": [],
+  "declinedOrTimedOut": false,
+  "pagination": {
+    "pagesScanned": 1,
+    "jrJobsSeen": 3,
+    "target": 1,
+    "achieved": 1,
+    "exhausted": false,
+    "hitPageCap": false,
+    "hitAiBatchCap": false,
+    "relaxationRounds": 0
+  }
+}

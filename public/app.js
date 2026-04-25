@@ -35,6 +35,11 @@ const state = {
     // Latest feedback entry per jobId for the current client — drives button
     // highlight state. `{ [jobId]: { verdict, entryId } }`.
     feedbackByJob: {},
+    // Operator-edited "About this candidate" draft + saved baseline. Baseline
+    // comes from the persisted intent (or freshly-built summary). Draft is
+    // dirty when it differs.
+    aboutDraft: '',
+    aboutBaseline: '',
 };
 
 const $ = (id) => document.getElementById(id);
@@ -176,6 +181,7 @@ async function selectClient(email) {
 // switching clients so stale values don't carry over.
 function resetFilterInputs() {
     const el = (id) => $(id);
+    if (el('filter-country')) el('filter-country').value = '';
     if (el('filter-daysAgo')) el('filter-daysAgo').value = '';
     if (el('filter-seniority')) el('filter-seniority').value = '';
     if (el('filter-yoe')) el('filter-yoe').value = '';
@@ -227,6 +233,9 @@ function applySavedOverrides(saved) {
     const ov = saved.overrides || {};
     const pick = (k) => (k in ov ? ov[k] : intent[k]);
 
+    if (typeof pick('country') === 'string' && $('filter-country')) {
+        $('filter-country').value = pick('country');
+    }
     if (Number.isInteger(pick('daysAgo'))) $('filter-daysAgo').value = String(pick('daysAgo'));
     if (typeof pick('seniority') === 'string' && $('filter-seniority')) {
         $('filter-seniority').value = pick('seniority');
@@ -276,6 +285,8 @@ function renderProfile() {
         buildBtn.disabled = true;
         scrapeBtn.disabled = true;
         prefs.hidden = exclEditor.hidden = raw.hidden = true;
+        const about = $('about-candidate-section');
+        if (about) about.hidden = true;
         return;
     }
 
@@ -327,6 +338,16 @@ function renderProfile() {
         locations: [...state.exclLocationsDraft],
     };
     renderExclusionsEditor();
+
+    // About-this-candidate — seeded from saved intent if we have one.
+    const aboutSection = $('about-candidate-section');
+    if (aboutSection) aboutSection.hidden = false;
+    const savedAbout = state.summary?.intent?.aboutCandidate
+        || state.savedRecord?.intent?.aboutCandidate
+        || '';
+    state.aboutBaseline = savedAbout;
+    state.aboutDraft = savedAbout;
+    renderAboutCandidate();
 
     raw.hidden = false;
     rawJson.textContent = JSON.stringify(state.profile, null, 2);
@@ -489,6 +510,19 @@ async function buildSummary() {
             cacheHit: body.cacheHit,
             resumeFound: body.resumeFound,
         };
+        // Auto-fill the "About this candidate" textarea from the fresh AI
+        // output whenever the operator hasn't already tuned + saved it.
+        // If a saved record exists and differs, leave operator edits alone.
+        const aiAbout = body.intent?.aboutCandidate || '';
+        if (aiAbout && !state.aboutBaseline) {
+            state.aboutDraft = aiAbout;
+            state.aboutBaseline = aiAbout;
+        } else if (aiAbout && state.aboutBaseline === state.aboutDraft) {
+            // Operator hasn't edited since last load → refresh with AI's latest draft.
+            state.aboutDraft = aiAbout;
+            state.aboutBaseline = aiAbout;
+        }
+        renderAboutCandidate();
         renderSummary();
         setStatus('console-status', body.cacheHit ? 'cached — $0 replay' : 'fresh summary computed');
     } catch (err) {
@@ -628,6 +662,8 @@ async function clearSavedFiltersForCurrentClient() {
 // anything the operator didn't explicitly set.
 function collectFilterOverrides() {
     const out = {};
+    const country = $('filter-country')?.value || '';
+    if (country) out.country = country;
     const daysAgo = Number.parseInt($('filter-daysAgo').value, 10);
     if (Number.isInteger(daysAgo)) out.daysAgo = daysAgo;
     const seniority = $('filter-seniority')?.value || '';
@@ -928,6 +964,85 @@ function renderDecisions(r) {
     }
 }
 
+// ---- About this candidate (operator-editable frame) -------------------
+
+function renderAboutCandidate() {
+    const ta = $('about-candidate');
+    const meta = $('about-candidate-meta');
+    const saveBtn = $('about-save');
+    const revertBtn = $('about-revert');
+    const count = $('about-char-count');
+    if (!ta) return;
+    if (ta.value !== state.aboutDraft) ta.value = state.aboutDraft || '';
+    if (count) count.textContent = `${(state.aboutDraft || '').length} / 2000`;
+    const dirty = (state.aboutDraft || '') !== (state.aboutBaseline || '');
+    if (saveBtn) saveBtn.disabled = !state.selectedEmail || !dirty;
+    if (revertBtn) revertBtn.disabled = !dirty;
+    if (meta) {
+        if (state.aboutBaseline) {
+            meta.textContent = dirty ? '· edited, not saved' : '· saved';
+        } else {
+            meta.textContent = '· not generated yet — click Build Summary';
+        }
+    }
+}
+
+async function saveAboutCandidate() {
+    if (!state.selectedEmail) return;
+    const btn = $('about-save');
+    if (btn) btn.disabled = true;
+    setStatus('about-status', 'saving…');
+    try {
+        // The saved-filter record is the source of truth for the intent
+        // used on next scrape. Update its `aboutCandidate` in place.
+        // If no record exists yet, seed one from the current summary.
+        const baseIntent = state.savedRecord?.intent
+            || state.summary?.intent
+            || null;
+        if (!baseIntent) {
+            setStatus('about-status', 'cannot save: click Build Summary first', { error: true });
+            renderAboutCandidate();
+            return;
+        }
+        const nextIntent = { ...baseIntent, aboutCandidate: state.aboutDraft };
+        const res = await fetch(
+            `${API}/clients/${encodeURIComponent(state.selectedEmail)}/filters`,
+            {
+                method: 'PUT',
+                headers: { 'content-type': 'application/json' },
+                body: JSON.stringify({
+                    intent: nextIntent,
+                    overrides: state.savedRecord?.overrides || null,
+                }),
+            },
+        );
+        const body = await res.json();
+        if (!body.success) {
+            setStatus('about-status', `save failed: ${body.message || body.error}`, { error: true });
+            return;
+        }
+        state.savedRecord = body.record;
+        state.aboutBaseline = state.aboutDraft;
+        // Also update the in-memory summary intent so next scrape uses it
+        // even if saved-record isn't re-read.
+        if (state.summary?.intent) state.summary.intent.aboutCandidate = state.aboutDraft;
+        renderAboutCandidate();
+        renderSummaryBanner();
+        renderFilterActions();
+        setStatus('about-status', 'saved ✓ — next scrape will use this');
+    } catch (err) {
+        setStatus('about-status', `save error: ${err.message}`, { error: true });
+    } finally {
+        renderAboutCandidate();
+    }
+}
+
+function revertAboutCandidate() {
+    state.aboutDraft = state.aboutBaseline || '';
+    renderAboutCandidate();
+    setStatus('about-status', 'reverted');
+}
+
 // ---- Feedback loop (Phase 2) -------------------------------------------
 
 // loadFeedback: pull every saved event for the selected client, build a
@@ -1107,7 +1222,8 @@ function phaseSubline(key, progress) {
     }
     if (key === 'searching' && progress.searched) {
         const s = progress.searched;
-        return `${s.totalNormalized} jobs (${fmtMs(s.durationMs)})`;
+        const liSkip = s.linkedInSkipped ? `, ${s.linkedInSkipped} LinkedIn skipped` : '';
+        return `${s.totalNormalized} jobs${liSkip} (${fmtMs(s.durationMs)})`;
     }
     if (key === 'filtering' && progress.filtered) {
         const f = progress.filtered;
@@ -1135,12 +1251,22 @@ function renderRunStats(r) {
         return;
     }
     const p = r.progress.pushed;
+    const cost = r.progress.cost;
     el.hidden = false;
+    let costRows = '';
+    if (cost && (cost.totalTokens > 0 || cost.calls > 0)) {
+        const usd = cost.usd < 0.01 ? `$${cost.usd.toFixed(4)}` : `$${cost.usd.toFixed(4)}`;
+        costRows = `
+            <dt>AI cost</dt><dd>${usd} (${cost.model || 'gpt-4o-mini'})</dd>
+            <dt>AI calls</dt><dd>${cost.calls} · ${cost.cacheHits} cached · ${cost.totalTokens.toLocaleString()} tokens</dd>
+        `;
+    }
     el.innerHTML = `
         <dt>Pushed</dt><dd>${p.pushed}</dd>
         <dt>Duplicates</dt><dd>${p.duplicates}</dd>
         <dt>Blocked</dt><dd>${p.blocked}</dd>
         <dt>Errors</dt><dd>${p.errors}</dd>
+        ${costRows}
     `;
 }
 
@@ -1349,6 +1475,13 @@ $('excl-save')?.addEventListener('click', saveExclusions);
 $('excl-reset')?.addEventListener('click', resetExclusions);
 
 $('filter-remarks')?.addEventListener('input', updateRemarksCount);
+
+$('about-candidate')?.addEventListener('input', (e) => {
+    state.aboutDraft = e.target.value;
+    renderAboutCandidate();
+});
+$('about-save')?.addEventListener('click', saveAboutCandidate);
+$('about-revert')?.addEventListener('click', revertAboutCandidate);
 
 $('resume-run')?.addEventListener('click', resumeRun);
 $('decisions-toggle')?.addEventListener('change', (e) => {

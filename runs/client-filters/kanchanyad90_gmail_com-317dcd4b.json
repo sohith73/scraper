@@ -1,0 +1,30 @@
+{
+  "email": "kanchanyad90@gmail.com",
+  "intent": {
+    "roles": [
+      "Program Manager",
+      "Public Health Program Manager",
+      "Clinical Research Coordinator"
+    ],
+    "locations": [],
+    "seniority": "mid",
+    "companies": [],
+    "workAuth": "F1 OPT",
+    "narrative": "Public health / data analytics mid-level",
+    "futurePreferences": "",
+    "aboutCandidate": "Public health professional on F1 OPT with biostatistics and data analytics strengths; mid-level; open to research and coordinator roles in healthcare and public health organisations.",
+    "exclusions": {
+      "companies": [],
+      "locations": []
+    },
+    "remarks": "Do not push Associate Director level roles."
+  },
+  "overrides": {
+    "daysAgo": 30
+  },
+  "meta": {
+    "lastRunId": "ded2392c-ca23-4f6d-ab7f-302e1a0f0899",
+    "source": "override-intent",
+    "savedAt": "2026-04-24T08:11:02.721Z"
+  }
+}

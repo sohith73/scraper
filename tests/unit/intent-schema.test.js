@@ -15,6 +15,7 @@ const VALID_AI = {
     workAuth: 'H1B required',
     narrative: 'Senior backend engineer on F1 OPT seeking US-remote roles.',
     futurePreferences: '',
+    aboutCandidate: 'Senior backend engineer specialising in distributed systems.',
 };
 
 test('AiIntent accepts a minimal valid shape', () => {
@@ -67,7 +68,7 @@ test('SeniorityEnum lists the expected six levels', () => {
 test('AI_INTENT_JSON_SCHEMA required list covers every zod key including extended filters', () => {
     const required = AI_INTENT_JSON_SCHEMA.required.slice().sort();
     // Core fields
-    for (const k of ['roles', 'locations', 'seniority', 'companies', 'workAuth', 'narrative', 'futurePreferences']) {
+    for (const k of ['roles', 'locations', 'seniority', 'companies', 'workAuth', 'narrative', 'futurePreferences', 'aboutCandidate']) {
         assert.ok(required.includes(k), `missing core required: ${k}`);
     }
     // Extended filter knobs — optional semantically but listed in required per

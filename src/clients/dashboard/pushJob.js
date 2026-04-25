@@ -22,7 +22,7 @@
 //     userDetails: { email, name },
 //     role: 'operations',
 //     operationsEmail: 'scraper@flashfirehq',
-//     operationsName: 'JobRightScraper' }
+//     operationsName: 'JRA' }  // short label — appears in dashboard timeline
 
 import { ok, err } from '../common/result.js';
 import { HttpError } from '../common/httpClient.js';
@@ -30,7 +30,7 @@ import { HttpError } from '../common/httpClient.js';
 const PATH = '/addjob';
 
 const OPERATOR_EMAIL = 'scraper@flashfirehq';
-const OPERATOR_NAME = 'JobRightScraper';
+const OPERATOR_NAME = 'JRA';
 
 function validateJob(job) {
     if (!job || typeof job !== 'object') return 'job must be an object';

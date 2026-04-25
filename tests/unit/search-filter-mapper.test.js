@@ -60,11 +60,11 @@ test('produces a payload with all JR keys present', () => {
     }
 });
 
-test('roles are joined as comma-separated jobTitle', () => {
+test('roles are joined as comma-separated jobTitle (first 2 only — JR 400s on long strings)', () => {
     const f = searchIntentToJRFilter({
         intent: { ...MIN_INTENT, roles: ['Backend', 'Platform', 'Infra'] },
     });
-    assert.equal(f.jobTitle, 'Backend, Platform, Infra');
+    assert.equal(f.jobTitle, 'Backend, Platform');
 });
 
 test('seniority maps to JR integer array', () => {
@@ -351,4 +351,66 @@ test('excludeStaffingAgency / excludeSecurityClearance / excludeUsCitizenOnly pa
     assert.equal(f.excludeStaffingAgency, true);
     assert.equal(f.excludeSecurityClearance, true);
     assert.equal(f.excludeUsCitizen, true);
+});
+
+test('strips trailing ", USA" / ", US" from city strings (JR rejects 3-part form)', () => {
+    const f = searchIntentToJRFilter({
+        intent: {
+            ...MIN_INTENT,
+            locations: ['Cambridge, MA, USA', 'Austin, TX, United States'],
+        },
+    });
+    assert.deepEqual(f.locations.map((l) => l.city), ['Cambridge, MA', 'Austin, TX']);
+});
+
+test('jobTitle trims to first two roles + 80-char cap', () => {
+    const f = searchIntentToJRFilter({
+        intent: {
+            ...MIN_INTENT,
+            roles: [
+                'Biostatistician',
+                'Epidemiologist',
+                'Program Manager',
+                'Research Analyst in Public Health',
+                'Data Analyst in Public Health',
+            ],
+        },
+    });
+    assert.ok(f.jobTitle.length <= 80, `jobTitle too long: ${f.jobTitle.length}`);
+    // Only the first 2 roles should appear.
+    assert.match(f.jobTitle, /^Biostatistician.*Epidemiologist/);
+    assert.equal(f.jobTitle.includes('Program Manager'), false);
+});
+
+test('country: defaults to US when intent omits it', () => {
+    const f = searchIntentToJRFilter({ intent: MIN_INTENT });
+    assert.equal(f.country, 'US');
+});
+
+test('country: accepts US + CA aliases only', () => {
+    for (const [input, expected] of [
+        ['US', 'US'], ['us', 'US'], ['USA', 'US'], ['United States', 'US'], ['United States of America', 'US'],
+        ['CA', 'CA'], ['ca', 'CA'], ['can', 'CA'], ['Canada', 'CA'], ['canada', 'CA'],
+    ]) {
+        const f = searchIntentToJRFilter({ intent: { ...MIN_INTENT, country: input } });
+        assert.equal(f.country, expected, `"${input}" → expected ${expected}, got ${f.country}`);
+    }
+});
+
+test('country: any non-US/CA value falls back to US (stale saved records never leak to JR)', () => {
+    for (const input of ['Atlantis', 'UK', 'IN', 'AU', 'DE', 'SG', 'britain']) {
+        const f = searchIntentToJRFilter({ intent: { ...MIN_INTENT, country: input } });
+        assert.equal(f.country, 'US', `"${input}" must fall back to US, got ${f.country}`);
+    }
+});
+
+test('jobTitle very long single role → truncated with ellipsis', () => {
+    const f = searchIntentToJRFilter({
+        intent: {
+            ...MIN_INTENT,
+            roles: ['x'.repeat(200)],
+        },
+    });
+    assert.ok(f.jobTitle.length <= 80);
+    assert.ok(f.jobTitle.endsWith('...'));
 });

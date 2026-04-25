@@ -57,6 +57,7 @@ async function runBatch({ ai, intent, batch, batchIndex, schemaVersion, calibrat
         decisions: aiRes.value.value.decisions,
         decisionsById,
         cacheHit: aiRes.value.cacheHit,
+        usage: aiRes.value.usage || { promptTokens: 0, completionTokens: 0, totalTokens: 0 },
     });
 }
 
@@ -161,6 +162,17 @@ export async function filterJobsByRelevance({
         .map((s) => s.job);
 
     const cacheHits = results.filter((r) => r.value.cacheHit).length;
+    // Aggregate token usage across batches. Cache-hit batches contribute 0.
+    const usage = results.reduce(
+        (acc, r) => {
+            const u = r.value.usage || {};
+            acc.promptTokens += u.promptTokens || 0;
+            acc.completionTokens += u.completionTokens || 0;
+            acc.totalTokens += u.totalTokens || 0;
+            return acc;
+        },
+        { promptTokens: 0, completionTokens: 0, totalTokens: 0 },
+    );
 
     return ok({
         scored,
@@ -174,6 +186,7 @@ export async function filterJobsByRelevance({
             borderline: borderline.length,
             batches: batches.length,
             cacheHits,
+            usage,
             durationMs: Date.now() - startedAt,
         },
     });

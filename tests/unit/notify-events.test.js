@@ -72,6 +72,39 @@ test('notifyRunDone — no-op when notifier disabled', async () => {
     assert.equal(n.calls.length, 0);
 });
 
+test('notifyRunDone — surfaces AI cost when ledger recorded usage', async () => {
+    const n = makeNotifier();
+    const run = {
+        ...RUN,
+        progress: {
+            ...RUN.progress,
+            cost: {
+                model: 'gpt-4o-mini',
+                calls: 3,
+                cacheHits: 1,
+                promptTokens: 12345,
+                completionTokens: 678,
+                totalTokens: 13023,
+                usd: 0.0023,
+            },
+        },
+    };
+    await notifyRunDone({ notifier: n, run });
+    const f = n.calls[0].fields.find((x) => x.name === 'AI cost');
+    assert.ok(f, 'AI cost field must be present when ledger has usage');
+    assert.match(f.value, /\$0\.0023/);
+    assert.match(f.value, /gpt-4o-mini/);
+    assert.match(f.value, /3 calls/);
+    assert.match(f.value, /1 cache hits/);
+});
+
+test('notifyRunDone — skips AI cost field when no usage recorded', async () => {
+    const n = makeNotifier();
+    await notifyRunDone({ notifier: n, run: RUN });
+    const f = n.calls[0].fields.find((x) => x.name === 'AI cost');
+    assert.equal(f, undefined);
+});
+
 test('notifyRunDone — surfaces applied relaxations', async () => {
     const n = makeNotifier();
     const run = {

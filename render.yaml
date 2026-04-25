@@ -1,0 +1,59 @@
+# Render blueprint for the JobRight scraper.
+#
+# Usage: point Render at the repo, it'll offer to create the service from
+# this file. Or use it as documentation for manually setting up a Web
+# Service.
+#
+# Important: this service runs Playwright (headless Chromium) which
+# requires a persistent disk for the JR session cookies. The Free plan
+# does NOT support persistent disks — pick Starter or higher.
+
+services:
+  - type: web
+    name: jobright-scraper
+    env: node
+    region: oregon                     # pick whichever is closest to ops
+    plan: starter                      # Free has no disk; Starter is the floor
+    buildCommand: npm ci && npx playwright install --with-deps chromium
+    startCommand: node src/server.js
+    healthCheckPath: /api/health
+    disk:
+      name: scraper-data
+      mountPath: /var/data
+      sizeGB: 1
+    envVars:
+      - key: NODE_ENV
+        value: production
+      - key: LOG_LEVEL
+        value: info
+      - key: HEADLESS
+        value: "true"
+      # Persistent paths — point everything at the mounted disk so session
+      # cookies, run artifacts and AI cache survive restarts + redeploys.
+      - key: STORAGE_DIR
+        value: /var/data/storage
+      - key: RUNS_DIR
+        value: /var/data/runs
+      - key: AI_CACHE_DIR
+        value: /var/data/ai-cache
+      # Secrets — fill in the Render dashboard, never commit.
+      - key: OPENAI_API_KEY
+        sync: false
+      - key: DASHBOARD_BASE
+        sync: false
+      - key: DASHBOARD_SERVICE_TOKEN
+        sync: false
+      - key: RESUME_BASE
+        sync: false
+      - key: JOBRIGHT_EMAIL
+        sync: false
+      - key: JOBRIGHT_PASSWORD
+        sync: false
+      - key: DISCORD_WEBHOOK_URL
+        sync: false
+      - key: MONGO_URI
+        sync: false
+      - key: MONGO_DB
+        sync: false
+      - key: CORS_EXTRA_ORIGINS
+        sync: false

@@ -113,7 +113,12 @@ export function createOpenAIClient({
             const hit = await cache.get(resolvedKey);
             if (hit !== null && hit !== undefined) {
                 logger?.debug?.({ key: resolvedKey.slice(0, 10) }, 'ai cache hit');
-                return ok({ value: hit, cacheHit: true, key: resolvedKey });
+                return ok({
+                    value: hit,
+                    cacheHit: true,
+                    key: resolvedKey,
+                    usage: { promptTokens: 0, completionTokens: 0, totalTokens: 0 },
+                });
             }
         }
 
@@ -186,7 +191,16 @@ export function createOpenAIClient({
             await cache.set(resolvedKey, parsed);
         }
 
-        return ok({ value: parsed, cacheHit: false, key: resolvedKey });
+        // --- usage: track prompt/completion tokens for per-run cost -----
+        // OpenAI returns `usage` at the top level of the response. Some
+        // retry-wrapped fakes may omit it; default to zero.
+        const usage = {
+            promptTokens: response?.usage?.prompt_tokens ?? 0,
+            completionTokens: response?.usage?.completion_tokens ?? 0,
+            totalTokens: response?.usage?.total_tokens ?? 0,
+        };
+
+        return ok({ value: parsed, cacheHit: false, key: resolvedKey, usage });
     }
 
     return { completeJson };

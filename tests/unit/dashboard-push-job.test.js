@@ -27,7 +27,7 @@ test('buildPushJobPayload mirrors the dashboard contract', () => {
     });
     assert.equal(payload.role, 'operations');
     assert.equal(payload.operationsEmail, 'scraper@flashfirehq');
-    assert.equal(payload.operationsName, 'JobRightScraper');
+    assert.equal(payload.operationsName, 'JRA');
     assert.equal(payload.jobDetails.userID, 'client@co.com');
     assert.equal(payload.userDetails.email, 'client@co.com');
     assert.equal(payload.userDetails.name, 'Client');

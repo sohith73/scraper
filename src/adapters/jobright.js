@@ -63,6 +63,22 @@ export function composeDescription(jobResult) {
     return parts.join('\n\n').trim();
 }
 
+// isLinkedInApplyUrl: returns true when the apply URL routes through
+// LinkedIn. We skip these entirely because:
+//  - they require a LinkedIn account to actually apply
+//  - LinkedIn's apply flow is less reliable than direct career-site URLs
+//  - the dashboard tracker prefers direct links
+// Defensive parse so a malformed URL just returns false (filter stays fast).
+export function isLinkedInApplyUrl(url) {
+    if (typeof url !== 'string' || !url) return false;
+    try {
+        const u = new URL(url);
+        return /(^|\.)linkedin\.com$/i.test(u.hostname);
+    } catch {
+        return /linkedin\.com/i.test(url);
+    }
+}
+
 // normalizeJobRightJob: JR's recommend/list/jobs entry → our canonical Job.
 //
 // Canonical shape:

@@ -115,7 +115,7 @@ export function clientsRouter({ container }) {
     // ClientOperationsModel exclusion lists. Proxies to dashboard's
     // PUT /operations/client-operations — single source of truth, so the
     // change takes effect for every future scrape AND any dashboard-native
-    // flow. Operator name hard-coded to 'JobRightScraper' for audit trail.
+    // flow. Operator name hard-coded to 'JRA' for audit trail.
     router.put('/clients/:email/exclusions', async (req, res, next) => {
         try {
             const email = decodeEmailParam(req.params.email);

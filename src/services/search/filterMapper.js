@@ -95,6 +95,28 @@ function isBareState(loc) {
     return BARE_STATE_NAMES.has(String(loc || '').trim().toLowerCase());
 }
 
+// mapCountry: normalise operator override to the short ISO code JR expects.
+// JR's `country` field is live-verified for US + CA. Any other value (from a
+// stale saved record or a typo) falls back to 'US' — never sent raw to JR.
+const COUNTRY_ALIASES = {
+    us: 'US', usa: 'US', 'united states': 'US', 'united states of america': 'US',
+    ca: 'CA', can: 'CA', canada: 'CA',
+};
+function mapCountry(intent) {
+    const raw = String(intent?.country || '').trim().toLowerCase();
+    if (!raw) return 'US';
+    return COUNTRY_ALIASES[raw] || 'US';
+}
+
+// cleanCity: strip trailing country suffix that some profiles carry
+// ("Cambridge, MA, USA" → "Cambridge, MA"). JR rejects the 3-part form
+// with a 400 and no hint, which is how we learned about this in prod.
+function cleanCity(raw) {
+    return String(raw || '')
+        .replace(/\s*,\s*(USA|US|United States|United States of America)\s*$/i, '')
+        .trim();
+}
+
 function mapLocations(intent) {
     const locations = Array.isArray(intent?.locations) ? intent.locations : [];
     const cityLocations = locations
@@ -105,7 +127,8 @@ function mapLocations(intent) {
                 !isRemoteLocation(l) &&
                 !isBareState(l),
         )
-        .map((city) => ({ city: city.trim(), radiusRange: DEFAULT_RADIUS_MILES }));
+        .map((city) => ({ city: cleanCity(city), radiusRange: DEFAULT_RADIUS_MILES }))
+        .filter((x) => x.city);
     if (cityLocations.length === 0) {
         return [{ city: 'Within US', radiusRange: DEFAULT_RADIUS_MILES }];
     }
@@ -306,10 +329,17 @@ export function searchIntentToJRFilter({ intent, existing = null, resolvedTaxono
 
     return {
         ...base,
-        jobTitle: roles.join(', '),
+        // jobTitle is advisory free-text in JR — the actual role match
+        // happens via jobTaxonomyList. Keep the string short (JR rejected
+        // 116-char comma-joined strings with status 400): first two roles,
+        // trim to 80 chars.
+        jobTitle: (() => {
+            const joined = roles.slice(0, 2).join(', ');
+            return joined.length > 80 ? `${joined.slice(0, 77)}...` : joined;
+        })(),
         jobTaxonomyList,
         jobTypes: mapJobTypes(intent, base.jobTypes),
-        country: 'US',
+        country: mapCountry(intent),
         city: null,
         seniority: mapSeniority(intent),
         companyCategory,

@@ -228,3 +228,43 @@ test('messages sent to SDK include our system and user roles', async () => {
     assert.equal(calls[0].messages[1].content, 'USR');
     assert.equal(calls[0].temperature, 0.1);
 });
+
+test('usage passes through from SDK response → result', async () => {
+    const fn = async () => ({
+        choices: [{ message: { content: '{"ok":true}' } }],
+        usage: { prompt_tokens: 1234, completion_tokens: 567, total_tokens: 1801 },
+    });
+    const ai = createOpenAIClient({ apiKey: 'x', completionFn: fn });
+    const r = await ai.completeJson({ system: 'S', user: 'U' });
+    assert.equal(r.ok, true);
+    assert.equal(r.value.usage.promptTokens, 1234);
+    assert.equal(r.value.usage.completionTokens, 567);
+    assert.equal(r.value.usage.totalTokens, 1801);
+});
+
+test('usage defaults to zeros when SDK omits the usage block', async () => {
+    const fn = async () => ({ choices: [{ message: { content: '{}' } }] });
+    const ai = createOpenAIClient({ apiKey: 'x', completionFn: fn });
+    const r = await ai.completeJson({ system: 'S', user: 'U' });
+    assert.equal(r.value.usage.promptTokens, 0);
+    assert.equal(r.value.usage.totalTokens, 0);
+});
+
+test('cache hit returns zero-token usage (no billed call)', async () => {
+    const fn = async () => ({
+        choices: [{ message: { content: '{"x":1}' } }],
+        usage: { prompt_tokens: 100, completion_tokens: 50, total_tokens: 150 },
+    });
+    const mem = new Map();
+    const cache = {
+        get: async (k) => (mem.has(k) ? mem.get(k) : null),
+        set: async (k, v) => { mem.set(k, v); },
+    };
+    const ai = createOpenAIClient({ apiKey: 'x', completionFn: fn, cache });
+    const a = await ai.completeJson({ system: 'S', user: 'U' });
+    assert.equal(a.value.cacheHit, false);
+    assert.equal(a.value.usage.totalTokens, 150);
+    const b = await ai.completeJson({ system: 'S', user: 'U' });
+    assert.equal(b.value.cacheHit, true);
+    assert.equal(b.value.usage.totalTokens, 0);
+});

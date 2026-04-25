@@ -1,3 +1,3 @@
-2026/04/23-18:05:10.252 856f8 Reusing MANIFEST /home/bsc/Codding/DEPLOY/deploy v1/DASH/scraper/storage/Default/shared_proto_db/MANIFEST-000001
-2026/04/23-18:05:10.253 856f8 Recovering log #3
-2026/04/23-18:05:10.254 856f8 Reusing old log /home/bsc/Codding/DEPLOY/deploy v1/DASH/scraper/storage/Default/shared_proto_db/000003.log 
+2026/04/24-13:19:26.035 c436c Reusing MANIFEST /home/bsc/Codding/DEPLOY/deploy v1/DASH/scraper/storage/Default/shared_proto_db/MANIFEST-000001
+2026/04/24-13:19:26.035 c436c Recovering log #3
+2026/04/24-13:19:26.037 c436c Reusing old log /home/bsc/Codding/DEPLOY/deploy v1/DASH/scraper/storage/Default/shared_proto_db/000003.log 

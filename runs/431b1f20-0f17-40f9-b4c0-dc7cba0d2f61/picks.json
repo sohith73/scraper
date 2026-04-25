@@ -1,0 +1,199 @@
+{
+  "picks": [
+    {
+      "jobId": "69ea30f94b0fa35a70772a21",
+      "title": "Data Analyst",
+      "company": "Astound",
+      "applyUrl": "https://astound.wd108.myworkdayjobs.com/Astound_Careers/job/NJ-CollegeRdPrinceton/Data-Analyst_JR-000524",
+      "createdJobId": "69eb25481d73ef07343acf4d",
+      "outcome": "pushed"
+    }
+  ],
+  "blocked": [],
+  "errored": [],
+  "decisions": [
+    {
+      "jobId": "69eaad297820c036924ef1bf",
+      "title": "Informaticist",
+      "company": "Humana",
+      "applyUrl": "https://humana.wd5.myworkdayjobs.com/humana_external_career_site/job/Remote-Nationwide/Informaticist_R-412671",
+      "pick": false,
+      "score": 15,
+      "reason": "Skip — different discipline; Informaticist role does not align with data analytics in health."
+    },
+    {
+      "jobId": "69ea595d4b0fa35a7077379d",
+      "title": "Sr Data Analyst- Remote",
+      "company": "Stryker",
+      "applyUrl": "https://stryker.wd1.myworkdayjobs.com/strykercareers/job/Mahwah-New-Jersey/Sr-Data-Analyst--Remote_R562759",
+      "pick": false,
+      "score": 20,
+      "reason": "Skip — seniority mismatch; Sr Data Analyst is too senior for a mid-level candidate."
+    },
+    {
+      "jobId": "69ea3b717820c036924ec6a6",
+      "title": "Data Analyst",
+      "company": "Rent The Runway",
+      "applyUrl": "https://boards.greenhouse.io/embed/job_app?token=7846732&utm_source=jobright",
+      "pick": false,
+      "score": 15,
+      "reason": "Skip — different discipline; Data Analyst role at Rent The Runway is not health-focused."
+    },
+    {
+      "jobId": "69b349fbad360c0340a86c40",
+      "title": "Data Analyst, Data Analytics",
+      "company": "Current",
+      "applyUrl": "https://boards.greenhouse.io/embed/job_app?token=7713491&utm_source=jobright",
+      "pick": false,
+      "score": 20,
+      "reason": "Skip — seniority mismatch; Data Analyst role requires 3+ years of experience, which exceeds mid-level expectations."
+    },
+    {
+      "jobId": "69bdadb4b10602456282a47e",
+      "title": "Data Analyst",
+      "company": "QuinStreet",
+      "applyUrl": "https://boards.greenhouse.io/embed/job_app?token=7729723&utm_source=jobright",
+      "pick": false,
+      "score": 15,
+      "reason": "Skip — different discipline; Data Analyst role at QuinStreet does not focus on health."
+    },
+    {
+      "jobId": "69eac3b23aa0c479643b17c4",
+      "title": "Analytics and Reporting Sr Analytics (IKC)",
+      "company": "DaVita Kidney Care",
+      "applyUrl": "https://click.jobsplice.com/redirect/NTAyNzM4MS4yOTg1LjI1?source=APPLICANT_SOURCE-3-80",
+      "pick": false,
+      "score": 20,
+      "reason": "Skip — seniority mismatch; Analytics and Reporting Sr Analytics role is too senior for a mid-level candidate."
+    },
+    {
+      "jobId": "69ea1cfbdc35f7132c4a8787",
+      "title": "Data Analyst II",
+      "company": "BlueCross BlueShield of South Carolina",
+      "applyUrl": "https://ourhrconnect.wd501.myworkdayjobs.com/SCBlues/job/Columbia-South-Carolina/Data-Analyst-II_R1050367-1?source=LinkedIn",
+      "pick": false,
+      "score": 0,
+      "reason": "Skip — citizen-only posting conflicts with F1 OPT sponsorship need."
+    },
+    {
+      "jobId": "69ea83b77820c036924ee612",
+      "title": "Data Analyst",
+      "company": "adMarketplace",
+      "applyUrl": "https://careers.admarketplace.com/jobs/577232-data-analyst",
+      "pick": false,
+      "score": 15,
+      "reason": "Skip — different discipline; Data Analyst role at adMarketplace does not align with health analytics."
+    },
+    {
+      "jobId": "69ea5dfa0a6e0955530407f1",
+      "title": "Senior Informaticist",
+      "company": "Humana",
+      "applyUrl": "https://humana.wd5.myworkdayjobs.com/humana_external_career_site/job/Remote-Nationwide/Senior-Informaticist_R-412691",
+      "pick": false,
+      "score": 20,
+      "reason": "Skip — seniority mismatch; Senior Informaticist role is too senior for a mid-level candidate."
+    },
+    {
+      "jobId": "6996978f81476f6176ae7da6",
+      "title": "Data Scientist II - Product",
+      "company": "Garner Health",
+      "applyUrl": "https://boards.greenhouse.io/embed/job_app?token=5806406004&utm_source=jobright",
+      "pick": false,
+      "score": 20,
+      "reason": "Skip — seniority mismatch; Data Scientist II role is too senior for a mid-level candidate."
+    },
+    {
+      "jobId": "69bc0cf65b89c002acf10335",
+      "title": "GTM Data & Automation Analyst (Remote)",
+      "company": "CrowdStrike",
+      "applyUrl": "https://crowdstrike.wd5.myworkdayjobs.com/crowdstrikecareers/job/USA---Remote/Data---Automation-Analyst--Remote-_R26541-1?source=LinkedIn_jobs",
+      "pick": false,
+      "score": 15,
+      "reason": "Skip — different discipline; GTM Data & Automation Analyst role does not align with health analytics."
+    },
+    {
+      "jobId": "69ea30f94b0fa35a70772a21",
+      "title": "Data Analyst",
+      "company": "Astound",
+      "applyUrl": "https://astound.wd108.myworkdayjobs.com/Astound_Careers/job/NJ-CollegeRdPrinceton/Data-Analyst_JR-000524",
+      "pick": true,
+      "score": 70,
+      "reason": "Strong fit — Data Analyst role at Astound is mid-level, remote, and aligns with health analytics."
+    },
+    {
+      "jobId": "69eb0bd6dc35f7132c4ad32b",
+      "title": "Senior Data Analyst",
+      "company": "Haus",
+      "applyUrl": "https://jobs.ashbyhq.com/haus/3dc47750-18a7-4a6e-85f9-18c14b960f20?utm_source=haus_jobs_linkedin",
+      "pick": false,
+      "score": 20,
+      "reason": "Skip — seniority mismatch; Senior Data Analyst role is too senior for a mid-level candidate."
+    },
+    {
+      "jobId": "69eb134558811370cb1366d2",
+      "title": "Business Intel. Developer (Epic Cogito, Clarity & Caboodle)",
+      "company": "OU Health",
+      "applyUrl": "https://oumedicine.wd5.myworkdayjobs.com/en-US/OUHealthCareers/job/Oklahoma-City/Business-Intelligence-Developer_R0060542?source=Linkedin",
+      "pick": false,
+      "score": 20,
+      "reason": "Skip — seniority mismatch; Business Intel. Developer role is too senior for a mid-level candidate."
+    },
+    {
+      "jobId": "69ea732cdc35f7132c4aa39a",
+      "title": "Data Analyst",
+      "company": "Lonestar Electric Supply",
+      "applyUrl": "https://recruiting.paylocity.com/Recruiting/Jobs/Details/4110707",
+      "pick": false,
+      "score": 0,
+      "reason": "Skip — excluded location; Onsite role in Houston does not match remote preference."
+    }
+  ],
+  "seenJrIds": [
+    "69eaad297820c036924ef1bf",
+    "69ea595d4b0fa35a7077379d",
+    "69ea3b717820c036924ec6a6",
+    "69b349fbad360c0340a86c40",
+    "69bdadb4b10602456282a47e",
+    "69eac3b23aa0c479643b17c4",
+    "69ea1cfbdc35f7132c4a8787",
+    "69ea83b77820c036924ee612",
+    "69ea5dfa0a6e0955530407f1",
+    "6996978f81476f6176ae7da6",
+    "69bc0cf65b89c002acf10335",
+    "69ea30f94b0fa35a70772a21",
+    "69eb0bd6dc35f7132c4ad32b",
+    "69eb134558811370cb1366d2",
+    "69ea732cdc35f7132c4aa39a"
+  ],
+  "resumedFrom": null,
+  "intent": {
+    "roles": [
+      "Data Analyst",
+      "Healthcare Data Analyst"
+    ],
+    "locations": [],
+    "seniority": "mid",
+    "companies": [],
+    "workAuth": "F1 OPT",
+    "narrative": "Public health / data analytics mid-level",
+    "futurePreferences": "",
+    "aboutCandidate": "Public health / biostatistics / program management professional on F1 OPT; wants mid-level roles in data or analytics adjacent to health.",
+    "exclusions": {
+      "companies": [],
+      "locations": []
+    },
+    "remarks": "Do not push Associate Director level roles."
+  },
+  "appliedRelaxations": [],
+  "declinedOrTimedOut": false,
+  "pagination": {
+    "pagesScanned": 1,
+    "jrJobsSeen": 15,
+    "target": 1,
+    "achieved": 1,
+    "exhausted": false,
+    "hitPageCap": false,
+    "hitAiBatchCap": false,
+    "relaxationRounds": 0
+  }
+}

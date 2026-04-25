@@ -10,6 +10,7 @@
 // ops alerts are best-effort and must never bubble up into pipeline code.
 
 import { DISCORD_COLORS } from './discord.js';
+import { formatUsd } from '../../ai/costs.js';
 
 function fmtMs(ms) {
     if (!Number.isFinite(ms)) return '—';
@@ -59,6 +60,19 @@ export async function notifyRunDone({ notifier, run, logger = null } = {}) {
             value: run.progress.appliedRelaxations
                 .map((a) => `${a.label}: ${a.from} → ${a.to}`)
                 .join('\n'),
+        });
+    }
+
+    // AI cost breakdown — tokens + cache hits + USD per run.
+    const cost = run.progress?.cost;
+    if (cost && (cost.totalTokens > 0 || cost.calls > 0)) {
+        fields.push({
+            name: 'AI cost',
+            value: [
+                `**${formatUsd(cost.usd)}** (${cost.model || 'gpt-4o-mini'})`,
+                `${cost.calls} calls · ${cost.cacheHits} cache hits · ${cost.totalTokens.toLocaleString()} tokens`,
+                `prompt ${cost.promptTokens.toLocaleString()} · completion ${cost.completionTokens.toLocaleString()}`,
+            ].join('\n'),
         });
     }
 
@@ -142,6 +156,14 @@ export async function notifyNoJobs({ notifier, run, culprits = [], logger = null
             value: run.progress.appliedRelaxations
                 .map((a) => `${a.label}: ${a.from} → ${a.to}`)
                 .join('\n'),
+        });
+    }
+    const cost = run.progress?.cost;
+    if (cost && cost.usd > 0) {
+        fields.push({
+            name: 'AI cost',
+            value: `${formatUsd(cost.usd)} · ${cost.calls} calls (${cost.totalTokens.toLocaleString()} tokens)`,
+            inline: true,
         });
     }
     try {

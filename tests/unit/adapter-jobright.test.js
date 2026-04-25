@@ -4,6 +4,7 @@ import {
     normalizeJobRightJob,
     composeDescription,
     toDashboardJob,
+    isLinkedInApplyUrl,
 } from '../../src/adapters/jobright.js';
 
 // Minimal realistic JR entry — mirrors the shape we captured live in recon.
@@ -169,4 +170,42 @@ test('toDashboardJob shape matches what dashboard.pushJob expects', () => {
     assert.equal(d.jobTitle, 'Software Engineer');
     assert.equal(d.joblink, 'https://jobs.lever.co/foo/apply');
     assert.ok(d.jobDescription.length > 0);
+});
+
+// --- isLinkedInApplyUrl --------------------------------------------------
+
+test('isLinkedInApplyUrl: matches linkedin.com + subdomains', () => {
+    for (const u of [
+        'https://www.linkedin.com/jobs/view/123456',
+        'https://linkedin.com/jobs/view/1',
+        'https://www.linkedin.com/comm/jobs/view/abc',
+        'http://LINKEDIN.com/jobs',
+        'https://jobs.linkedin.com/view/1',
+    ]) {
+        assert.equal(isLinkedInApplyUrl(u), true, `expected LinkedIn: ${u}`);
+    }
+});
+
+test('isLinkedInApplyUrl: does NOT match direct career URLs', () => {
+    for (const u of [
+        'https://jobs.lever.co/foo/apply',
+        'https://boards.greenhouse.io/acme/jobs/123',
+        'https://careers.stripe.com/jobs/xyz',
+        'https://apply.workable.com/foo/j/abc',
+        'https://example.com/?ref=linkedin.com',  // substring in query, not host
+    ]) {
+        assert.equal(isLinkedInApplyUrl(u), false, `should NOT match: ${u}`);
+    }
+});
+
+test('isLinkedInApplyUrl: false for falsy / non-strings / malformed', () => {
+    assert.equal(isLinkedInApplyUrl(''), false);
+    assert.equal(isLinkedInApplyUrl(null), false);
+    assert.equal(isLinkedInApplyUrl(undefined), false);
+    assert.equal(isLinkedInApplyUrl(42), false);
+});
+
+test('isLinkedInApplyUrl: malformed URL falls back to substring check', () => {
+    // Not parseable as URL but clearly LinkedIn — defensive fallback catches it.
+    assert.equal(isLinkedInApplyUrl('not-a-url-but-linkedin.com/jobs/123'), true);
 });

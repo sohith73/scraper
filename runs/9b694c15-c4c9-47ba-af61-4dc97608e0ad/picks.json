@@ -1,0 +1,199 @@
+{
+  "picks": [
+    {
+      "jobId": "69bdadb4b10602456282a47e",
+      "title": "Data Analyst",
+      "company": "QuinStreet",
+      "applyUrl": "https://boards.greenhouse.io/embed/job_app?token=7729723&utm_source=jobright",
+      "createdJobId": "69eb252c1d73ef07343acf20",
+      "outcome": "pushed"
+    }
+  ],
+  "blocked": [],
+  "errored": [],
+  "decisions": [
+    {
+      "jobId": "69ea8f6d58811370cb133ebb",
+      "title": "Rates Product Management and Data Sciences",
+      "company": "ICD Portal",
+      "applyUrl": "https://ecnf.fa.us2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX/job/301738",
+      "pick": false,
+      "score": 15,
+      "reason": "Skip — different discipline; product management and finance focus does not align with public health or data analytics."
+    },
+    {
+      "jobId": "69bdadb4b10602456282a47e",
+      "title": "Data Analyst",
+      "company": "QuinStreet",
+      "applyUrl": "https://boards.greenhouse.io/embed/job_app?token=7729723&utm_source=jobright",
+      "pick": true,
+      "score": 70,
+      "reason": "Strong fit — Data Analyst role is remote, mid-level, and aligns with your public health and data analytics background."
+    },
+    {
+      "jobId": "69bc0cf65b89c002acf10335",
+      "title": "GTM Data & Automation Analyst (Remote)",
+      "company": "CrowdStrike",
+      "applyUrl": "https://crowdstrike.wd5.myworkdayjobs.com/crowdstrikecareers/job/USA---Remote/Data---Automation-Analyst--Remote-_R26541-1?source=LinkedIn_jobs",
+      "pick": false,
+      "score": 15,
+      "reason": "Skip — different discipline; role focuses on technology and automation rather than public health or data analytics."
+    },
+    {
+      "jobId": "69ea3b717820c036924ec6a6",
+      "title": "Data Analyst",
+      "company": "Rent The Runway",
+      "applyUrl": "https://boards.greenhouse.io/embed/job_app?token=7846732&utm_source=jobright",
+      "pick": true,
+      "score": 70,
+      "reason": "Strong fit — Data Analyst position is hybrid, mid-level, and matches your experience with data analytics."
+    },
+    {
+      "jobId": "69ea83b77820c036924ee612",
+      "title": "Data Analyst",
+      "company": "adMarketplace",
+      "applyUrl": "https://careers.admarketplace.com/jobs/577232-data-analyst",
+      "pick": false,
+      "score": 15,
+      "reason": "Skip — different discipline; this role is more focused on advertising and marketing analytics."
+    },
+    {
+      "jobId": "69b349fbad360c0340a86c40",
+      "title": "Data Analyst, Data Analytics",
+      "company": "Current",
+      "applyUrl": "https://boards.greenhouse.io/embed/job_app?token=7713491&utm_source=jobright",
+      "pick": true,
+      "score": 65,
+      "reason": "Borderline — Data Analyst role is mid-level and in New York, but it focuses on fintech which is slightly outside your stated preference."
+    },
+    {
+      "jobId": "698d429078b4502f12a3dd07",
+      "title": "Data Scientist",
+      "company": "Bumble Inc.",
+      "applyUrl": "https://jobs.lever.co/bumbleinc/21fc13e7-7d9c-4bd7-8e74-96923157cbb4/apply?utm_source=jobright",
+      "pick": false,
+      "score": 15,
+      "reason": "Skip — different discipline; Data Scientist role is more technical and not aligned with public health."
+    },
+    {
+      "jobId": "69ea30f94b0fa35a70772a21",
+      "title": "Data Analyst",
+      "company": "Astound",
+      "applyUrl": "https://astound.wd108.myworkdayjobs.com/Astound_Careers/job/NJ-CollegeRdPrinceton/Data-Analyst_JR-000524",
+      "pick": true,
+      "score": 75,
+      "reason": "Strong fit — Remote Data Analyst position is mid-level and aligns well with your public health and data analytics experience."
+    },
+    {
+      "jobId": "69eae80916b2612c2a118142",
+      "title": "Data Analyst, Merchandising",
+      "company": "REVOLVE",
+      "applyUrl": "https://workforcenow.adp.com/mascsr/default/mdf/recruitment/recruitment.html?cid=02835ad7-1b2e-4eb2-9773-3454d03b1a3e&ccId=19000101_000001&jobId=566947&source=LR&lang=en_US&source=LI&source=LI",
+      "pick": false,
+      "score": 15,
+      "reason": "Skip — different discipline; role focuses on merchandising analytics rather than public health."
+    },
+    {
+      "jobId": "6996978f81476f6176ae7da6",
+      "title": "Data Scientist II - Product",
+      "company": "Garner Health",
+      "applyUrl": "https://boards.greenhouse.io/embed/job_app?token=5806406004&utm_source=jobright",
+      "pick": false,
+      "score": 15,
+      "reason": "Skip — different discipline; Data Scientist role is not aligned with your public health focus."
+    },
+    {
+      "jobId": "69ea732cdc35f7132c4aa39a",
+      "title": "Data Analyst",
+      "company": "Lonestar Electric Supply",
+      "applyUrl": "https://recruiting.paylocity.com/Recruiting/Jobs/Details/4110707",
+      "pick": false,
+      "score": 15,
+      "reason": "Skip — different discipline; this role is more focused on operations rather than public health."
+    },
+    {
+      "jobId": "69ea66437820c036924ed6f5",
+      "title": "Data Scientist",
+      "company": "Hilton",
+      "applyUrl": "https://hilton.talentnet.community/jobs/4943d96f-7a4f-4810-a27a-0d3b6f7630e0",
+      "pick": false,
+      "score": 15,
+      "reason": "Skip — seniority mismatch; this is a mid-senior level role which exceeds your mid-level preference."
+    },
+    {
+      "jobId": "69eb0bd6dc35f7132c4ad32b",
+      "title": "Senior Data Analyst",
+      "company": "Haus",
+      "applyUrl": "https://jobs.ashbyhq.com/haus/3dc47750-18a7-4a6e-85f9-18c14b960f20?utm_source=haus_jobs_linkedin",
+      "pick": false,
+      "score": 15,
+      "reason": "Skip — seniority mismatch; this is a senior level role which exceeds your mid-level preference."
+    },
+    {
+      "jobId": "69eafde158811370cb136306",
+      "title": "Senior Data Scientist, Product Analytics",
+      "company": "Laurel",
+      "applyUrl": "http://laurel.ai/careers?ashby_jid=8d60971f-90fd-4baa-83bb-b97d0446f0af&utm_source=ex9jbwY6JL",
+      "pick": false,
+      "score": 15,
+      "reason": "Skip — seniority mismatch; this is a senior level role which exceeds your mid-level preference."
+    },
+    {
+      "jobId": "69ea640bdc35f7132c4a9c06",
+      "title": "Alteryx Data Analytics Consultant",
+      "company": "Andrew Morgan",
+      "applyUrl": "https://boards.greenhouse.io/embed/job_app?token=5198282008&utm_source=jobright",
+      "pick": true,
+      "score": 65,
+      "reason": "Borderline — Alteryx Data Analytics Consultant is mid-level and aligns with your data analytics background, but is more focused on consulting."
+    }
+  ],
+  "seenJrIds": [
+    "69ea8f6d58811370cb133ebb",
+    "69bdadb4b10602456282a47e",
+    "69bc0cf65b89c002acf10335",
+    "69ea3b717820c036924ec6a6",
+    "69ea83b77820c036924ee612",
+    "69b349fbad360c0340a86c40",
+    "698d429078b4502f12a3dd07",
+    "69ea30f94b0fa35a70772a21",
+    "69eae80916b2612c2a118142",
+    "6996978f81476f6176ae7da6",
+    "69ea732cdc35f7132c4aa39a",
+    "69ea66437820c036924ed6f5",
+    "69eb0bd6dc35f7132c4ad32b",
+    "69eafde158811370cb136306",
+    "69ea640bdc35f7132c4a9c06"
+  ],
+  "resumedFrom": null,
+  "intent": {
+    "roles": [
+      "Research Analyst",
+      "Data Analyst"
+    ],
+    "locations": [],
+    "seniority": "mid",
+    "companies": [],
+    "workAuth": "F1 OPT",
+    "narrative": "Public health / data analytics mid-level",
+    "futurePreferences": "",
+    "aboutCandidate": "Public health / biostatistics / program management professional on F1 OPT; wants mid-level roles in data or analytics adjacent to health.",
+    "exclusions": {
+      "companies": [],
+      "locations": []
+    },
+    "remarks": "Do not push Associate Director level roles."
+  },
+  "appliedRelaxations": [],
+  "declinedOrTimedOut": false,
+  "pagination": {
+    "pagesScanned": 1,
+    "jrJobsSeen": 15,
+    "target": 1,
+    "achieved": 1,
+    "exhausted": false,
+    "hitPageCap": false,
+    "hitAiBatchCap": false,
+    "relaxationRounds": 0
+  }
+}

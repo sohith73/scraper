@@ -1,0 +1,37 @@
+{
+  "picks": [],
+  "blocked": [],
+  "errored": [],
+  "decisions": [],
+  "seenJrIds": [],
+  "resumedFrom": null,
+  "intent": {
+    "roles": [
+      "Program Manager"
+    ],
+    "locations": [],
+    "seniority": "mid",
+    "companies": [],
+    "workAuth": "F1 OPT",
+    "narrative": "Public health / data analytics mid-level",
+    "futurePreferences": "",
+    "aboutCandidate": "Public health / biostatistics / program management professional on F1 OPT; wants mid-level roles in data or analytics adjacent to health.",
+    "exclusions": {
+      "companies": [],
+      "locations": []
+    },
+    "remarks": "Do not push Associate Director level roles."
+  },
+  "appliedRelaxations": [],
+  "declinedOrTimedOut": false,
+  "pagination": {
+    "pagesScanned": 0,
+    "jrJobsSeen": 0,
+    "target": 1,
+    "achieved": 0,
+    "exhausted": true,
+    "hitPageCap": false,
+    "hitAiBatchCap": false,
+    "relaxationRounds": 0
+  }
+}

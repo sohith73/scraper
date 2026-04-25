@@ -133,6 +133,11 @@ const schema = z.object({
     // string disables alerts (zero-config default). The URL itself is a
     // capability token — treat as SECRET.
     DISCORD_WEBHOOK_URL: z.string().optional().default(''),
+
+    // --- CORS allowlist extension (optional) ---------------------------
+    // Comma-separated list of extra origins that may call /api/* beyond
+    // the built-in loopback + hq.flashfirejobs.com defaults.
+    CORS_EXTRA_ORIGINS: z.string().optional().default(''),
 });
 
 // loadEnv: parses process.env against the schema. On failure, formats a clear

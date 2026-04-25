@@ -35,6 +35,8 @@ import {
     notifyCooldown,
     computeCulprits,
 } from '../notify/index.js';
+import { createCostLedger } from '../../ai/costs.js';
+import { isLinkedInApplyUrl } from '../../adapters/jobright.js';
 
 // Error codes that signal JR is throttling / blocking us — on these we
 // write a cooldown so the next run refuses up-front.
@@ -165,6 +167,11 @@ export async function runPipeline({
         }
     }
 
+    // Per-run cost ledger — accumulates OpenAI token usage from the
+    // summariser + every relevance batch. Surfaced in state.progress.cost
+    // and the Discord success message.
+    const costLedger = createCostLedger({ model: env?.OPENAI_MODEL || 'gpt-4o-mini' });
+
     try {
         logger?.info?.(
             { clientEmail, requestedCount, clientName },
@@ -232,6 +239,7 @@ export async function runPipeline({
                 }),
             );
             if (!sumRes.ok) return failRun(store, runId, sumRes.error, logger, notifier);
+            costLedger.add({ ...sumRes.value.usage, cacheHit: sumRes.value.cacheHit });
             intent = sumRes.value.intent;
             // Apply per-run operator overrides on top of the AI output.
             // Operator Advanced Filters always win over AI inference.
@@ -316,7 +324,7 @@ export async function runPipeline({
         const allDecisions = [];
         const DECISIONS_CAP = 200;
         const agg = {
-            searched: { totalReturned: 0, totalNormalized: 0, durationMs: 0, pages: 0 },
+            searched: { totalReturned: 0, totalNormalized: 0, durationMs: 0, pages: 0, linkedInSkipped: 0 },
             filtered: { totalJobs: 0, picked: 0, skipped: 0, borderline: 0, batches: 0, cacheHits: 0, durationMs: 0 },
             enriched: { total: 0, ready: 0, sparse: 0, durationMs: 0 },
             preflight: { total: 0, pushable: 0, blockedCompany: 0, blockedLocation: 0, localDuplicate: 0 },
@@ -387,15 +395,39 @@ export async function runPipeline({
             }
 
             // De-dupe vs previous pages (JR sometimes repeats).
-            const freshJobs = searchRes.value.jobs.filter((j) => {
+            const dedupedJobs = searchRes.value.jobs.filter((j) => {
                 if (!j?.id || seenJrIds.has(j.id)) return false;
                 seenJrIds.add(j.id);
                 return true;
             });
+
+            // Skip LinkedIn-hosted apply URLs BEFORE they hit AI. The
+            // dashboard tracker prefers direct career-site links and the
+            // LinkedIn apply flow is unreliable — saves tokens + operator
+            // noise to drop them at the boundary.
+            const linkedInSkipped = [];
+            const freshJobs = dedupedJobs.filter((j) => {
+                if (isLinkedInApplyUrl(j?.applyUrl)) {
+                    linkedInSkipped.push({
+                        jobId: j?.id,
+                        title: j?.title,
+                        company: j?.companyName,
+                    });
+                    return false;
+                }
+                return true;
+            });
+            if (linkedInSkipped.length) {
+                logger?.info?.(
+                    { page, skipped: linkedInSkipped.length, remaining: freshJobs.length },
+                    'linkedin jobs skipped before AI',
+                );
+            }
             agg.searched.totalReturned += searchRes.value.totalReturned;
             agg.searched.totalNormalized += freshJobs.length;
             agg.searched.durationMs += searchRes.value.durationMs;
             agg.searched.pages = page + 1;
+            agg.searched.linkedInSkipped += linkedInSkipped.length;
             store.update(runId, { progress: { searched: agg.searched } });
             logger?.info?.(
                 { page, jrReturned: searchRes.value.totalReturned, fresh: freshJobs.length, seenTotal: seenJrIds.size },
@@ -421,6 +453,26 @@ export async function runPipeline({
                 }),
             );
             if (!filterRes.ok) return failRun(store, runId, filterRes.error, logger, notifier);
+            // Track AI spend per batch. One ledger entry per batch preserves
+            // the cacheHits counter accuracy (cache-hit batches have zero
+            // tokens but still count as one call).
+            {
+                const totalBatches = filterRes.value.stats.batches || 1;
+                const cachedInBatch = filterRes.value.stats.cacheHits || 0;
+                const liveBatches = Math.max(0, totalBatches - cachedInBatch);
+                const u = filterRes.value.stats.usage || { promptTokens: 0, completionTokens: 0, totalTokens: 0 };
+                // Split the aggregated usage across the live batches so each
+                // accounted call carries its proportional share. Cache-hit
+                // batches get a zero-token entry with cacheHit=true.
+                const perLive = liveBatches > 0
+                    ? {
+                          promptTokens: Math.round(u.promptTokens / liveBatches),
+                          completionTokens: Math.round(u.completionTokens / liveBatches),
+                      }
+                    : { promptTokens: 0, completionTokens: 0 };
+                for (let i = 0; i < liveBatches; i += 1) costLedger.add(perLive);
+                for (let i = 0; i < cachedInBatch; i += 1) costLedger.add({ cacheHit: true });
+            }
             aiBatches += filterRes.value.stats.batches;
             agg.filtered.totalJobs += filterRes.value.stats.totalJobs;
             agg.filtered.picked += filterRes.value.stats.picked;
@@ -631,6 +683,8 @@ export async function runPipeline({
         const blocked = allBlocked;
         const errored = allErrored;
 
+        const costSnapshot = costLedger.totals();
+
         await writeArtifact(runArtDir, 'picks.json', {
             picks,
             blocked,
@@ -641,6 +695,7 @@ export async function runPipeline({
             intent,
             appliedRelaxations,
             declinedOrTimedOut,
+            cost: costSnapshot,
             pagination: {
                 pagesScanned: page,
                 jrJobsSeen: seenJrIds.size,
@@ -656,7 +711,7 @@ export async function runPipeline({
         store.update(runId, {
             phase: PHASES.DONE,
             picks,
-            progress: { pushed: agg.pushed },
+            progress: { pushed: agg.pushed, cost: costSnapshot },
         });
 
         // --- Ops alert: DONE (or no-jobs variant) ---------------------
@@ -709,6 +764,7 @@ export async function runPipeline({
             requestedCount,
             picksCount: picks.length,
             stats: agg.pushed,
+            cost: costSnapshot,
             intent,
             completedAt: new Date().toISOString(),
         });

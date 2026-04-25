@@ -1,0 +1,72 @@
+{
+  "email": "grandhisaikrishna3@gmail.com",
+  "intent": {
+    "roles": [
+      "Data Analyst",
+      "Data Engineer",
+      "Marketing Analyst",
+      "Business Analyst",
+      "Product Manager",
+      "Reporting Analyst"
+    ],
+    "locations": [
+      "Washington D.C",
+      "Seattle",
+      "Newyork",
+      "Virginia",
+      "New Jersey",
+      "Oregon"
+    ],
+    "seniority": "mid",
+    "companies": [
+      "Microsoft",
+      "Amazon",
+      "Meta",
+      "Google",
+      "Tesla",
+      "JP Morgan",
+      "Bank of America",
+      "Capital One"
+    ],
+    "workAuth": "F1 visa",
+    "narrative": "Sai Krishna Grandhi is a mid-level Data Analyst seeking opportunities in Washington D.C., Seattle, New York, Virginia, New Jersey, or Oregon. He is currently on an F1 visa and is available to join in one week.",
+    "futurePreferences": "",
+    "aboutCandidate": "Sai Krishna Grandhi is a Data & Operations Analyst with over 3 years of experience in data analytics and business intelligence. He holds a Bachelor's degree in Computer Science and a Master's in Data Analytics. He is skilled in SQL, Python, Tableau, and cloud data warehouses, focusing on building scalable analytics solutions. He prefers roles that allow him to leverage his expertise in data-driven decision-making and is authorized to work in the U.S. on an F1 visa.",
+    "employmentTypes": [
+      "full-time"
+    ],
+    "workModels": null,
+    "daysAgo": 1,
+    "minYearsOfExperience": 2,
+    "maxYearsOfExperience": 4,
+    "salaryMinimumUsd": 30,
+    "industries": null,
+    "skills": [
+      "SQL",
+      "Python",
+      "Tableau",
+      "BigQuery",
+      "Snowflake",
+      "Power BI"
+    ],
+    "companyStages": null,
+    "roleType": null,
+    "excludedTitles": null,
+    "excludedSkills": null,
+    "excludedIndustries": null,
+    "excludeStaffingAgency": null,
+    "excludeSecurityClearance": false,
+    "excludeUsCitizenOnly": true,
+    "exclusions": {
+      "companies": [],
+      "locations": []
+    },
+    "remarks": ""
+  },
+  "overrides": null,
+  "meta": {
+    "lastRunId": "2ff1e6b4-7451-4491-9f35-22384d090eb5",
+    "source": "override-intent",
+    "savedAt": "2026-04-24T07:55:38.029Z"
+  }
+}

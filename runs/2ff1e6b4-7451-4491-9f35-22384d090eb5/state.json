@@ -1,0 +1,450 @@
+{
+  "id": "2ff1e6b4-7451-4491-9f35-22384d090eb5",
+  "createdAt": "2026-04-24T07:54:39.289Z",
+  "updatedAt": "2026-04-24T07:55:38.025Z",
+  "phase": "done",
+  "clientEmail": "grandhisaikrishna3@gmail.com",
+  "clientName": "Sai Krishna  Grandhi",
+  "requestedCount": 10,
+  "abortRequested": false,
+  "progress": {
+    "intent": {
+      "roles": [
+        "Data Analyst",
+        "Data Engineer",
+        "Marketing Analyst",
+        "Business Analyst",
+        "Product Manager",
+        "Reporting Analyst"
+      ],
+      "locations": [
+        "Washington D.C",
+        "Seattle",
+        "Newyork",
+        "Virginia",
+        "New Jersey",
+        "Oregon"
+      ],
+      "seniority": "mid",
+      "companies": [
+        "Microsoft",
+        "Amazon",
+        "Meta",
+        "Google",
+        "Tesla",
+        "JP Morgan",
+        "Bank of America",
+        "Capital One"
+      ],
+      "workAuth": "F1 visa",
+      "narrative": "Sai Krishna Grandhi is a mid-level Data Analyst seeking opportunities in Washington D.C., Seattle, New York, Virginia, New Jersey, or Oregon. He is currently on an F1 visa and is available to join in one week.",
+      "futurePreferences": "",
+      "aboutCandidate": "Sai Krishna Grandhi is a Data & Operations Analyst with over 3 years of experience in data analytics and business intelligence. He holds a Bachelor's degree in Computer Science and a Master's in Data Analytics. He is skilled in SQL, Python, Tableau, and cloud data warehouses, focusing on building scalable analytics solutions. He prefers roles that allow him to leverage his expertise in data-driven decision-making and is authorized to work in the U.S. on an F1 visa.",
+      "employmentTypes": [
+        "full-time"
+      ],
+      "workModels": null,
+      "daysAgo": 1,
+      "minYearsOfExperience": 2,
+      "maxYearsOfExperience": 4,
+      "salaryMinimumUsd": 30,
+      "industries": null,
+      "skills": [
+        "SQL",
+        "Python",
+        "Tableau",
+        "BigQuery",
+        "Snowflake",
+        "Power BI"
+      ],
+      "companyStages": null,
+      "roleType": null,
+      "excludedTitles": null,
+      "excludedSkills": null,
+      "excludedIndustries": null,
+      "excludeStaffingAgency": null,
+      "excludeSecurityClearance": false,
+      "excludeUsCitizenOnly": true,
+      "exclusions": {
+        "companies": [],
+        "locations": []
+      },
+      "remarks": ""
+    },
+    "searched": {
+      "totalReturned": 30,
+      "totalNormalized": 25,
+      "durationMs": 13577,
+      "pages": 2
+    },
+    "filtered": {
+      "totalJobs": 25,
+      "picked": 12,
+      "skipped": 13,
+      "borderline": 0,
+      "batches": 2,
+      "cacheHits": 0,
+      "durationMs": 18806
+    },
+    "enriched": {
+      "total": 12,
+      "ready": 12,
+      "sparse": 0,
+      "durationMs": 0
+    },
+    "preflight": {
+      "total": 12,
+      "pushable": 12,
+      "blockedCompany": 0,
+      "blockedLocation": 0,
+      "localDuplicate": 0
+    },
+    "pushed": {
+      "total": 11,
+      "pushed": 10,
+      "duplicates": 1,
+      "blocked": 0,
+      "errors": 0,
+      "durationMs": 24770
+    },
+    "decisions": [
+      {
+        "jobId": "69ead2b00a6e09555304348a",
+        "title": "Data Engineer",
+        "company": "Temu",
+        "applyUrl": "https://www.linkedin.com/jobs/view/4405067657",
+        "pick": true,
+        "score": 80,
+        "reason": "Strong fit — Data Engineer role at Temu, aligns with your data engineering experience and skills in SQL and Python, remote work model and H1B sponsorship available."
+      },
+      {
+        "jobId": "69ea10aa4b0fa35a7077245b",
+        "title": "Product Manager (KYC)",
+        "company": "Sumsub",
+        "applyUrl": "https://careers.sumsub.com/jobs/7617444-product-manager-kyc",
+        "pick": false,
+        "score": 30,
+        "reason": "Skip — Product Manager role does not align with your focus on data analytics and operations."
+      },
+      {
+        "jobId": "69ea9d0f4b0fa35a707755ec",
+        "title": "Product Manager, Analytics & Data Products",
+        "company": "New York Oncology Hematology",
+        "applyUrl": "https://oneoncology.wd1.myworkdayjobs.com/OneOncology/job/United-States/Product-Manager--Analytics---Data-Products_R-0000020387",
+        "pick": false,
+        "score": 30,
+        "reason": "Skip — Product Manager position is outside your declared roles in data analytics."
+      },
+      {
+        "jobId": "69bdadb4b10602456282a47e",
+        "title": "Data Analyst",
+        "company": "QuinStreet",
+        "applyUrl": "https://boards.greenhouse.io/embed/job_app?token=7729723&utm_source=jobright",
+        "pick": true,
+        "score": 70,
+        "reason": "Strong fit — Data Analyst role at QuinStreet matches your experience and skills, remote work model and H1B sponsorship available."
+      },
+      {
+        "jobId": "69bc0cf65b89c002acf10335",
+        "title": "GTM Data & Automation Analyst (Remote)",
+        "company": "CrowdStrike",
+        "applyUrl": "https://crowdstrike.wd5.myworkdayjobs.com/crowdstrikecareers/job/USA---Remote/Data---Automation-Analyst--Remote-_R26541-1?source=LinkedIn_jobs",
+        "pick": false,
+        "score": 25,
+        "reason": "Skip — GTM Data & Automation Analyst role requires skills in GenAI which are not in your profile."
+      },
+      {
+        "jobId": "69ea30f94b0fa35a70772a21",
+        "title": "Data Analyst",
+        "company": "Astound",
+        "applyUrl": "https://astound.wd108.myworkdayjobs.com/Astound_Careers/job/NJ-CollegeRdPrinceton/Data-Analyst_JR-000524",
+        "pick": true,
+        "score": 75,
+        "reason": "Strong fit — Data Analyst position at Astound aligns with your experience in data analysis and SQL, remote work model and H1B sponsorship available."
+      },
+      {
+        "jobId": "6995233881476f6176ad00be",
+        "title": "Data Engineer",
+        "company": "Newsela",
+        "applyUrl": "https://boards.greenhouse.io/embed/job_app?token=7616064&utm_source=jobright",
+        "pick": false,
+        "score": 20,
+        "reason": "Skip — Data Engineer role requires 4+ years of experience, which exceeds your current experience level."
+      },
+      {
+        "jobId": "69d5c37d366bb95ba55484c0",
+        "title": "Data Engineer",
+        "company": "Amplify",
+        "applyUrl": "https://amplify.wd1.myworkdayjobs.com/Amplify_Careers/job/Remote---United-States/Data-Engineer_Req_12486?source=LinkedIn",
+        "pick": false,
+        "score": 20,
+        "reason": "Skip — Data Engineer role requires 3+ years of experience, which is at the upper limit of your experience."
+      },
+      {
+        "jobId": "69ea67b53aa0c479643af833",
+        "title": "SQL/ETL Developer",
+        "company": "fullthrottle.ai®",
+        "applyUrl": "https://ats.rippling.com/fullthrottle1/jobs/2ce97c7f-576d-450e-9b5c-9484b0f9a1c3",
+        "pick": true,
+        "score": 80,
+        "reason": "Strong fit — SQL/ETL Developer role matches your skills in SQL and Python, remote work model and H1B sponsorship available."
+      },
+      {
+        "jobId": "69ea756e58811370cb1339b2",
+        "title": "Data Scientist",
+        "company": "WMT Digital",
+        "applyUrl": "https://wmtdigital.bamboohr.com/careers/68",
+        "pick": false,
+        "score": 15,
+        "reason": "Skip — Data Scientist role requires advanced qualifications and experience beyond your current profile."
+      },
+      {
+        "jobId": "69eaad297820c036924ef1bf",
+        "title": "Informaticist",
+        "company": "Humana",
+        "applyUrl": "https://humana.wd5.myworkdayjobs.com/humana_external_career_site/job/Remote-Nationwide/Informaticist_R-412671",
+        "pick": true,
+        "score": 70,
+        "reason": "Strong fit — Informaticist role aligns with your data analysis experience and skills, remote work model and H1B sponsorship available."
+      },
+      {
+        "jobId": "69ea6ba17820c036924ed8a7",
+        "title": "Business Analyst",
+        "company": "Risk Strategies Company",
+        "applyUrl": "https://insbrk.wd5.myworkdayjobs.com/One80Careers/job/Cleveland-OH/Business-Analyst_JR103783",
+        "pick": true,
+        "score": 75,
+        "reason": "Strong fit — Business Analyst role matches your analytical skills and experience, remote work model and H1B sponsorship available."
+      },
+      {
+        "jobId": "69eabed0dc35f7132c4abbb6",
+        "title": "Data Engineer 2",
+        "company": "Humana",
+        "applyUrl": "https://humana.wd5.myworkdayjobs.com/centerwell_external_career_site/job/Remote-Nationwide/Data-Engineer-2_R-412785",
+        "pick": false,
+        "score": 20,
+        "reason": "Skip — Data Engineer 2 role requires 2+ years of experience, which is at the lower limit of your experience."
+      },
+      {
+        "jobId": "69ea31104b0fa35a70772a99",
+        "title": "Data Engineer",
+        "company": "Liberty Mutual Insurance",
+        "applyUrl": "https://careers-libertymutual.icims.com/jobs/75725/data-engineer/job?in_iframe=1",
+        "pick": true,
+        "score": 75,
+        "reason": "Strong fit — Data Engineer role at Liberty Mutual aligns with your experience and skills in SQL and Python, remote work model and H1B sponsorship available."
+      },
+      {
+        "jobId": "69eada5616b2612c2a117af7",
+        "title": "Data Scientist",
+        "company": "Ascension",
+        "applyUrl": "https://ascensionjobs1-ascension.icims.com/jobs/429695/data-scientist/job?in_iframe=1",
+        "pick": false,
+        "score": 20,
+        "reason": "Skip — Data Scientist role requires advanced qualifications and experience beyond your current profile."
+      },
+      {
+        "jobId": "69ea73da3aa0c479643b01ff",
+        "title": "BI & NetSuite Developer",
+        "company": "Learntastic",
+        "applyUrl": "https://learntastic.applytojob.com/apply/qJajb7UyXA/BI-NetSuite-Developer",
+        "pick": false,
+        "score": 15,
+        "reason": "Skip — different discipline; BI & NetSuite Developer role does not align with Data Analyst focus."
+      },
+      {
+        "jobId": "69e5c83ce0cd471b2f122cec",
+        "title": "Data Analytics Engineer (Remote)",
+        "company": "Ventura TRAVEL",
+        "applyUrl": "https://boards.greenhouse.io/embed/job_app?token=7634204&utm_source=jobright",
+        "pick": true,
+        "score": 75,
+        "reason": "Strong fit — Data Analytics Engineer role matches candidate's skills in SQL and Python, remote work model, and H1B sponsorship."
+      },
+      {
+        "jobId": "69ea8ddf3aa0c479643b08ae",
+        "title": "Data Engineer",
+        "company": "Astrix",
+        "applyUrl": "https://www.linkedin.com/jobs/view/4405029597",
+        "pick": true,
+        "score": 70,
+        "reason": "Strong fit — Data Engineer position aligns with candidate's experience and skills, remote work model, and H1B sponsorship."
+      },
+      {
+        "jobId": "69ea5963dc35f7132c4a973b",
+        "title": "Consultant, Data Engineer",
+        "company": "IBM",
+        "applyUrl": "https://ibmglobal.avature.net/en_US/careers/JobDetail?jobId=101566&src=jobright",
+        "pick": true,
+        "score": 70,
+        "reason": "Strong fit — Consultant, Data Engineer role matches candidate's experience and skills, remote work model, and H1B sponsorship."
+      },
+      {
+        "jobId": "69ea47e658811370cb13236e",
+        "title": "Data Analyst 3",
+        "company": "Public Consulting Group",
+        "applyUrl": "https://pcg.wd1.myworkdayjobs.com/PCG_External_Careers/job/Charlotte-NC/Data-Analyst-3_JR101765",
+        "pick": false,
+        "score": 0,
+        "reason": "Skip — no H1B sponsorship available, which conflicts with candidate's F1 visa status."
+      },
+      {
+        "jobId": "69ea91a73aa0c479643b0b1c",
+        "title": "Senior Data Engineer (Databricks) (Remote)",
+        "company": "Codvo.ai",
+        "applyUrl": "https://codvo-team.freshteam.com/jobs/lJ4T9vspYWaj/senior-data-engineer-databricks-remote",
+        "pick": false,
+        "score": 20,
+        "reason": "Skip — senior-level position exceeds candidate's mid-level experience."
+      },
+      {
+        "jobId": "69eae8334b0fa35a70777088",
+        "title": "Data Engineer",
+        "company": "Anteriad",
+        "applyUrl": "https://job-boards.greenhouse.io/anteriad/jobs/5980230004?source=LinkedIn",
+        "pick": true,
+        "score": 65,
+        "reason": "Borderline — Data Engineer role fits candidate's skills and experience, remote work model, and H1B sponsorship, but lacks specific experience in Azure."
+      },
+      {
+        "jobId": "69ea6b9f3aa0c479643af94f",
+        "title": "Data Scientist (Decision Sciences Team)",
+        "company": "CVS Health",
+        "applyUrl": "https://cvshealth.wd1.myworkdayjobs.com/cvs_health_careers/job/Chicago-525-West-Monroe/Data-Scientist--Decision-Sciences-Team-_R0878263",
+        "pick": false,
+        "score": 15,
+        "reason": "Skip — Data Scientist role is outside the candidate's focus on Data Analyst positions."
+      },
+      {
+        "jobId": "69ea53ea0a6e095553040428",
+        "title": "Analytics Engineer",
+        "company": "Remitly",
+        "applyUrl": "https://remitly.wd5.myworkdayjobs.com/Remitly_Careers/job/Seattle-Washington-United-States/Analytics-Engineer_R_106128",
+        "pick": false,
+        "score": 15,
+        "reason": "Skip — Analytics Engineer role requires a Master's degree in a specific field, which may not align with candidate's profile."
+      },
+      {
+        "jobId": "69ea91af0a6e095553041d71",
+        "title": "Data Operations Engineer",
+        "company": "Uplight",
+        "applyUrl": "https://jobs.jobvite.com/uplight/job/ohZ2zfwB",
+        "pick": true,
+        "score": 65,
+        "reason": "Borderline — Data Operations Engineer role aligns with candidate's skills and experience, remote work model, and H1B sponsorship, but focuses more on software development."
+      }
+    ],
+    "seenJrIds": [
+      "69ead2b00a6e09555304348a",
+      "69ea10aa4b0fa35a7077245b",
+      "69ea9d0f4b0fa35a707755ec",
+      "69bdadb4b10602456282a47e",
+      "69bc0cf65b89c002acf10335",
+      "69ea30f94b0fa35a70772a21",
+      "6995233881476f6176ad00be",
+      "69d5c37d366bb95ba55484c0",
+      "69ea67b53aa0c479643af833",
+      "69ea756e58811370cb1339b2",
+      "69eaad297820c036924ef1bf",
+      "69ea6ba17820c036924ed8a7",
+      "69eabed0dc35f7132c4abbb6",
+      "69ea31104b0fa35a70772a99",
+      "69eada5616b2612c2a117af7",
+      "69ea73da3aa0c479643b01ff",
+      "69e5c83ce0cd471b2f122cec",
+      "69ea8ddf3aa0c479643b08ae",
+      "69ea5963dc35f7132c4a973b",
+      "69ea47e658811370cb13236e",
+      "69ea91a73aa0c479643b0b1c",
+      "69eae8334b0fa35a70777088",
+      "69ea6b9f3aa0c479643af94f",
+      "69ea53ea0a6e095553040428",
+      "69ea91af0a6e095553041d71"
+    ]
+  },
+  "picks": [
+    {
+      "jobId": "69bdadb4b10602456282a47e",
+      "title": "Data Analyst",
+      "company": "QuinStreet",
+      "applyUrl": "https://boards.greenhouse.io/embed/job_app?token=7729723&utm_source=jobright",
+      "createdJobId": "69eb21d61d73ef07343accb3",
+      "outcome": "pushed"
+    },
+    {
+      "jobId": "69ea30f94b0fa35a70772a21",
+      "title": "Data Analyst",
+      "company": "Astound",
+      "applyUrl": "https://astound.wd108.myworkdayjobs.com/Astound_Careers/job/NJ-CollegeRdPrinceton/Data-Analyst_JR-000524",
+      "createdJobId": "69eb21e21d73ef07343accc5",
+      "outcome": "pushed"
+    },
+    {
+      "jobId": "69ea67b53aa0c479643af833",
+      "title": "SQL/ETL Developer",
+      "company": "fullthrottle.ai®",
+      "applyUrl": "https://ats.rippling.com/fullthrottle1/jobs/2ce97c7f-576d-450e-9b5c-9484b0f9a1c3",
+      "createdJobId": "69eb21e41d73ef07343accd0",
+      "outcome": "pushed"
+    },
+    {
+      "jobId": "69ea6ba17820c036924ed8a7",
+      "title": "Business Analyst",
+      "company": "Risk Strategies Company",
+      "applyUrl": "https://insbrk.wd5.myworkdayjobs.com/One80Careers/job/Cleveland-OH/Business-Analyst_JR103783",
+      "createdJobId": "69eb21e61d73ef07343acce4",
+      "outcome": "pushed"
+    },
+    {
+      "jobId": "69eaad297820c036924ef1bf",
+      "title": "Informaticist",
+      "company": "Humana",
+      "applyUrl": "https://humana.wd5.myworkdayjobs.com/humana_external_career_site/job/Remote-Nationwide/Informaticist_R-412671",
+      "createdJobId": "69eb21e51d73ef07343accda",
+      "outcome": "pushed"
+    },
+    {
+      "jobId": "69ea31104b0fa35a70772a99",
+      "title": "Data Engineer",
+      "company": "Liberty Mutual Insurance",
+      "applyUrl": "https://careers-libertymutual.icims.com/jobs/75725/data-engineer/job?in_iframe=1",
+      "createdJobId": "69eb21e81d73ef07343accf0",
+      "outcome": "pushed"
+    },
+    {
+      "jobId": "69e5c83ce0cd471b2f122cec",
+      "title": "Data Analytics Engineer (Remote)",
+      "company": "Ventura TRAVEL",
+      "applyUrl": "https://boards.greenhouse.io/embed/job_app?token=7634204&utm_source=jobright",
+      "createdJobId": "69eb21f51d73ef07343acd07",
+      "outcome": "pushed"
+    },
+    {
+      "jobId": "69ea8ddf3aa0c479643b08ae",
+      "title": "Data Engineer",
+      "company": "Astrix",
+      "applyUrl": "https://www.linkedin.com/jobs/view/4405029597",
+      "createdJobId": "69eb21f51d73ef07343acd05",
+      "outcome": "pushed"
+    },
+    {
+      "jobId": "69ea5963dc35f7132c4a973b",
+      "title": "Consultant, Data Engineer",
+      "company": "IBM",
+      "applyUrl": "https://ibmglobal.avature.net/en_US/careers/JobDetail?jobId=101566&src=jobright",
+      "createdJobId": "69eb21f71d73ef07343acd12",
+      "outcome": "pushed"
+    },
+    {
+      "jobId": "69eae8334b0fa35a70777088",
+      "title": "Data Engineer",
+      "company": "Anteriad",
+      "applyUrl": "https://job-boards.greenhouse.io/anteriad/jobs/5980230004?source=LinkedIn",
+      "createdJobId": "69eb21f81d73ef07343acd1c",
+      "outcome": "pushed"
+    }
+  ],
+  "error": null,
+  "durationMs": 58736,
+  "eventSeq": 26
+}

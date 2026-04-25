@@ -541,6 +541,23 @@ pre {
 .relaxation-option input[type=radio] { margin-top: 3px; }
 .relaxation-actions { display: flex; gap: 8px; margin-top: 8px; }
 
+#about-candidate {
+    width: 100%;
+    box-sizing: border-box;
+    background: var(--code-bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 8px 10px;
+    color: var(--fg);
+    font-family: inherit;
+    font-size: 13px;
+    line-height: 1.5;
+    resize: vertical;
+    min-height: 90px;
+}
+#about-candidate:focus { outline: none; border-color: var(--accent); }
+#about-candidate:disabled { opacity: 0.6; }
+
 .stats-grid {
     display: grid;
     grid-template-columns: 1fr 1fr;

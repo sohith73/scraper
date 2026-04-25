@@ -1,0 +1,109 @@
+{
+  "picks": [],
+  "blocked": [],
+  "errored": [],
+  "decisions": [
+    {
+      "jobId": "69eb0bebdc35f7132c4ad387",
+      "title": "Clinical Data Management Specialist",
+      "company": "bioMérieux",
+      "applyUrl": "https://jobs.jobvite.com/biofiredx/job/ovU1zfwJ?__jvst=Job+Board&__jvsd=LinkedIn",
+      "pick": false,
+      "score": 0,
+      "reason": "Skip — entry-level role does not meet mid-level requirement."
+    },
+    {
+      "jobId": "69b04ce474950064509648b4",
+      "title": "Biostatistician II",
+      "company": "Foundation Medicine",
+      "applyUrl": "https://careers.foundationmedicine.com/jobs/biostatistician-ii-boston-massachusetts-united-states-cf65e867-32b1-41ec-9a44-fcd21f929168?source=jobright&utm_source=jobright",
+      "pick": false,
+      "score": 0,
+      "reason": "Skip — seniority mismatch, requires 4+ years of experience while candidate is mid-level."
+    },
+    {
+      "jobId": "69eaf2cf7820c036924f082c",
+      "title": "Statistician Lead (underfill Senior/Intermediate)",
+      "company": "Michigan Medicine",
+      "applyUrl": "https://careers.umich.edu/job_detail/276677/statistician-lead-underfill-seniorintermediate",
+      "pick": false,
+      "score": 0,
+      "reason": "Skip — seniority mismatch, requires 5+ years of experience while candidate is mid-level."
+    },
+    {
+      "jobId": "68cd9340e23def7af55bbe85",
+      "title": "Health Data Scientist",
+      "company": "Voloridge Health",
+      "applyUrl": "https://voloridge-health.hiringthing.com/job/889274/health-data-scientist?s=lif",
+      "pick": false,
+      "score": 0,
+      "reason": "Skip — onsite role conflicts with candidate's preference for remote work."
+    },
+    {
+      "jobId": "69eab1d87820c036924ef31c",
+      "title": "Research Scientist 2 (Biostatistics/Health Services Research)",
+      "company": "NYS Office for People With Developmental Disabilities",
+      "applyUrl": "https://statejobs.ny.gov/public/vacancyDetailsView.cfm?id=214633",
+      "pick": false,
+      "score": 0,
+      "reason": "Skip — role requires a Ph.D. or extensive experience, which exceeds mid-level expectations."
+    },
+    {
+      "jobId": "69ea72db58811370cb1333d9",
+      "title": "Senior Clinical Programmer",
+      "company": "Cytel",
+      "applyUrl": "https://iblyjb.fa.ocs.oraclecloud.com/hcmUI/CandidateExperience/en/job/1482/?utm_medium=jobboard&utm_source=linkedin",
+      "pick": false,
+      "score": 0,
+      "reason": "Skip — seniority mismatch, requires 4-6 years of experience while candidate is mid-level."
+    },
+    {
+      "jobId": "69ce26fccdb525785fb946b5",
+      "title": "Biospecimen Research Coordinator",
+      "company": "Hartford HealthCare",
+      "applyUrl": "https://www.hhccareers.org/us/en/job/26154573/Biospecimen-Research-Coordinator?src=UNS-10164",
+      "pick": false,
+      "score": 0,
+      "reason": "Skip — entry-level role does not meet mid-level requirement."
+    }
+  ],
+  "seenJrIds": [
+    "69eb0bebdc35f7132c4ad387",
+    "69b04ce474950064509648b4",
+    "69eaf2cf7820c036924f082c",
+    "68cd9340e23def7af55bbe85",
+    "69eab1d87820c036924ef31c",
+    "69ea72db58811370cb1333d9",
+    "69ce26fccdb525785fb946b5"
+  ],
+  "resumedFrom": null,
+  "intent": {
+    "roles": [
+      "Biostatistician"
+    ],
+    "locations": [],
+    "seniority": "mid",
+    "companies": [],
+    "workAuth": "F1 OPT",
+    "narrative": "Public health / data analytics mid-level",
+    "futurePreferences": "",
+    "aboutCandidate": "Public health / biostatistics / program management professional on F1 OPT; wants mid-level roles in data or analytics adjacent to health.",
+    "exclusions": {
+      "companies": [],
+      "locations": []
+    },
+    "remarks": "Do not push Associate Director level roles."
+  },
+  "appliedRelaxations": [],
+  "declinedOrTimedOut": false,
+  "pagination": {
+    "pagesScanned": 1,
+    "jrJobsSeen": 7,
+    "target": 1,
+    "achieved": 0,
+    "exhausted": true,
+    "hitPageCap": false,
+    "hitAiBatchCap": false,
+    "relaxationRounds": 0
+  }
+}

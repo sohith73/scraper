@@ -1,0 +1,36 @@
+{
+  "id": "93962cfb-1dcc-4053-81dc-68c4a94954a4",
+  "phase": "done",
+  "clientEmail": "kanchanyad90@gmail.com",
+  "clientName": "Kanchan Yadav",
+  "requestedCount": 1,
+  "picksCount": 1,
+  "stats": {
+    "total": 1,
+    "pushed": 1,
+    "duplicates": 0,
+    "blocked": 0,
+    "errors": 0,
+    "durationMs": 2777
+  },
+  "intent": {
+    "roles": [
+      "Biostatistician",
+      "Statistician",
+      "Research Analyst"
+    ],
+    "locations": [],
+    "seniority": "mid",
+    "companies": [],
+    "workAuth": "F1 OPT",
+    "narrative": "Public health / data analytics mid-level",
+    "futurePreferences": "",
+    "aboutCandidate": "Public health professional on F1 OPT with biostatistics and data analytics strengths; mid-level; open to research and coordinator roles in healthcare and public health organisations.",
+    "exclusions": {
+      "companies": [],
+      "locations": []
+    },
+    "remarks": "Do not push Associate Director level roles."
+  },
+  "completedAt": "2026-04-24T08:10:47.418Z"
+}

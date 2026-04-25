@@ -34,7 +34,7 @@ export async function updateExclusions({
     email,
     companies = [],
     locations = [],
-    operatorName = 'JobRightScraper',
+    operatorName = 'JRA',
 } = {}) {
     if (typeof email !== 'string' || !email.includes('@')) {
         return err('BAD_INPUT', 'email is required');

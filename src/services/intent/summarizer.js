@@ -60,8 +60,16 @@ export async function summarizeProfile({
     });
     if (!aiRes.ok) return aiRes;
 
+    const aiValue = aiRes.value.value;
+    // Defensive: if the model omits aboutCandidate despite the schema, fall
+    // back to the narrative so downstream never sees an empty framing.
+    const aboutCandidate =
+        typeof aiValue.aboutCandidate === 'string' && aiValue.aboutCandidate.trim()
+            ? aiValue.aboutCandidate.trim()
+            : (typeof aiValue.narrative === 'string' ? aiValue.narrative.trim() : '');
     const fused = {
-        ...aiRes.value.value,
+        ...aiValue,
+        aboutCandidate,
         exclusions: {
             companies: normaliseExclusionSet(exclusions.companies),
             locations: normaliseExclusionSet(exclusions.locations),
@@ -80,5 +88,6 @@ export async function summarizeProfile({
         intent: finalParse.data,
         cacheHit: aiRes.value.cacheHit,
         key: aiRes.value.key,
+        usage: aiRes.value.usage || { promptTokens: 0, completionTokens: 0, totalTokens: 0 },
     });
 }

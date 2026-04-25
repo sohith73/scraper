@@ -1,0 +1,463 @@
+{
+  "id": "757709a9-bffd-4e84-9687-a1b2b678e2ce",
+  "createdAt": "2026-04-24T07:49:24.098Z",
+  "updatedAt": "2026-04-24T07:52:40.072Z",
+  "phase": "awaiting-relaxation",
+  "clientEmail": "riyamate4567@gmail.com",
+  "clientName": "Riya Mate",
+  "requestedCount": 10,
+  "abortRequested": true,
+  "progress": {
+    "intent": {
+      "roles": [
+        "Software Developer",
+        "AI Engineer",
+        "Software Engineer",
+        "Backend Engineer"
+      ],
+      "locations": [
+        "California",
+        "Remote"
+      ],
+      "seniority": "entry",
+      "companies": [
+        "Google",
+        "Meta",
+        "Microsoft",
+        "Amazon",
+        "Apple",
+        "NVIDIA",
+        "Oracle",
+        "OpenAI",
+        "Anthropic",
+        "Cohere",
+        "Mistral",
+        "Stability AI",
+        "Hugging Face",
+        "Perplexity",
+        "Replit",
+        "Scale AI",
+        "Runway",
+        "LangChain",
+        "Pinecone",
+        "Weaviate",
+        "Milvus",
+        "Databricks",
+        "Snowflake",
+        "Confluent",
+        "HashiCorp",
+        "VMware",
+        "Red Hat",
+        "Elastic",
+        "MongoDB Inc.",
+        "Palantir",
+        "Atlassian",
+        "GitLab",
+        "CircleCI",
+        "Tesla",
+        "Waymo",
+        "Zoox"
+      ],
+      "workAuth": "F1 OPT",
+      "narrative": "Riya Mate is an entry-level Software Developer and AI Engineer based in California, open to remote opportunities, and currently on F1 OPT work authorization.",
+      "futurePreferences": "Open to relocation and seeking opportunities for salary growth.",
+      "employmentTypes": [
+        "full-time"
+      ],
+      "workModels": [
+        "onsite",
+        "remote"
+      ],
+      "daysAgo": 7,
+      "minYearsOfExperience": 5,
+      "maxYearsOfExperience": 8,
+      "salaryMinimumUsd": null,
+      "industries": null,
+      "skills": [
+        "Python",
+        "Java",
+        "React",
+        "Kubernetes",
+        "AWS",
+        "CI/CD",
+        "MLOps",
+        "Machine Learning",
+        "FastAPI",
+        "TensorRT"
+      ],
+      "companyStages": null,
+      "roleType": "ic",
+      "excludedTitles": null,
+      "excludedSkills": null,
+      "excludedIndustries": null,
+      "excludeStaffingAgency": null,
+      "excludeSecurityClearance": false,
+      "excludeUsCitizenOnly": true,
+      "exclusions": {
+        "companies": [],
+        "locations": []
+      }
+    },
+    "searched": {
+      "totalReturned": 60,
+      "totalNormalized": 25,
+      "durationMs": 26972,
+      "pages": 1
+    },
+    "filtered": {
+      "totalJobs": 25,
+      "picked": 1,
+      "skipped": 22,
+      "borderline": 2,
+      "batches": 2,
+      "cacheHits": 0,
+      "durationMs": 27257
+    },
+    "enriched": {
+      "total": 3,
+      "ready": 3,
+      "sparse": 0,
+      "durationMs": 0
+    },
+    "preflight": {
+      "total": 3,
+      "pushable": 3,
+      "blockedCompany": 0,
+      "blockedLocation": 0,
+      "localDuplicate": 0
+    },
+    "pushed": {
+      "total": 3,
+      "pushed": 0,
+      "duplicates": 1,
+      "blocked": 2,
+      "errors": 0,
+      "durationMs": 16695
+    },
+    "decisions": [
+      {
+        "jobId": "69eb13090a6e0955530444c5",
+        "title": "Platform Software/Diagnostics (NCG 2026)",
+        "company": "Astera Labs",
+        "applyUrl": "https://boards.greenhouse.io/embed/job_app?token=4610910005&utm_source=jobright",
+        "pick": false,
+        "score": 25,
+        "reason": "Skip — different discipline; candidate is focused on Software Development and AI Engineering, while this role is more diagnostics-oriented."
+      },
+      {
+        "jobId": "69eaa84758811370cb134a5e",
+        "title": "Early Career - AI Solutions Engineer",
+        "company": "Texas Instruments",
+        "applyUrl": "https://edbz.fa.us2.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX/job/25010195",
+        "pick": false,
+        "score": 25,
+        "reason": "Skip — different discipline; role requires a Master's or PhD in a technical field, while candidate is entry-level."
+      },
+      {
+        "jobId": "69eb0be10a6e095553044107",
+        "title": "Test Engineer (AI Focus)",
+        "company": "Nokia",
+        "applyUrl": "https://fa-evmr-saasfaprod1.fa.ocs.oraclecloud.com/hcmUI/CandidateExperience/en/job/35122/?utm_medium=jobshare&src=SNS-102",
+        "pick": false,
+        "score": 25,
+        "reason": "Skip — different discipline; this role focuses on telecommunications and mobile network technologies, which is outside the candidate's preferred areas."
+      },
+      {
+        "jobId": "69eafe537820c036924f09a6",
+        "title": "Software Engineer - Product (New Grad)",
+        "company": "Julius AI",
+        "applyUrl": "https://jobs.ashbyhq.com/julius/83d88b90-1b7f-476c-a0e8-10b1cb71639e/application?utm_source=R7w09vvYr1",
+        "pick": false,
+        "score": 25,
+        "reason": "Skip — different discipline; candidate prefers software development roles, while this position emphasizes product experience."
+      },
+      {
+        "jobId": "69e91a644b0fa35a7076b784",
+        "title": "Software Developer",
+        "company": "Cal Coast Credit Union",
+        "applyUrl": "https://www.linkedin.com/jobs/view/4404456295",
+        "pick": true,
+        "score": 75,
+        "reason": "Strong fit — Software Developer at Cal Coast Credit Union, aligns with entry-level profile and requires skills in Python and Object Oriented Languages."
+      },
+      {
+        "jobId": "69ea79f97820c036924ee2f2",
+        "title": "Applied AI Engineer, Silicon Co-Design Group, New College Grad 2026",
+        "company": "NVIDIA",
+        "applyUrl": "https://nvidia.wd5.myworkdayjobs.com/nvidiaexternalcareersite/job/US-CA-Santa-Clara/Applied-AI-Engineer--Silicon-Co-Design-Group--New-College-Grad-2026_JR2015814",
+        "pick": false,
+        "score": 25,
+        "reason": "Skip — different discipline; this role requires a Master's or PhD, which is beyond the candidate's entry-level experience."
+      },
+      {
+        "jobId": "69e977bf7820c036924e835a",
+        "title": "AI-ML Engineer 1",
+        "company": "Universal Avionics",
+        "applyUrl": "https://recruiting.ultipro.com/uni1039uasc/JobBoard/6038d855-6c9a-480e-9c31-fccbf1f9f16f/OpportunityDetail?opportunityId=03ed369d-6123-427b-9745-236c1ea62712",
+        "pick": false,
+        "score": 0,
+        "reason": "Skip — no H1B sponsorship available, which conflicts with candidate's F1 OPT work authorization."
+      },
+      {
+        "jobId": "69eb15c54b0fa35a70778123",
+        "title": "Ground Data Software Engineer",
+        "company": "Lockheed Martin",
+        "applyUrl": "https://sjobs.brassring.com/TGnewUI/Search/home/HomeWithPreLoad?partnerid=25037&siteid=5010&PageType=JobDetails&jobid=847062",
+        "pick": false,
+        "score": 25,
+        "reason": "Skip — different discipline; this role requires specific Java development experience, which is not highlighted in the candidate's profile."
+      },
+      {
+        "jobId": "69e9f19b7820c036924ea11e",
+        "title": "Applied AI ML Engineer Associate",
+        "company": "JPMorganChase",
+        "applyUrl": "https://JPMorganChase.contacthr.com/151873358",
+        "pick": false,
+        "score": 25,
+        "reason": "Skip — different discipline; this role requires advanced degrees and experience in LLM/NLP, which is not aligned with the candidate's profile."
+      },
+      {
+        "jobId": "69af4318dfaeda6ff5976464",
+        "title": "AI Engineer",
+        "company": "Cadence",
+        "applyUrl": "https://cadence.wd1.myworkdayjobs.com/External_Careers/job/SAN-JOSE/Software-Engineer-II_R53569-1?source=LinkedIn",
+        "pick": false,
+        "score": 25,
+        "reason": "Skip — different discipline; this role requires a strong foundation in machine learning and deep learning, which is not specified in the candidate's skills."
+      },
+      {
+        "jobId": "69e9e55d3aa0c479643abf55",
+        "title": "Software Developer",
+        "company": "DLRdmv®",
+        "applyUrl": "https://ats.rippling.com/dlrdmv/jobs/3143e69f-bea5-4a45-8ae6-5bc2863f795d?jobSite=LinkedIn",
+        "pick": false,
+        "score": 25,
+        "reason": "Skip — different discipline; this role requires a Bachelor's degree or equivalent experience, which is not aligned with the candidate's entry-level status."
+      },
+      {
+        "jobId": "69ea189b3aa0c479643ae000",
+        "title": "Software Engineer (SWE/SWE II), AI Platform- Slack",
+        "company": "Salesforce",
+        "applyUrl": "https://salesforce.wd12.myworkdayjobs.com/external_career_site/job/Washington---Seattle/Software-Engineer--SWE-SWE-II---AI-Platform--Slack_JR328732",
+        "pick": false,
+        "score": 25,
+        "reason": "Skip — different discipline; this role requires experience with developer tooling and APIs, which is not highlighted in the candidate's profile."
+      },
+      {
+        "jobId": "69e948643aa0c479643a8cf6",
+        "title": "Software Engineer - Robotics",
+        "company": "Shinkei",
+        "applyUrl": "https://careers.kula.ai/shinkei/32623?src=Linkedin",
+        "pick": false,
+        "score": 25,
+        "reason": "Skip — different discipline; this role requires experience in robotics, which is not aligned with the candidate's focus."
+      },
+      {
+        "jobId": "69e7869c0a6e09555302ae9c",
+        "title": "AI Engineer I",
+        "company": "Klaviyo",
+        "applyUrl": "https://boards.greenhouse.io/embed/job_app?token=7621072003&utm_source=jobright",
+        "pick": false,
+        "score": 25,
+        "reason": "Skip — different discipline; this role requires advanced degree pursuit, which is not aligned with the candidate's entry-level status."
+      },
+      {
+        "jobId": "69af47a9749500645093cb63",
+        "title": "Software Development Engineer",
+        "company": "Adobe",
+        "applyUrl": "https://careers.adobe.com/us/en/job/ADOBUSR166371EXTERNALENUS/Software-Development-Engineer?utm_source=linkedin&utm_medium=phenom-feeds&source=LinkedIn",
+        "pick": false,
+        "score": 25,
+        "reason": "Skip — different discipline; this role requires experience in building web applications and AI/ML features, which is not specified in the candidate's skills."
+      },
+      {
+        "jobId": "69ea53c87820c036924ed05c",
+        "title": "Test Engineer (AI Focus)",
+        "company": "Nokia",
+        "applyUrl": "https://fa-evmr-saasfaprod1.fa.ocs.oraclecloud.com/hcmUI/CandidateExperience/en/sites/CX_1/job/35122",
+        "pick": false,
+        "score": 25,
+        "reason": "Skip — different discipline; Test Engineer role does not align with Software Developer or AI Engineer."
+      },
+      {
+        "jobId": "69eaad9558811370cb134b51",
+        "title": "Software Engineer - IT Early Career Development Program",
+        "company": "Western Alliance Bank",
+        "applyUrl": "https://westernalliancebank.wd5.myworkdayjobs.com/wab/job/Phoenix-AZ/Software-Engineer---IT-Early-Career-Development-Program_R12821",
+        "pick": false,
+        "score": 25,
+        "reason": "Skip — different discipline; Software Engineer role at a bank does not align with the candidate's focus on AI and software development."
+      },
+      {
+        "jobId": "69c674e9aa3c2c1995e0ffcd",
+        "title": "Software Engineer, Product",
+        "company": "Prelim",
+        "applyUrl": "https://jobs.ashbyhq.com/prelim/62449307-e366-4c92-8d22-9a9f8ec11afa?utm_source=85vwN566LJ",
+        "pick": false,
+        "score": 25,
+        "reason": "Skip — different discipline; Software Engineer, Product role does not align with the candidate's focus on AI and software development."
+      },
+      {
+        "jobId": "69eacc35dc35f7132c4abdca",
+        "title": "Junior Software Engineer",
+        "company": "KBR Careers",
+        "applyUrl": "https://careers.kbr.com/us/en/job/KIVKBRUSR2122447EXTERNALENUS/Junior-Software-Engineer?utm_source=linkedinjobboard&utm_medium=phenom-feeds",
+        "pick": false,
+        "score": 25,
+        "reason": "Skip — different discipline; Junior Software Engineer role does not align with the candidate's focus on AI and software development."
+      },
+      {
+        "jobId": "6906b83a122e8474c78e07f6",
+        "title": "Software Engineer, Full Stack",
+        "company": "Figma",
+        "applyUrl": "https://boards.greenhouse.io/figma/jobs/5691911004?gh_jid=5691911004&gh_src=28109e334us&source=LinkedIn",
+        "pick": false,
+        "score": 25,
+        "reason": "Skip — different discipline; Software Engineer, Full Stack role does not align with the candidate's focus on AI and software development."
+      },
+      {
+        "jobId": "69e845ca4b0fa35a707614a4",
+        "title": "Product Engineer",
+        "company": "Moonset Health",
+        "applyUrl": "https://www.ycombinator.com/companies/moonset-health/jobs/hLOMAGp-product-engineer?utm_source=syn_li",
+        "pick": false,
+        "score": 25,
+        "reason": "Skip — different discipline; Product Engineer role does not align with the candidate's focus on AI and software development."
+      },
+      {
+        "jobId": "69cb5f12aa3c2c1995e367b0",
+        "title": "Software Engineering AMTS (College Grad)",
+        "company": "Salesforce",
+        "applyUrl": "https://salesforce.wd12.myworkdayjobs.com/External_Career_Site/job/California---San-Francisco/Software-Engineering-AMTS-MTS--College-Grad-_JR330400-1?source=LinkedIn_Jobs",
+        "pick": false,
+        "score": 55,
+        "reason": "Borderline — Software Engineering AMTS role is entry-level but focuses on a broader engineering discipline rather than specifically on software development."
+      },
+      {
+        "jobId": "69e8cb007820c036924e2e08",
+        "title": "Research Engineer, Monetization AI",
+        "company": "Meta",
+        "applyUrl": "https://jsv3.recruitics.com/redirect?rx_cid=3239&rx_jobId=a1KDp00000CZLZnMAP_1005&rx_url=https%3A%2F%2Fwww.metacareers.com%2Fjobs%2F2321017468376143%2F%3Frx_campaign%3DLinkedin1%26rx_ch%3Dconnector%26rx_group%3D126320%26rx_id%3D68d08ee0-2d2e-11f1-93d1-2f1a77135f7f%26rx_job%3Da1KDp00000CZLZnMAP_1005%26rx_medium%3Dpost%26rx_r%3Dnone%26rx_source%3DLinkedin%26rx_ts%3D20260422T061202Z%26rx_vp%3Dslots%26utm_campaign%3DJob%252Bboard%26utm_medium%3Djobs%26utm_source%3DLIpaid",
+        "pick": false,
+        "score": 25,
+        "reason": "Skip — different discipline; Research Engineer role does not align with the candidate's focus on software development."
+      },
+      {
+        "jobId": "69e909290a6e095553038812",
+        "title": "AI Algorithm Developer",
+        "company": "Applied Materials",
+        "applyUrl": "https://jobs.appliedmaterials.com/job/-/-/95/89631208912?p_sid=53yO-Lb&p_uid=nTxnRQo8JJ&ss=paid&utm_campaign=engineering_us&utm_content=pj_board&utm_medium=jobad&utm_source=linkedin+slotted&gad_source=7&dclid=CJmWxor6gZQDFTrGzgAdOyUS9A",
+        "pick": false,
+        "score": 25,
+        "reason": "Skip — different discipline; AI Algorithm Developer role does not align with the candidate's focus on software development."
+      },
+      {
+        "jobId": "69eaa3827820c036924ef00f",
+        "title": "Software Engineer, New Grad",
+        "company": "Notion",
+        "applyUrl": "https://jobs.ashbyhq.com/notion/a6311f97-4850-4674-a5f3-d9fe5f6f2555/application?utm_source=jobright",
+        "pick": false,
+        "score": 55,
+        "reason": "Borderline — Software Engineer, New Grad role is entry-level but focuses on a broader engineering discipline rather than specifically on software development."
+      }
+    ],
+    "seenJrIds": [
+      "69eb13090a6e0955530444c5",
+      "69eaa84758811370cb134a5e",
+      "69eb0be10a6e095553044107",
+      "69eafe537820c036924f09a6",
+      "69e91a644b0fa35a7076b784",
+      "69ea79f97820c036924ee2f2",
+      "69e977bf7820c036924e835a",
+      "69eb15c54b0fa35a70778123",
+      "69e9f19b7820c036924ea11e",
+      "69af4318dfaeda6ff5976464",
+      "69e9e55d3aa0c479643abf55",
+      "69ea189b3aa0c479643ae000",
+      "69e948643aa0c479643a8cf6",
+      "69e7869c0a6e09555302ae9c",
+      "69af47a9749500645093cb63",
+      "69ea53c87820c036924ed05c",
+      "69eaad9558811370cb134b51",
+      "69c674e9aa3c2c1995e0ffcd",
+      "69eacc35dc35f7132c4abdca",
+      "6906b83a122e8474c78e07f6",
+      "69e845ca4b0fa35a707614a4",
+      "69cb5f12aa3c2c1995e367b0",
+      "69e8cb007820c036924e2e08",
+      "69e909290a6e095553038812",
+      "69eaa3827820c036924ef00f"
+    ],
+    "appliedRelaxations": [
+      {
+        "round": 1,
+        "field": "salaryMinimumUsd",
+        "label": "Min salary",
+        "from": "$100,000",
+        "to": "any (many postings omit salary)",
+        "acceptedAt": "2026-04-24T07:51:07.706Z"
+      }
+    ]
+  },
+  "picks": [],
+  "error": null,
+  "durationMs": 0,
+  "eventSeq": 41,
+  "pendingRelaxation": {
+    "round": 2,
+    "achieved": 0,
+    "target": 10,
+    "plans": [
+      {
+        "index": 0,
+        "field": "daysAgo",
+        "label": "Date posted",
+        "from": "past 7 days",
+        "to": "past 14 days",
+        "reason": "Narrow date windows miss most of the job inventory.",
+        "priority": 10
+      },
+      {
+        "index": 1,
+        "field": "workModels",
+        "label": "Work model",
+        "from": "onsite, remote",
+        "to": "any (onsite / remote / hybrid)",
+        "reason": "A single work-model filter cuts the candidate pool by ~60%.",
+        "priority": 8
+      },
+      {
+        "index": 2,
+        "field": "locations",
+        "label": "Locations",
+        "from": "California, Remote",
+        "to": "nationwide (clear filter)",
+        "reason": "Clearing location matches jobs nationwide.",
+        "priority": 6
+      },
+      {
+        "index": 3,
+        "field": "yoe",
+        "label": "Years of experience",
+        "from": "5–8 yrs",
+        "to": "3–10 yrs",
+        "reason": "Widening the YoE band by 2 on each side catches adjacent postings.",
+        "priority": 5
+      }
+    ],
+    "appliedRelaxations": [
+      {
+        "round": 1,
+        "field": "salaryMinimumUsd",
+        "label": "Min salary",
+        "from": "$100,000",
+        "to": "any (many postings omit salary)",
+        "acceptedAt": "2026-04-24T07:51:07.706Z"
+      }
+    ],
+    "createdAt": "2026-04-24T07:51:13.117Z",
+    "decision": {
+      "action": "decline"
+    }
+  }
+}

@@ -1,0 +1,153 @@
+{
+  "id": "261f0a57-8b21-46f6-a7ff-3ffe9ed6215a",
+  "createdAt": "2026-04-24T08:08:10.761Z",
+  "updatedAt": "2026-04-24T08:08:42.791Z",
+  "phase": "done",
+  "clientEmail": "kanchanyad90@gmail.com",
+  "clientName": "Kanchan Yadav",
+  "requestedCount": 1,
+  "abortRequested": false,
+  "progress": {
+    "intent": {
+      "roles": [
+        "Epidemiologist",
+        "Public Health Analyst"
+      ],
+      "locations": [],
+      "seniority": "mid",
+      "companies": [],
+      "workAuth": "F1 OPT",
+      "narrative": "Public health / data analytics mid-level",
+      "futurePreferences": "",
+      "aboutCandidate": "Public health / biostatistics / program management professional on F1 OPT; wants mid-level roles in data or analytics adjacent to health.",
+      "exclusions": {
+        "companies": [],
+        "locations": []
+      },
+      "remarks": "Do not push Associate Director level roles."
+    },
+    "searched": {
+      "totalReturned": 7,
+      "totalNormalized": 7,
+      "durationMs": 6775,
+      "pages": 1
+    },
+    "filtered": {
+      "totalJobs": 7,
+      "picked": 1,
+      "skipped": 6,
+      "borderline": 0,
+      "batches": 1,
+      "cacheHits": 0,
+      "durationMs": 6865
+    },
+    "enriched": {
+      "total": 1,
+      "ready": 1,
+      "sparse": 0,
+      "durationMs": 0
+    },
+    "preflight": {
+      "total": 1,
+      "pushable": 1,
+      "blockedCompany": 0,
+      "blockedLocation": 0,
+      "localDuplicate": 0
+    },
+    "pushed": {
+      "total": 1,
+      "pushed": 1,
+      "duplicates": 0,
+      "blocked": 0,
+      "errors": 0,
+      "durationMs": 14646
+    },
+    "decisions": [
+      {
+        "jobId": "69eb0bebdc35f7132c4ad387",
+        "title": "Clinical Data Management Specialist",
+        "company": "bioMérieux",
+        "applyUrl": "https://jobs.jobvite.com/biofiredx/job/ovU1zfwJ?__jvst=Job+Board&__jvsd=LinkedIn",
+        "pick": false,
+        "score": 0,
+        "reason": "Skip — entry-level role does not match mid-level preference."
+      },
+      {
+        "jobId": "69b04ce474950064509648b4",
+        "title": "Biostatistician II",
+        "company": "Foundation Medicine",
+        "applyUrl": "https://careers.foundationmedicine.com/jobs/biostatistician-ii-boston-massachusetts-united-states-cf65e867-32b1-41ec-9a44-fcd21f929168?source=jobright&utm_source=jobright",
+        "pick": false,
+        "score": 0,
+        "reason": "Skip — Biostatistician II requires a Master's or PhD, which exceeds candidate's current qualifications."
+      },
+      {
+        "jobId": "69eaf2cf7820c036924f082c",
+        "title": "Statistician Lead (underfill Senior/Intermediate)",
+        "company": "Michigan Medicine",
+        "applyUrl": "https://careers.umich.edu/job_detail/276677/statistician-lead-underfill-seniorintermediate",
+        "pick": false,
+        "score": 0,
+        "reason": "Skip — Statistician Lead role is too senior for mid-level candidate."
+      },
+      {
+        "jobId": "68cd9340e23def7af55bbe85",
+        "title": "Health Data Scientist",
+        "company": "Voloridge Health",
+        "applyUrl": "https://voloridge-health.hiringthing.com/job/889274/health-data-scientist?s=lif",
+        "pick": false,
+        "score": 0,
+        "reason": "Skip — Health Data Scientist role requires advanced machine learning skills not indicated in candidate's profile."
+      },
+      {
+        "jobId": "69eab1d87820c036924ef31c",
+        "title": "Research Scientist 2 (Biostatistics/Health Services Research)",
+        "company": "NYS Office for People With Developmental Disabilities",
+        "applyUrl": "https://statejobs.ny.gov/public/vacancyDetailsView.cfm?id=214633",
+        "pick": true,
+        "score": 70,
+        "reason": "Strong fit — Research Scientist 2 role aligns with public health and biostatistics, mid-level, hybrid work model."
+      },
+      {
+        "jobId": "69ea72db58811370cb1333d9",
+        "title": "Senior Clinical Programmer",
+        "company": "Cytel",
+        "applyUrl": "https://iblyjb.fa.ocs.oraclecloud.com/hcmUI/CandidateExperience/en/job/1482/?utm_medium=jobboard&utm_source=linkedin",
+        "pick": false,
+        "score": 0,
+        "reason": "Skip — Senior Clinical Programmer role exceeds candidate's mid-level preference."
+      },
+      {
+        "jobId": "69ce26fccdb525785fb946b5",
+        "title": "Biospecimen Research Coordinator",
+        "company": "Hartford HealthCare",
+        "applyUrl": "https://www.hhccareers.org/us/en/job/26154573/Biospecimen-Research-Coordinator?src=UNS-10164",
+        "pick": false,
+        "score": 0,
+        "reason": "Skip — Biospecimen Research Coordinator role is entry-level and does not match mid-level preference."
+      }
+    ],
+    "seenJrIds": [
+      "69eb0bebdc35f7132c4ad387",
+      "69b04ce474950064509648b4",
+      "69eaf2cf7820c036924f082c",
+      "68cd9340e23def7af55bbe85",
+      "69eab1d87820c036924ef31c",
+      "69ea72db58811370cb1333d9",
+      "69ce26fccdb525785fb946b5"
+    ]
+  },
+  "picks": [
+    {
+      "jobId": "69eab1d87820c036924ef31c",
+      "title": "Research Scientist 2 (Biostatistics/Health Services Research)",
+      "company": "NYS Office for People With Developmental Disabilities",
+      "applyUrl": "https://statejobs.ny.gov/public/vacancyDetailsView.cfm?id=214633",
+      "createdJobId": "69eb24fe1d73ef07343aced6",
+      "outcome": "pushed"
+    }
+  ],
+  "error": null,
+  "durationMs": 32030,
+  "eventSeq": 16
+}

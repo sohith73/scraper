@@ -1,0 +1,34 @@
+{
+  "id": "52f6444a-6708-40fe-80a0-0692e5276af2",
+  "phase": "done",
+  "clientEmail": "kanchanyad90@gmail.com",
+  "clientName": "Kanchan Yadav",
+  "requestedCount": 1,
+  "picksCount": 0,
+  "stats": {
+    "total": 0,
+    "pushed": 0,
+    "duplicates": 0,
+    "blocked": 0,
+    "errors": 0,
+    "durationMs": 0
+  },
+  "intent": {
+    "roles": [
+      "Program Manager"
+    ],
+    "locations": [],
+    "seniority": "mid",
+    "companies": [],
+    "workAuth": "F1 OPT",
+    "narrative": "Public health / data analytics mid-level",
+    "futurePreferences": "",
+    "aboutCandidate": "Public health / biostatistics / program management professional on F1 OPT; wants mid-level roles in data or analytics adjacent to health.",
+    "exclusions": {
+      "companies": [],
+      "locations": []
+    },
+    "remarks": "Do not push Associate Director level roles."
+  },
+  "completedAt": "2026-04-24T08:08:50.451Z"
+}

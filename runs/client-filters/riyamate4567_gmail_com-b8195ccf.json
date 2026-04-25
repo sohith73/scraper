@@ -90,10 +90,23 @@
       "locations": []
     }
   },
-  "overrides": null,
+  "overrides": {
+    "daysAgo": 1,
+    "seniority": "entry",
+    "minYearsOfExperience": 5,
+    "maxYearsOfExperience": 8,
+    "salaryMinimumUsd": 100000,
+    "employmentTypes": [
+      "full-time"
+    ],
+    "workModels": [
+      "onsite",
+      "remote"
+    ],
+    "excludeUsCitizenOnly": true
+  },
   "meta": {
-    "lastRunId": "ac7f38ef-26aa-4a11-a978-507e43ba3768",
-    "source": "override-intent",
-    "savedAt": "2026-04-24T03:33:25.069Z"
+    "source": "operator",
+    "savedAt": "2026-04-24T09:49:02.573Z"
   }
 }

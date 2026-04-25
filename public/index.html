@@ -39,6 +39,19 @@
                     <h3>Preferences</h3>
                     <dl id="profile-preferences-list"></dl>
                 </section>
+                <section id="about-candidate-section" class="profile-section" hidden>
+                    <h3>About this candidate <span class="muted" id="about-candidate-meta"></span></h3>
+                    <div class="muted" style="margin-bottom:4px">
+                        AI-drafted paragraph describing WHO this candidate is (domain, discipline, seniority, preferences). Prepended to every relevance prompt — tune this and the AI judges every future job through it. Editable.
+                    </div>
+                    <textarea id="about-candidate" rows="6" maxlength="2000" placeholder="Click Build Summary first — AI will draft this from profile + resume. Then edit to taste."></textarea>
+                    <div class="filter-actions">
+                        <button id="about-save" class="btn-primary" disabled>Save</button>
+                        <button id="about-revert" class="btn-secondary" disabled>Revert</button>
+                        <span class="muted" id="about-status"></span>
+                        <span class="muted" id="about-char-count">0 / 2000</span>
+                    </div>
+                </section>
                 <section id="profile-exclusions-editor" class="profile-section" hidden>
                     <h3>Exclusions (synced with dashboard)</h3>
                     <div class="exclusion-editor">
@@ -70,6 +83,14 @@
                     <details class="advanced-filters-details">
                         <summary><h3 style="display:inline-block;margin:0">Advanced filters (overrides)</h3></summary>
                         <div class="filter-grid">
+                            <label>
+                                Country
+                                <select id="filter-country">
+                                    <option value="">default (US)</option>
+                                    <option value="US">United States</option>
+                                    <option value="CA">Canada</option>
+                                </select>
+                            </label>
                             <label>
                                 Date posted
                                 <select id="filter-daysAgo">

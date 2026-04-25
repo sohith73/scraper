@@ -115,6 +115,31 @@ test('SYSTEM_PROMPT documents the operator remarks override path', () => {
     assert.match(SYSTEM_PROMPT, /HARD constraint|hard constraint/i);
 });
 
+test('SYSTEM_PROMPT calls out domain-agnostic scope (not just tech)', () => {
+    assert.match(SYSTEM_PROMPT, /medical|nursing|law|finance|sales|non-tech/i);
+    assert.match(SYSTEM_PROMPT, /aboutCandidate/);
+});
+
+test('compactIntent threads aboutCandidate when present', () => {
+    const slim = compactIntent({
+        ...INTENT,
+        aboutCandidate: 'ICU RN with 3 yrs critical care at Cedars-Sinai, paediatric focus.',
+    });
+    assert.match(slim.aboutCandidate, /ICU RN/);
+});
+
+test('compactIntent omits aboutCandidate when empty', () => {
+    const slim = compactIntent(INTENT);
+    assert.equal('aboutCandidate' in slim, false);
+});
+
+test('compactIntent truncates aboutCandidate > 1200 chars', () => {
+    const long = 'z'.repeat(2000);
+    const slim = compactIntent({ ...INTENT, aboutCandidate: long });
+    assert.ok(slim.aboutCandidate.length <= 1201);
+    assert.ok(slim.aboutCandidate.endsWith('…'));
+});
+
 test('compactIntent emits skills/industries/YoE only when set', () => {
     const with_ext = compactIntent({
         ...INTENT,

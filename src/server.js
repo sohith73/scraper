@@ -57,16 +57,26 @@ export function buildApp({ container = buildContainer() } = {}) {
         }),
     );
 
-    // Locked-down CORS: only loopback origins for Phase 1. Widen later if
-    // the dashboard frontend on :3000 ever needs to call us cross-origin.
+    // CORS allowlist. Loopback origins always allowed for dev + the admin
+    // clients-tracking portal (which lives on hq.flashfirejobs.com in prod).
+    // Extra origins can be added via env.CORS_EXTRA_ORIGINS (comma-separated).
+    const defaultOrigins = [
+        'http://localhost:3000',
+        'http://localhost:5173',
+        'http://localhost:8092',
+        'http://127.0.0.1:3000',
+        'http://127.0.0.1:5173',
+        'http://127.0.0.1:8092',
+        'https://hq.flashfirejobs.com',
+    ];
+    const extra = (container.env?.CORS_EXTRA_ORIGINS || '')
+        .split(',')
+        .map((s) => s.trim())
+        .filter(Boolean);
+    const allowedOrigins = [...defaultOrigins, ...extra];
     app.use(
         cors({
-            origin: [
-                'http://localhost:3000',
-                'http://localhost:8092',
-                'http://127.0.0.1:3000',
-                'http://127.0.0.1:8092',
-            ],
+            origin: allowedOrigins,
             credentials: false,
             maxAge: 600,
         }),

@@ -1,0 +1,114 @@
+{
+  "id": "ded2392c-ca23-4f6d-ab7f-302e1a0f0899",
+  "createdAt": "2026-04-24T08:10:49.486Z",
+  "updatedAt": "2026-04-24T08:11:02.720Z",
+  "phase": "done",
+  "clientEmail": "kanchanyad90@gmail.com",
+  "clientName": "Kanchan Yadav",
+  "requestedCount": 1,
+  "abortRequested": false,
+  "progress": {
+    "intent": {
+      "roles": [
+        "Program Manager",
+        "Public Health Program Manager",
+        "Clinical Research Coordinator"
+      ],
+      "locations": [],
+      "seniority": "mid",
+      "companies": [],
+      "workAuth": "F1 OPT",
+      "narrative": "Public health / data analytics mid-level",
+      "futurePreferences": "",
+      "aboutCandidate": "Public health professional on F1 OPT with biostatistics and data analytics strengths; mid-level; open to research and coordinator roles in healthcare and public health organisations.",
+      "exclusions": {
+        "companies": [],
+        "locations": []
+      },
+      "remarks": "Do not push Associate Director level roles."
+    },
+    "searched": {
+      "totalReturned": 3,
+      "totalNormalized": 3,
+      "durationMs": 4852,
+      "pages": 1
+    },
+    "filtered": {
+      "totalJobs": 3,
+      "picked": 1,
+      "skipped": 2,
+      "borderline": 0,
+      "batches": 1,
+      "cacheHits": 0,
+      "durationMs": 3732
+    },
+    "enriched": {
+      "total": 1,
+      "ready": 1,
+      "sparse": 0,
+      "durationMs": 0
+    },
+    "preflight": {
+      "total": 1,
+      "pushable": 1,
+      "blockedCompany": 0,
+      "blockedLocation": 0,
+      "localDuplicate": 0
+    },
+    "pushed": {
+      "total": 1,
+      "pushed": 1,
+      "duplicates": 0,
+      "blocked": 0,
+      "errors": 0,
+      "durationMs": 2855
+    },
+    "decisions": [
+      {
+        "jobId": "69eb0bebdc35f7132c4ad387",
+        "title": "Clinical Data Management Specialist",
+        "company": "bioMérieux",
+        "applyUrl": "https://jobs.jobvite.com/biofiredx/job/ovU1zfwJ?__jvst=Job+Board&__jvsd=LinkedIn",
+        "pick": false,
+        "score": 0,
+        "reason": "Skip — different discipline; role is focused on clinical data management, while candidate prefers public health and research roles."
+      },
+      {
+        "jobId": "69ea72db58811370cb1333d9",
+        "title": "Senior Clinical Programmer",
+        "company": "Cytel",
+        "applyUrl": "https://iblyjb.fa.ocs.oraclecloud.com/hcmUI/CandidateExperience/en/job/1482/?utm_medium=jobboard&utm_source=linkedin",
+        "pick": false,
+        "score": 0,
+        "reason": "Skip — seniority mismatch; this is a Senior role, while candidate is mid-level."
+      },
+      {
+        "jobId": "69ce26fccdb525785fb946b5",
+        "title": "Biospecimen Research Coordinator",
+        "company": "Hartford HealthCare",
+        "applyUrl": "https://www.hhccareers.org/us/en/job/26154573/Biospecimen-Research-Coordinator?src=UNS-10164",
+        "pick": true,
+        "score": 70,
+        "reason": "Strong fit — Biospecimen Research Coordinator role aligns with candidate's public health background and mid-level experience, plus it offers H1B sponsorship."
+      }
+    ],
+    "seenJrIds": [
+      "69eb0bebdc35f7132c4ad387",
+      "69ea72db58811370cb1333d9",
+      "69ce26fccdb525785fb946b5"
+    ]
+  },
+  "picks": [
+    {
+      "jobId": "69ce26fccdb525785fb946b5",
+      "title": "Biospecimen Research Coordinator",
+      "company": "Hartford HealthCare",
+      "applyUrl": "https://www.hhccareers.org/us/en/job/26154573/Biospecimen-Research-Coordinator?src=UNS-10164",
+      "createdJobId": "69eb25941d73ef07343acfaa",
+      "outcome": "pushed"
+    }
+  ],
+  "error": null,
+  "durationMs": 13234,
+  "eventSeq": 16
+}

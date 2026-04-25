@@ -1,0 +1,90 @@
+{
+  "capturedAt": "2026-04-24T08:00:53.562Z",
+  "state": {
+    "id": "70b49c3d-5b3c-462a-b4cf-a9eace0f1ae9",
+    "createdAt": "2026-04-24T08:00:48.500Z",
+    "updatedAt": "2026-04-24T08:00:53.558Z",
+    "phase": "failed",
+    "clientEmail": "kanchanyad90@gmail.com",
+    "clientName": "Kanchan Yadav",
+    "requestedCount": 10,
+    "abortRequested": false,
+    "progress": {
+      "intent": {
+        "roles": [
+          "Biostatistician",
+          "Epidemiologist",
+          "Program Manager",
+          "Research Analyst in Public Health",
+          "Data Analyst in Public Health"
+        ],
+        "locations": [
+          "Cambridge, MA, USA",
+          "Remote"
+        ],
+        "seniority": "mid",
+        "companies": [
+          "Pharma companies",
+          "Non-profit organization",
+          "biopharma companies"
+        ],
+        "workAuth": "F1 OPT",
+        "narrative": "Kanchan Yadav is a mid-level Biostatistician and Epidemiologist based in Cambridge, MA, open to remote opportunities. She holds an F1 OPT visa and is looking to join organizations in the public health sector.",
+        "futurePreferences": "Open to relocation and interested in long-term specialization in public health research.",
+        "aboutCandidate": "Kanchan Yadav is a Biostatistician and Epidemiologist with 4-6 years of experience in public health research and data analysis. She has a Master's degree from Harvard University and has directed over 20 studies involving more than 1 million participants. Kanchan is proficient in statistical programming languages such as R, STATA, and SAS, and has expertise in survival analysis and causal inference. She is seeking mid-level roles in biostatistics or epidemiology, preferably in pharma or non-profit organizations, and is authorized to work under F1 OPT.",
+        "employmentTypes": [
+          "full-time"
+        ],
+        "workModels": [
+          "onsite",
+          "remote"
+        ],
+        "daysAgo": 30,
+        "minYearsOfExperience": 4,
+        "maxYearsOfExperience": 6,
+        "salaryMinimumUsd": 100000,
+        "industries": [
+          "Public Health",
+          "Biopharma",
+          "Pharmaceuticals"
+        ],
+        "skills": [
+          "R",
+          "STATA",
+          "SAS",
+          "SPSS",
+          "Tableau",
+          "Power BI",
+          "Excel"
+        ],
+        "companyStages": null,
+        "roleType": null,
+        "excludedTitles": [
+          "Associate director"
+        ],
+        "excludedSkills": null,
+        "excludedIndustries": null,
+        "excludeStaffingAgency": null,
+        "excludeSecurityClearance": false,
+        "excludeUsCitizenOnly": true,
+        "exclusions": {
+          "companies": [],
+          "locations": []
+        },
+        "remarks": ""
+      },
+      "searched": null,
+      "filtered": null,
+      "enriched": null,
+      "preflight": null,
+      "pushed": null
+    },
+    "picks": [],
+    "error": {
+      "code": "FILTER_UPDATE_FAILED",
+      "message": "filter-update status=400"
+    },
+    "durationMs": 5058,
+    "eventSeq": 7
+  }
+}

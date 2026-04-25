@@ -30,6 +30,7 @@ const VALID_AI_INTENT = {
     workAuth: 'H1B required',
     narrative: 'Senior backend engineer seeking remote roles.',
     futurePreferences: '',
+    aboutCandidate: 'Senior backend engineer with distributed systems focus; remote-only; H1B.',
 };
 
 const VALID_PROFILE = {
@@ -137,4 +138,21 @@ test('cacheHit flag surfaces through to caller', async () => {
     assert.equal(r.ok, true);
     assert.equal(r.value.cacheHit, true);
     assert.equal(r.value.key, 'hash');
+});
+
+test('fused SearchIntent carries aboutCandidate through unchanged', async () => {
+    const ai = fakeAi({ aiIntent: VALID_AI_INTENT });
+    const r = await summarizeProfile({ ai, profile: VALID_PROFILE });
+    assert.equal(r.ok, true);
+    assert.match(r.value.intent.aboutCandidate, /distributed systems/);
+});
+
+test('aboutCandidate falls back to narrative when AI omits it', async () => {
+    const withoutAbout = { ...VALID_AI_INTENT };
+    delete withoutAbout.aboutCandidate;
+    const ai = fakeAi({ aiIntent: withoutAbout });
+    const r = await summarizeProfile({ ai, profile: VALID_PROFILE });
+    assert.equal(r.ok, true);
+    // Should be the narrative text, not an empty string.
+    assert.equal(r.value.intent.aboutCandidate, VALID_AI_INTENT.narrative);
 });
