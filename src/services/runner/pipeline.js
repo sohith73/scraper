@@ -306,9 +306,15 @@ export async function runPipeline({
         // Stats + picks accumulate across iterations; SSE keeps the UI
         // live throughout.
 
-        const PAGE_SIZE = Math.max(requestedCount, 15);
-        const MAX_PAGES = 12;               // up to 12 × PAGE_SIZE candidates scanned
-        const MAX_AI_BATCHES = 10;          // cap AI spend: ~10 × 20-job batches
+        // Pull MORE jobs per JR call so a single round captures the
+        // tail of the candidate list. JR's `count` parameter caps soft —
+        // asking for 40 reliably returns up to ~40 in one call. With a
+        // larger page size, low-pick-rate intents (heavy AI skips) still
+        // converge on the requested count without needing to lean on
+        // dedupe-prone subsequent pages.
+        const PAGE_SIZE = Math.max(requestedCount * 3, 40);
+        const MAX_PAGES = 15;               // up to 15 × PAGE_SIZE candidates scanned
+        const MAX_AI_BATCHES = 14;          // cap AI spend (slightly above MAX_PAGES)
 
         const traceDir = env?.DEBUG_CAPTURE ? runArtDir : null;
         // resumeFrom may preload previously-seen JR ids so a retried run

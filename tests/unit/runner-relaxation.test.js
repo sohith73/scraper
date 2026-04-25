@@ -23,9 +23,13 @@ function intent(overrides = {}) {
     };
 }
 
-test('empty intent → empty plan', () => {
+test('empty intent → only the seniority step (mid → senior bucket added)', () => {
+    // The seniority chain is now complete (intern→entry→mid→senior→lead→exec),
+    // so "mid" produces a single plan adding "senior" to extraSeniorities.
     const p = computeRelaxationPlan({ intent: intent() });
-    assert.equal(p.length, 0);
+    assert.equal(p.length, 1);
+    assert.equal(p[0].field, 'seniority');
+    assert.match(p[0].to, /senior/);
 });
 
 test('daysAgo narrow → highest-priority widening', () => {
@@ -97,12 +101,20 @@ test('narrow YoE band → widen ±2', () => {
     assert.match(y.to, /3–10 yrs/);
 });
 
-test('seniority step: entry → mid', () => {
+test('seniority step: entry → entry+mid (UNION, not replace)', () => {
+    // Bug fix 2026-04-25: replacing entry with mid made JR drop the
+    // entry-level jobs from results. The fix appends to extraSeniorities
+    // so JR sees seniority=[entry, mid] = wider pool, not narrower.
     const p = computeRelaxationPlan({ intent: intent({ seniority: 'entry' }) });
     const s = p.find((x) => x.field === 'seniority');
     assert.ok(s);
     assert.equal(s.from, 'entry');
-    assert.equal(s.to, 'mid');
+    assert.match(s.to, /entry \+ mid/);
+    // applyRelaxation should put `mid` into extraSeniorities, leave
+    // primary `seniority` alone.
+    const next = s.apply({ seniority: 'entry' });
+    assert.equal(next.seniority, 'entry');
+    assert.deepEqual(next.extraSeniorities, ['mid']);
 });
 
 test('plans returned sorted by priority (descending)', () => {

@@ -78,6 +78,21 @@ test('seniority maps to JR integer array', () => {
     assert.deepEqual(f.seniority, [SENIORITY_ENUM_MAP.senior]);
 });
 
+test('seniority: extraSeniorities union with primary (relaxation widening)', () => {
+    const f = searchIntentToJRFilter({
+        intent: { ...MIN_INTENT, seniority: 'entry', extraSeniorities: ['mid', 'senior'] },
+    });
+    // entry=2, mid=3, senior=4 (per SENIORITY_ENUM_MAP)
+    assert.deepEqual([...f.seniority].sort(), [SENIORITY_ENUM_MAP.entry, SENIORITY_ENUM_MAP.mid, SENIORITY_ENUM_MAP.senior].sort());
+});
+
+test('seniority: extraSeniorities dedupes the primary', () => {
+    const f = searchIntentToJRFilter({
+        intent: { ...MIN_INTENT, seniority: 'entry', extraSeniorities: ['entry', 'mid'] },
+    });
+    assert.equal(f.seniority.length, 2);
+});
+
 test('unknown seniority falls back to mid', () => {
     const f = searchIntentToJRFilter({
         intent: { ...MIN_INTENT, seniority: 'wizard' },

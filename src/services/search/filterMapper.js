@@ -152,9 +152,22 @@ function mapWorkModel(intent) {
 }
 
 function mapSeniority(intent) {
-    const key = typeof intent?.seniority === 'string' ? intent.seniority : 'mid';
-    const code = SENIORITY_ENUM_MAP[key] ?? SENIORITY_ENUM_MAP.mid;
-    return [code];
+    // Primary seniority — single string from the AI summary.
+    const primaryKey = typeof intent?.seniority === 'string' ? intent.seniority : 'mid';
+    const codes = new Set();
+    const primary = SENIORITY_ENUM_MAP[primaryKey] ?? SENIORITY_ENUM_MAP.mid;
+    codes.add(primary);
+    // `extraSeniorities` (string[]) is populated by the relaxation engine
+    // when "entry → mid" widening fires. Older builds REPLACED the
+    // single-string seniority, which made JR drop the original entry-
+    // level jobs from results entirely. UNION instead so widening grows
+    // the candidate pool rather than swapping it.
+    const extras = Array.isArray(intent?.extraSeniorities) ? intent.extraSeniorities : [];
+    for (const k of extras) {
+        const code = SENIORITY_ENUM_MAP[k];
+        if (Number.isFinite(code)) codes.add(code);
+    }
+    return [...codes];
 }
 
 // mapEmploymentTypes: intent.employmentTypes (string[]) → JR int[].

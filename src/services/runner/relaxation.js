@@ -141,18 +141,32 @@ export function computeRelaxationPlan({ intent, limit = 4 } = {}) {
     }
 
     // --- seniority ------------------------------------------------------
+    // Each step ADDS the next bucket to `extraSeniorities` instead of
+    // replacing the primary. JR's filter then sees the union, e.g. an
+    // entry candidate keeps entry jobs AND gains mid jobs after the
+    // first relaxation round. Replacing was causing the candidate pool
+    // to shrink instead of grow when the operator clicked "widen".
     const s = intent.seniority;
-    const SENIORITY_STEPS = { intern: 'entry', entry: 'mid', lead: 'senior', exec: 'lead' };
-    if (s && SENIORITY_STEPS[s]) {
-        const next = SENIORITY_STEPS[s];
+    const SENIORITY_STEPS = { intern: 'entry', entry: 'mid', mid: 'senior', senior: 'lead', lead: 'exec' };
+    const existingExtras = Array.isArray(intent.extraSeniorities) ? intent.extraSeniorities : [];
+    const allCovered = new Set([s, ...existingExtras]);
+    let candidate = SENIORITY_STEPS[s];
+    while (candidate && allCovered.has(candidate)) {
+        candidate = SENIORITY_STEPS[candidate];
+    }
+    if (candidate) {
+        const fromLabel = [s, ...existingExtras].filter(Boolean).join(' + ');
         plans.push({
             field: 'seniority',
             label: 'Seniority',
-            from: s,
-            to: next,
-            reason: `"${s}" is narrow; shifting toward "${next}" widens the role pool.`,
+            from: fromLabel,
+            to: `${fromLabel} + ${candidate}`,
+            reason: `Adding "${candidate}" to the seniority pool widens the role pool without dropping current matches.`,
             priority: 4,
-            apply: (i) => ({ ...i, seniority: next }),
+            apply: (i) => ({
+                ...i,
+                extraSeniorities: [...new Set([...existingExtras, candidate])],
+            }),
         });
     }
 
