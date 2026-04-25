@@ -5,6 +5,7 @@
 # Optional: LOG_FILE=path ./run.sh — append all stdout/stderr to a file as well as the terminal
 # Optional: SKIP_PLAYWRIGHT=1 ./run.sh — skip browser install
 # Optional: PLAYWRIGHT_WITH_DEPS=1 ./run.sh — same as Render: npx playwright install --with-deps chromium (may need sudo / apt)
+# Optional: SKIP_FREE_PORT=1 ./run.sh — do not kill whatever is already listening on PORT
 
 # No `set -u`: nvm.sh and other sourced tools use unset variables; nounset breaks `nvm use`.
 set -eo pipefail
@@ -32,6 +33,55 @@ fi
 
 log "Working directory: $ROOT"
 log "PATH: $PATH"
+
+# Same default as src/config/env.js (8092). PORT env wins; else first line PORT= in .env.
+resolve_listen_port() {
+    if [[ -n "${PORT:-}" ]]; then
+        echo "$PORT"
+        return
+    fi
+    if [[ -f "$ROOT/.env" ]]; then
+        local from_env
+        from_env="$(cd "$ROOT" && node --env-file-if-exists=.env -e "process.stdout.write(String(process.env.PORT || ''))" 2>/dev/null || true)"
+        if [[ -n "$from_env" && "$from_env" =~ ^[0-9]+$ ]]; then
+            echo "$from_env"
+            return
+        fi
+    fi
+    echo "8092"
+}
+
+# Stop orphaned server from a closed terminal so this run can bind PORT again.
+free_listen_port() {
+    local port="$1"
+    if ! [[ "$port" =~ ^[0-9]+$ ]]; then
+        log "WARN: invalid port '$port', skip freeing port"
+        return 0
+    fi
+    local pid_list=()
+    if command -v lsof >/dev/null 2>&1; then
+        mapfile -t pid_list < <(lsof -t -iTCP:"$port" -sTCP:LISTEN 2>/dev/null | sort -u)
+    elif command -v ss >/dev/null 2>&1; then
+        mapfile -t pid_list < <(ss -lptn 2>/dev/null | grep -E "[:.]${port}\\b" | sed -n 's/.*pid=\([0-9]*\).*/\1/p' | sort -u)
+    elif command -v fuser >/dev/null 2>&1; then
+        log "Using fuser -k on port $port"
+        fuser -k -TERM "${port}/tcp" 2>/dev/null || true
+        sleep 1
+        fuser -k -KILL "${port}/tcp" 2>/dev/null || true
+        return 0
+    else
+        log "WARN: no lsof, ss, or fuser — cannot free port $port automatically"
+        return 0
+    fi
+    if [[ ${#pid_list[@]} -eq 0 || -z "${pid_list[0]:-}" ]]; then
+        log "Port $port is free (no TCP listener)"
+        return 0
+    fi
+    log "Stopping old listener(s) on port $port: ${pid_list[*]}"
+    kill -TERM "${pid_list[@]}" 2>/dev/null || true
+    sleep 1
+    kill -KILL "${pid_list[@]}" 2>/dev/null || true
+}
 
 need_node() {
     if ! command -v node >/dev/null 2>&1; then
@@ -96,5 +146,12 @@ else
     log "SKIP_PLAYWRIGHT=1 — skipping Playwright Chromium install"
 fi
 
-log "Starting server (loads .env if present: npm run start)"
+LISTEN_PORT="$(resolve_listen_port)"
+if [[ "${SKIP_FREE_PORT:-0}" != 1 ]]; then
+    free_listen_port "$LISTEN_PORT"
+else
+    log "SKIP_FREE_PORT=1 — not killing listeners on port $LISTEN_PORT"
+fi
+
+log "Starting server on port $LISTEN_PORT (loads .env if present: npm run start)"
 exec npm start
