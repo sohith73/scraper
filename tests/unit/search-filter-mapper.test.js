@@ -190,7 +190,24 @@ test('jobTaxonomyList: resolvedTaxonomyList REPLACES existing stale entries', ()
         { taxonomyId: '01-08-02', title: 'Data Scientist' },
         { taxonomyId: '01-06-01', title: 'Machine Learning Engineer' },
     ]);
-    assert.equal(f.jobTitle, 'Data Scientist, ML Engineer');
+    // jobTitle now prefers the canonical taxonomy titles (when resolved)
+    // over the user's free-text role strings — the canonical titles are
+    // guaranteed to be in JR's accepted vocabulary.
+    assert.equal(f.jobTitle, 'Data Scientist, Machine Learning Engineer');
+});
+
+test('jobTitle: sanitises ampersand + odd chars to keep JR happy (R&D Engineer triggers 400)', () => {
+    // Real prod failure: roles=['R&D Engineer','Product Development Engineer']
+    // produced jobTitle="Product Development Engineer, R&D Engineer" and JR
+    // returned filter-update status=400. The `&` is the culprit.
+    const f = searchIntentToJRFilter({
+        intent: { ...MIN_INTENT, roles: ['R&D Engineer', 'Product (Lead) Engineer'] },
+        existing: {},
+        resolvedTaxonomyList: [],
+    });
+    assert.ok(!/&/.test(f.jobTitle), 'no & in jobTitle');
+    assert.ok(!/[()]/.test(f.jobTitle), 'no parens in jobTitle');
+    assert.match(f.jobTitle, /R and D Engineer/);
 });
 
 test('jobTaxonomyList: without resolvedTaxonomyList, existing entries are preserved', () => {

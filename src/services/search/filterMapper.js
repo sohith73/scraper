@@ -330,11 +330,30 @@ export function searchIntentToJRFilter({ intent, existing = null, resolvedTaxono
     return {
         ...base,
         // jobTitle is advisory free-text in JR — the actual role match
-        // happens via jobTaxonomyList. Keep the string short (JR rejected
-        // 116-char comma-joined strings with status 400): first two roles,
-        // trim to 80 chars.
+        // happens via jobTaxonomyList. JR rejects the whole filter (400)
+        // when this string contains characters outside its accepted set
+        // (we got bit by `R&D Engineer` — the `&` triggered the validator).
+        // Two-pass cleanup:
+        //   1. Prefer the resolved taxonomy titles when we have them —
+        //      those are guaranteed to be in JR's vocabulary.
+        //   2. Sanitise: replace `&` with `and`, strip everything outside
+        //      [A-Za-z0-9 ,/.\-], collapse whitespace, cap to 80 chars.
         jobTitle: (() => {
-            const joined = roles.slice(0, 2).join(', ');
+            const sourceTitles =
+                Array.isArray(jobTaxonomyList) && jobTaxonomyList.length
+                    ? jobTaxonomyList.map((t) => t.title || '').filter(Boolean)
+                    : roles;
+            const joined = sourceTitles
+                .slice(0, 2)
+                .map((s) =>
+                    String(s)
+                        .replace(/&/g, ' and ')
+                        .replace(/[^A-Za-z0-9 ,/.\-]/g, ' ')
+                        .replace(/\s+/g, ' ')
+                        .trim(),
+                )
+                .filter(Boolean)
+                .join(', ');
             return joined.length > 80 ? `${joined.slice(0, 77)}...` : joined;
         })(),
         jobTaxonomyList,
