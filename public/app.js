@@ -177,12 +177,18 @@ async function selectClient(email) {
     }
 }
 
-// resetFilterInputs: blank every Advanced Filters control. Called when
-// switching clients so stale values don't carry over.
+// resetFilterInputs: reset every Advanced Filters control to its DEFAULT
+// (not blank). Called when switching clients so stale values don't carry
+// over. The two clearance/citizenship excludes default to ON because
+// every Flashfire client we work with is on F-1 / OPT / H-1B; matching
+// US-citizen-only / clearance-required postings is a guaranteed waste of
+// dashboard slots. Date posted defaults to past 24 h so we surface only
+// fresh roles. Saved per-client overrides (applySavedOverrides) override
+// any of these afterwards.
 function resetFilterInputs() {
     const el = (id) => $(id);
     if (el('filter-country')) el('filter-country').value = '';
-    if (el('filter-daysAgo')) el('filter-daysAgo').value = '';
+    if (el('filter-daysAgo')) el('filter-daysAgo').value = '1';
     if (el('filter-seniority')) el('filter-seniority').value = '';
     if (el('filter-yoe')) el('filter-yoe').value = '';
     if (el('filter-salary')) el('filter-salary').value = '';
@@ -192,8 +198,8 @@ function resetFilterInputs() {
         cb.checked = false;
     }
     if (el('filter-excludeStaffing')) el('filter-excludeStaffing').checked = false;
-    if (el('filter-excludeClearance')) el('filter-excludeClearance').checked = false;
-    if (el('filter-excludeCitizen')) el('filter-excludeCitizen').checked = false;
+    if (el('filter-excludeClearance')) el('filter-excludeClearance').checked = true;
+    if (el('filter-excludeCitizen')) el('filter-excludeCitizen').checked = true;
     if (el('filter-remarks')) { el('filter-remarks').value = ''; updateRemarksCount(); }
 }
 
@@ -255,9 +261,15 @@ function applySavedOverrides(saved) {
     setChecks('workModels', pick('workModels'));
     setChecks('companyStages', pick('companyStages'));
 
-    if (pick('excludeStaffingAgency') === true) $('filter-excludeStaffing').checked = true;
-    if (pick('excludeSecurityClearance') === true) $('filter-excludeClearance').checked = true;
-    if (pick('excludeUsCitizenOnly') === true) $('filter-excludeCitizen').checked = true;
+    // Tri-state: undefined → keep the default set by resetFilterInputs;
+    // explicit true/false → honour the saved choice exactly.
+    const setBool = (key, id) => {
+        const v = pick(key);
+        if (v === true || v === false) $(id).checked = v;
+    };
+    setBool('excludeStaffingAgency', 'filter-excludeStaffing');
+    setBool('excludeSecurityClearance', 'filter-excludeClearance');
+    setBool('excludeUsCitizenOnly', 'filter-excludeCitizen');
 
     const remarks = pick('remarks');
     if (typeof remarks === 'string' && $('filter-remarks')) {
@@ -680,9 +692,13 @@ function collectFilterOverrides() {
     const et = grab('employmentTypes'); if (et.length) out.employmentTypes = et;
     const wm = grab('workModels'); if (wm.length) out.workModels = wm;
     const cs = grab('companyStages'); if (cs.length) out.companyStages = cs;
-    if ($('filter-excludeStaffing').checked) out.excludeStaffingAgency = true;
-    if ($('filter-excludeClearance').checked) out.excludeSecurityClearance = true;
-    if ($('filter-excludeCitizen').checked) out.excludeUsCitizenOnly = true;
+    // Always write the boolean (true OR false) so the saved record
+    // round-trips correctly. Without the explicit `false`, an operator
+    // unchecking the box and saving would lose the choice on next load
+    // (the default-ON applied by resetFilterInputs would re-check it).
+    out.excludeStaffingAgency = $('filter-excludeStaffing').checked;
+    out.excludeSecurityClearance = $('filter-excludeClearance').checked;
+    out.excludeUsCitizenOnly = $('filter-excludeCitizen').checked;
     const remarks = ($('filter-remarks')?.value || '').trim();
     if (remarks) out.remarks = remarks.slice(0, 1000);
     return out;
