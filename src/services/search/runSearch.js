@@ -326,8 +326,44 @@ export async function runSearch({
                 // (default 0); we feed it straight to JR. Subsequent calls
                 // should pass position=count*iter to walk forward.
                 const listUrl = `${base}${LIST_URL_PATH}?refresh=${position === 0}&sortCondition=0&position=${position}&count=${count}&syncRerank=false`;
-                const list = await pageFetch(page, { url: listUrl });
+                let list = await pageFetch(page, { url: listUrl });
+                let activeListUrl = listUrl;
                 if (list.status !== 200 || list.body?.success !== true) {
+                    logger?.warn?.(
+                        {
+                            status: list.status,
+                            jrResponseBody: list.body,
+                            listUrl,
+                            position,
+                            count,
+                        },
+                        'runSearch: JR rejected list fetch — trying smaller count',
+                    );
+                    // Retry once with count=10. JR's recommend/list/jobs
+                    // sometimes rejects requests with count>25 + non-zero
+                    // position by returning success:false. count=10 is
+                    // verified safe across prod runs.
+                    if (count > 10) {
+                        const retryUrl = `${base}${LIST_URL_PATH}?refresh=${position === 0}&sortCondition=0&position=${position}&count=10&syncRerank=false`;
+                        const retry = await pageFetch(page, { url: retryUrl });
+                        if (retry.status === 200 && retry.body?.success === true) {
+                            logger?.info?.({ position, count: 10 }, 'runSearch: list-fetch retry with count=10 succeeded');
+                            list = retry;
+                            activeListUrl = retryUrl;
+                        }
+                    }
+                }
+                if (list.status !== 200 || list.body?.success !== true) {
+                    logger?.error?.(
+                        {
+                            status: list.status,
+                            jrResponseBody: list.body,
+                            listUrl: activeListUrl,
+                            position,
+                            count,
+                        },
+                        'runSearch: JR rejected list fetch (retry exhausted)',
+                    );
                     return err(classifyListError(list.status, list.body), 'list fetch failed', {
                         status: list.status,
                         bodyJson: list.body,
