@@ -306,13 +306,13 @@ export async function runPipeline({
         // Stats + picks accumulate across iterations; SSE keeps the UI
         // live throughout.
 
-        // PAGE_SIZE: JR's `count` parameter has a soft cap. Empirically
-        // 25 is reliably accepted; 40+ has triggered UPSTREAM_REJECTED
-        // on prod (success:false envelope from /swan/recommend/list/jobs).
-        // Stay at 25 and lean on more pages instead of bigger ones.
-        const PAGE_SIZE = Math.min(Math.max(requestedCount * 2, 20), 25);
-        const MAX_PAGES = 20;               // up to 20 × 25 = 500 candidates per round
-        const MAX_AI_BATCHES = 18;
+        // PAGE_SIZE: JR's `count` HARD-caps at 10. Verified live via
+        // Playwright MCP 2026-04-26: count=25 returns errorCode 20000
+        // ("bad request"); count=10 returns 10 jobs cleanly with the same
+        // session + filter. Stay at 10 and use more pages.
+        const PAGE_SIZE = 10;
+        const MAX_PAGES = 30;               // up to 30 × 10 = 300 candidates per round
+        const MAX_AI_BATCHES = 25;
 
         const traceDir = env?.DEBUG_CAPTURE ? runArtDir : null;
         // resumeFrom may preload previously-seen JR ids so a retried run
@@ -432,6 +432,12 @@ export async function runPipeline({
             agg.searched.durationMs += searchRes.value.durationMs;
             agg.searched.pages = page + 1;
             agg.searched.linkedInSkipped += linkedInSkipped.length;
+            // Surface the actual JR URL + filter body to the UI so operators
+            // can copy-paste them into a browser to reproduce results.
+            // Updated every page so the final state reflects the LAST
+            // request (covers post-relaxation widenings).
+            agg.searched.lastListUrl = searchRes.value.listUrl;
+            agg.searched.lastFilterPayload = searchRes.value.filter;
             store.update(runId, { progress: { searched: agg.searched } });
             logger?.info?.(
                 { page, jrReturned: searchRes.value.totalReturned, fresh: freshJobs.length, seenTotal: seenJrIds.size },

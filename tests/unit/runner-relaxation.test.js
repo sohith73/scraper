@@ -32,38 +32,16 @@ test('empty intent → only the seniority step (mid → senior bucket added)', (
     assert.match(p[0].to, /senior/);
 });
 
-test('daysAgo narrow → highest-priority widening', () => {
-    const p = computeRelaxationPlan({ intent: intent({ daysAgo: 1 }) });
-    assert.ok(p.length > 0);
-    assert.equal(p[0].field, 'daysAgo');
-    assert.match(p[0].from, /24 h|past 1/i);
-    assert.match(p[0].to, /3 days|past 3/i);
-});
-
-test('daysAgo ladder: 1→3, 3→7, 7→14, 14→30, 30→60, 60→90, 90→180, 180→omitted', () => {
-    const cases = [
-        [1, 'past 3 days'],
-        [3, 'past 7 days'],
-        [7, 'past 14 days'],
-        [14, 'past 30 days'],
-        [30, 'past 60 days'],
-        [60, 'past 90 days'],
-        [90, 'past 180 days'],
-    ];
-    for (const [from, toSubstr] of cases) {
-        const p = computeRelaxationPlan({ intent: intent({ daysAgo: from }) });
-        assert.ok(p[0], `no plan for daysAgo=${from}`);
-        assert.equal(p[0].field, 'daysAgo');
-        assert.ok(
-            p[0].to.includes(toSubstr),
-            `daysAgo=${from}: expected "${toSubstr}" in "${p[0].to}"`,
-        );
+test('daysAgo never proposed — hardcoded past-24-h, relaxation skips it', () => {
+    // 2026-04-26: filterMapper always sends daysAgo=1 regardless of intent;
+    // relaxation no longer proposes Date-posted widenings so the UI
+    // "auto-changed filters" panel doesn't show changes that wouldn't
+    // actually reach JR.
+    for (const d of [1, 3, 7, 14, 30, 60, 90, 180]) {
+        const p = computeRelaxationPlan({ intent: intent({ daysAgo: d }) });
+        assert.equal(p.find((x) => x.field === 'daysAgo'), undefined,
+            `daysAgo=${d} should NOT appear in plan`);
     }
-    // 180 should NOT be proposed as a widening target (already at max before "all time").
-    const at180 = computeRelaxationPlan({ intent: intent({ daysAgo: 180 }) });
-    // 180 bucket widens to "all time" (null).
-    const dayPlan = at180.find((x) => x.field === 'daysAgo');
-    if (dayPlan) assert.match(dayPlan.to, /all time/i);
 });
 
 test('single-model workModels proposed', () => {
@@ -131,19 +109,19 @@ test('plans returned sorted by priority (descending)', () => {
 });
 
 test('applyRelaxation produces new object with mutated field', () => {
-    const i = intent({ daysAgo: 1 });
+    const i = intent({ workModels: ['remote'] });
     const [plan] = computeRelaxationPlan({ intent: i });
     const next = applyRelaxation(i, plan);
     assert.notEqual(next, i); // new object
-    assert.notEqual(next.daysAgo, 1); // widened
-    assert.equal(i.daysAgo, 1); // input unchanged
+    assert.notDeepEqual(next.workModels, i.workModels);
+    assert.deepEqual(i.workModels, ['remote']); // input unchanged
 });
 
 test('serialisePlan strips the apply fn for wire transport', () => {
-    const [plan] = computeRelaxationPlan({ intent: intent({ daysAgo: 1 }) });
+    const [plan] = computeRelaxationPlan({ intent: intent({ workModels: ['remote'] }) });
     const [wire] = serialisePlan([plan]);
     assert.equal('apply' in wire, false);
-    assert.equal(wire.field, 'daysAgo');
+    assert.equal(wire.field, 'workModels');
     assert.equal(wire.index, 0);
     assert.equal(typeof wire.reason, 'string');
 });
@@ -151,7 +129,6 @@ test('serialisePlan strips the apply fn for wire transport', () => {
 test('limit caps returned plans', () => {
     const p = computeRelaxationPlan({
         intent: intent({
-            daysAgo: 1,
             workModels: ['remote'],
             salaryMinimumUsd: 200000,
             locations: ['Chicago', 'Austin'],
@@ -162,7 +139,7 @@ test('limit caps returned plans', () => {
         limit: 2,
     });
     assert.equal(p.length, 2);
-    // Top two by priority: daysAgo (10), workModels (8)
-    assert.equal(p[0].field, 'daysAgo');
-    assert.equal(p[1].field, 'workModels');
+    // Top two by priority after daysAgo removed: workModels (8), salary (7)
+    assert.equal(p[0].field, 'workModels');
+    assert.equal(p[1].field, 'salaryMinimumUsd');
 });

@@ -209,6 +209,16 @@
                     <div id="no-jobs-hint" class="warn-banner" hidden></div>
                     <div id="relaxation-prompt" class="warn-banner" hidden></div>
                     <div id="run-stats" class="stats-grid" hidden></div>
+                    <details id="jr-request" style="margin-top:8px" hidden>
+                        <summary style="cursor:pointer;font-size:11px;color:#88c">JR request — list URL + filter payload</summary>
+                        <div style="margin-top:6px;font-size:11px">
+                            <div><strong>List URL:</strong></div>
+                            <code id="jr-list-url" style="display:block;background:#0a0a14;padding:6px;border-radius:4px;word-break:break-all;color:#9ad"></code>
+                            <div style="margin-top:6px"><strong>POST /swan/filter/update/filter body:</strong></div>
+                            <pre id="jr-filter-payload" style="background:#0a0a14;padding:6px;border-radius:4px;max-height:280px;overflow:auto;color:#9ad;font-size:10px;margin:4px 0"></pre>
+                            <button id="jr-copy-curl" class="btn-secondary" style="font-size:11px">Copy as curl</button>
+                        </div>
+                    </details>
                 </section>
                 <section id="explain-section" class="profile-section" hidden>
                     <h3>

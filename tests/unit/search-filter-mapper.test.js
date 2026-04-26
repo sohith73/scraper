@@ -71,11 +71,17 @@ test('roles are joined as comma-separated jobTitle (up to 4 — capped at 80 cha
     assert.equal(f.jobTitle, 'Backend, Platform, Infra');
 });
 
-test('seniority maps to JR integer array', () => {
+test('seniority maps to JR integer array (primary + adjacency baseline)', () => {
+    // 2026-04-26: smooth-by-default — single seniority expands to primary
+    // + adjacent (e.g. senior → [mid, senior, lead]) to mirror JR UI's
+    // "+1" baseline.
     const f = searchIntentToJRFilter({
         intent: { ...MIN_INTENT, seniority: 'senior' },
     });
-    assert.deepEqual(f.seniority, [SENIORITY_ENUM_MAP.senior]);
+    assert.deepEqual(
+        [...f.seniority].sort((a, b) => a - b),
+        [SENIORITY_ENUM_MAP.mid, SENIORITY_ENUM_MAP.senior, SENIORITY_ENUM_MAP.lead].sort((a, b) => a - b),
+    );
 });
 
 test('seniority: extraSeniorities union with primary (relaxation widening)', () => {

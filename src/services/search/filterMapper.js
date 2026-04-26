@@ -141,23 +141,39 @@ function mapWorkModel(intent) {
     return [WORK_MODEL.ONSITE, WORK_MODEL.REMOTE, WORK_MODEL.HYBRID];
 }
 
+// Adjacency map — JR's UI defaults to "<level> +1" (e.g. "Mid Level +1"
+// = mid + senior). Mirroring that gives us a smoother starting filter
+// that returns the same baseline pool as JR's recommend page.
+const SENIORITY_NEIGHBOURS = {
+    intern: ['entry'],
+    entry:  ['mid'],
+    mid:    ['entry', 'senior'],
+    senior: ['mid', 'lead'],
+    lead:   ['senior', 'exec'],
+    exec:   ['lead'],
+};
+
 function mapSeniority(intent) {
-    // Primary seniority — single string from the AI summary.
     const primaryKey = typeof intent?.seniority === 'string' ? intent.seniority : 'mid';
     const codes = new Set();
     const primary = SENIORITY_ENUM_MAP[primaryKey] ?? SENIORITY_ENUM_MAP.mid;
     codes.add(primary);
-    // `extraSeniorities` (string[]) is populated by the relaxation engine
-    // when "entry → mid" widening fires. Older builds REPLACED the
-    // single-string seniority, which made JR drop the original entry-
-    // level jobs from results entirely. UNION instead so widening grows
-    // the candidate pool rather than swapping it.
+    // Smooth-by-default: include adjacent seniorities so we don't over-
+    // narrow the JR pool vs JR's "+1" UI default. Verified against live
+    // JR account 2026-04-26: their saved filter for an entry candidate
+    // sits on [3,4,5] (mid+senior+lead), not a single bucket.
+    for (const k of (SENIORITY_NEIGHBOURS[primaryKey] || [])) {
+        const code = SENIORITY_ENUM_MAP[k];
+        if (Number.isFinite(code)) codes.add(code);
+    }
+    // `extraSeniorities` from relaxation engine — adds buckets without
+    // dropping the primary. Layered on top of the adjacency baseline.
     const extras = Array.isArray(intent?.extraSeniorities) ? intent.extraSeniorities : [];
     for (const k of extras) {
         const code = SENIORITY_ENUM_MAP[k];
         if (Number.isFinite(code)) codes.add(code);
     }
-    return [...codes];
+    return [...codes].sort((a, b) => a - b);
 }
 
 // mapEmploymentTypes: intent.employmentTypes (string[]) → JR int[].

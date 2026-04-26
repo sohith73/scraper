@@ -51,18 +51,10 @@ export function computeRelaxationPlan({ intent, limit = 4 } = {}) {
     const plans = [];
 
     // --- date posted ---------------------------------------------------
-    if (Number.isInteger(intent.daysAgo) && intent.daysAgo < 180) {
-        const next = nextDaysAgoBucket(intent.daysAgo);
-        plans.push({
-            field: 'daysAgo',
-            label: 'Date posted',
-            from: fmtDaysAgo(intent.daysAgo),
-            to: fmtDaysAgo(next),
-            reason: 'Narrow date windows miss most of the job inventory.',
-            priority: 10,
-            apply: (i) => ({ ...i, daysAgo: next }),
-        });
-    }
+    // HARDCODED to past 24 h (filterMapper enforces daysAgo=1 regardless
+    // of intent). Skipping this widening so the operator-visible
+    // "auto-changed filters" panel never lists Date-posted changes that
+    // wouldn't actually reach JR.
 
     // --- work model -----------------------------------------------------
     const wm = Array.isArray(intent.workModels) ? intent.workModels : [];

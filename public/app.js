@@ -1245,6 +1245,7 @@ function renderRun() {
     renderError(r);
     renderNoJobsHint(r);
     renderRelaxationPrompt(r);
+    renderJrRequest(r);
 
     // Picks only once we have the full run (after terminal).
     if (Array.isArray(r.picks) && r.picks.length > 0) {
@@ -1682,6 +1683,46 @@ function renderNoJobsHint(r) {
         <div style="margin-top:8px">${bullets}</div>
         <div style="margin-top:6px" class="muted">Full filter payload: <code>GET /api/runs/${r.id}/log</code></div>
     `;
+}
+
+// renderJrRequest: surface the exact JR `/swan/recommend/list/jobs` URL
+// + the POST body sent to `/swan/filter/update/filter`. Lets operators
+// reproduce the search in a browser tab AND copy as curl for support
+// tickets to JR. Source: pipeline stashes searchRes.value.listUrl +
+// searchRes.value.filter into progress.searched on every page.
+function renderJrRequest(r) {
+    const wrap = $('jr-request');
+    if (!wrap) return;
+    const listUrl = r.progress?.searched?.lastListUrl;
+    const payload = r.progress?.searched?.lastFilterPayload;
+    if (!listUrl || !payload) {
+        wrap.hidden = true;
+        return;
+    }
+    wrap.hidden = false;
+    $('jr-list-url').textContent = listUrl;
+    $('jr-filter-payload').textContent = JSON.stringify(payload, null, 2);
+    const copyBtn = $('jr-copy-curl');
+    if (copyBtn && !copyBtn.dataset.bound) {
+        copyBtn.dataset.bound = '1';
+        copyBtn.addEventListener('click', () => {
+            const curl = [
+                `# 1. Push filter`,
+                `curl 'https://jobright.ai/swan/filter/update/filter' \\`,
+                `  -X POST -H 'content-type: application/json' \\`,
+                `  --cookie '<paste your jobright cookies>' \\`,
+                `  -d '${JSON.stringify(r.progress.searched.lastFilterPayload).replace(/'/g, "'\\''")}'`,
+                ``,
+                `# 2. Fetch jobs`,
+                `curl '${r.progress.searched.lastListUrl}' \\`,
+                `  --cookie '<paste your jobright cookies>'`,
+            ].join('\n');
+            navigator.clipboard?.writeText(curl).then(() => {
+                copyBtn.textContent = 'Copied!';
+                setTimeout(() => { copyBtn.textContent = 'Copy as curl'; }, 1500);
+            });
+        });
+    }
 }
 
 // renderRelaxationPrompt: pipeline now auto-relaxes (no operator pause),
