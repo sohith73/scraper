@@ -94,28 +94,9 @@ export function computeRelaxationPlan({ intent, limit = 4 } = {}) {
     }
 
     // --- locations ------------------------------------------------------
-    const locs = Array.isArray(intent.locations) ? intent.locations : [];
-    if (locs.length > 0 && locs.length <= 4 && !locs.some((l) => /remote/i.test(l))) {
-        plans.push({
-            field: 'locations',
-            label: 'Locations',
-            from: locs.join(', '),
-            to: `${locs.join(', ')} + Remote`,
-            reason: 'Adding Remote typically 2–3x the pool for most roles.',
-            priority: 6,
-            apply: (i) => ({ ...i, locations: [...locs, 'Remote'] }),
-        });
-    } else if (locs.length > 0 && locs.length <= 2) {
-        plans.push({
-            field: 'locations',
-            label: 'Locations',
-            from: locs.join(', '),
-            to: 'nationwide (clear filter)',
-            reason: 'Clearing location matches jobs nationwide.',
-            priority: 6,
-            apply: (i) => ({ ...i, locations: [] }),
-        });
-    }
+    // Locations widening removed — mapLocations now hardcodes the JR
+    // filter to country-wide (Within US / Within CA), so there's nothing
+    // to widen. Country still flips US ↔ CA via the operator dropdown.
 
     // --- YoE band -------------------------------------------------------
     if (Number.isInteger(intent.minYearsOfExperience) && Number.isInteger(intent.maxYearsOfExperience)) {

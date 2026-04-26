@@ -118,23 +118,13 @@ function cleanCity(raw) {
 }
 
 function mapLocations(intent) {
-    const locations = Array.isArray(intent?.locations) ? intent.locations : [];
-    const cityLocations = locations
-        .filter(
-            (l) =>
-                typeof l === 'string' &&
-                l.trim() &&
-                !isRemoteLocation(l) &&
-                !isBareState(l),
-        )
-        .map((city) => ({ city: cleanCity(city), radiusRange: DEFAULT_RADIUS_MILES }))
-        .filter((x) => x.city);
-    if (cityLocations.length === 0) {
-        return [{ city: 'Within US', radiusRange: DEFAULT_RADIUS_MILES }];
-    }
-    // JR caps location list. Keep the first 5 — more than enough for any
-    // realistic operator search.
-    return cityLocations.slice(0, 5);
+    // HARDCODED country-wide. Per product direction we never send city
+    // pins to JR — they over-narrow the result set vs JR's UI default.
+    // The `country` field (US or CA) drives the geo scope; locations
+    // just carries JR's "Within US" / "Within CA" pseudo-city.
+    const country = mapCountry(intent);
+    const label = country === 'CA' ? 'Within CA' : 'Within US';
+    return [{ city: label, radiusRange: DEFAULT_RADIUS_MILES }];
 }
 
 function mapWorkModel(intent) {

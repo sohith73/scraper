@@ -140,13 +140,24 @@ test('Remote-only intent strips Remote from locations list', () => {
     assert.deepEqual(f.locations, [{ city: 'Within US', radiusRange: DEFAULT_RADIUS_MILES }]);
 });
 
-test('locations map to {city, radiusRange} objects', () => {
+test('locations always country-wide — city pins ignored per product direction', () => {
+    // intent cities are intentionally dropped; mapper hardcodes
+    // country-wide JR location ("Within US" or "Within CA") so the
+    // result set matches JR's UI default scope.
     const f = searchIntentToJRFilter({
         intent: { ...MIN_INTENT, locations: ['Austin, TX', 'Denver, CO'] },
     });
     assert.deepEqual(f.locations, [
-        { city: 'Austin, TX', radiusRange: DEFAULT_RADIUS_MILES },
-        { city: 'Denver, CO', radiusRange: DEFAULT_RADIUS_MILES },
+        { city: 'Within US', radiusRange: DEFAULT_RADIUS_MILES },
+    ]);
+});
+
+test('locations: Canada country flips to "Within CA"', () => {
+    const f = searchIntentToJRFilter({
+        intent: { ...MIN_INTENT, country: 'CA', locations: ['Toronto'] },
+    });
+    assert.deepEqual(f.locations, [
+        { city: 'Within CA', radiusRange: DEFAULT_RADIUS_MILES },
     ]);
 });
 
@@ -406,14 +417,18 @@ test('excludeStaffingAgency / excludeSecurityClearance / excludeUsCitizenOnly pa
     assert.equal(f.excludeUsCitizen, true);
 });
 
-test('strips trailing ", USA" / ", US" from city strings (JR rejects 3-part form)', () => {
+test('country-wide hardcode ignores any malformed city strings', () => {
+    // Earlier behaviour stripped ", USA" / ", US" suffixes. Now cities
+    // are dropped entirely so JR's input validator can't trip on any
+    // form of city we send. Always "Within US".
     const f = searchIntentToJRFilter({
         intent: {
             ...MIN_INTENT,
             locations: ['Cambridge, MA, USA', 'Austin, TX, United States'],
         },
     });
-    assert.deepEqual(f.locations.map((l) => l.city), ['Cambridge, MA', 'Austin, TX']);
+    assert.equal(f.locations.length, 1);
+    assert.equal(f.locations[0].city, 'Within US');
 });
 
 test('jobTitle trims to first four roles + 80-char cap', () => {

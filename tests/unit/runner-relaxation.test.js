@@ -82,13 +82,12 @@ test('salaryMinimumUsd > 0 proposed with $30k drop for high floors', () => {
     assert.match(s.to, /170,000|170k/);
 });
 
-test('small-city locations → add Remote', () => {
+test('locations no longer in plan — mapper hardcodes country-wide', () => {
+    // mapLocations always emits "Within US"/"Within CA"; nothing to widen.
     const p = computeRelaxationPlan({
         intent: intent({ locations: ['Chicago', 'Austin'] }),
     });
-    const l = p.find((x) => x.field === 'locations');
-    assert.ok(l);
-    assert.match(l.to, /Remote/);
+    assert.equal(p.find((x) => x.field === 'locations'), undefined);
 });
 
 test('narrow YoE band → widen ±2', () => {

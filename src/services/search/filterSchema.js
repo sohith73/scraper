@@ -67,11 +67,16 @@ export const JR_FILTER_SCHEMA = z.object({
     workModel: z.array(z.number().int()),
     locations: z.array(locationEntry),
 
-    // Nullable arrays
-    excludedSkills: nullableIntArray.or(z.union([z.array(z.string()), z.null()]).optional()),
+    // Nullable arrays / scalars — JR is inconsistent across these:
+    //   excludedSkills: string array OR null
+    //   minYearsOfExperienceRange: 2-tuple of ints OR null
+    //   companyStages: STRING array (e.g. ["3","5"]) OR null
+    //   roleType: SINGLE STRING ("IC"/"Manager") OR null  ← not array!
+    //   excludeCompanyCategory: int array OR null
+    excludedSkills: z.union([z.array(z.string()), z.null()]).optional(),
     minYearsOfExperienceRange: nullableIntArray,
-    companyStages: nullableIntArray,
-    roleType: nullableIntArray,
+    companyStages: z.union([z.array(z.string()), z.null()]).optional(),
+    roleType: z.union([z.string(), z.null()]).optional(),
     excludeCompanyCategory: nullableIntArray,
 
     // Scalars / nullables

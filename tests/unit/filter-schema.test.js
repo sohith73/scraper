@@ -80,11 +80,22 @@ test('validateJRFilter: jobTitle must be a string (not array)', () => {
     assert.equal(r.ok, false);
 });
 
-test('validateJRFilter: nullable arrays allow null OR array', () => {
+test('validateJRFilter: nullable string arrays allow null OR string array', () => {
+    // companyStages is JR string-array ("3", "5") not int — relaxed
+    // 2026-04-26 after roleType/companyStages prod 400.
     const a = validateJRFilter({ ...VALID, companyStages: null });
     assert.equal(a.ok, true);
-    const b = validateJRFilter({ ...VALID, companyStages: [1, 2] });
+    const b = validateJRFilter({ ...VALID, companyStages: ['3', '5'] });
     assert.equal(b.ok, true);
+});
+
+test('validateJRFilter: roleType single string OR null (not array)', () => {
+    const a = validateJRFilter({ ...VALID, roleType: null });
+    assert.equal(a.ok, true);
+    const b = validateJRFilter({ ...VALID, roleType: 'IC' });
+    assert.equal(b.ok, true);
+    const c = validateJRFilter({ ...VALID, roleType: ['IC'] });
+    assert.equal(c.ok, false);
 });
 
 test('validateJRFilter: passthrough — unknown JR fields do not fail', () => {
