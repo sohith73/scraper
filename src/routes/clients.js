@@ -328,6 +328,80 @@ export function clientsRouter({ container }) {
         }
     });
 
+    // POST /api/clients/:email/push-explain-job — body { jobUrl }
+    // After an explain verdict the operator may disagree and want the
+    // job pushed to the dashboard anyway. Re-fetch via the same swan
+    // intercept (so we get the canonical Job + correct apply URL), then
+    // call dashboard.pushJob with the client's name. Bypasses the AI
+    // relevance phase entirely; preflight (exclusions + dedupe) still
+    // runs on the dashboard side via /addjob.
+    router.post('/clients/:email/push-explain-job', async (req, res, next) => {
+        try {
+            const email = decodeEmailParam(req.params.email);
+            if (!email) return respondErr(res, req, { code: 'BAD_INPUT', message: 'invalid email param' });
+            const jobUrl = (req.body || {}).jobUrl;
+            if (typeof jobUrl !== 'string' || !jobUrl.trim()) {
+                return respondErr(res, req, { code: 'BAD_INPUT', message: 'jobUrl required' });
+            }
+            const { fetchJrJobByUrl } = await import('../services/explain/index.js');
+            const fetchRes = await fetchJrJobByUrl({
+                browser: container.browser,
+                session: container.session,
+                env: container.env,
+                url: jobUrl,
+                logger: container.logger,
+            });
+            if (!fetchRes.ok) return respondErr(res, req, fetchRes.error);
+            const { job } = fetchRes.value;
+            // Pull client name from /clients list — pushJob wants it.
+            const clientsRes = await container.dashboard.listClients();
+            const clientName = clientsRes.ok
+                ? (clientsRes.value.clients.find((c) => c.email?.toLowerCase() === email)?.name || '')
+                : '';
+            const pushRes = await container.dashboard.pushJob({
+                clientEmail: email,
+                clientName,
+                job,
+            });
+            if (!pushRes.ok) return respondErr(res, req, pushRes.error);
+            respondOk(res, req, { outcome: pushRes.value.outcome, createdJobId: pushRes.value.createdJobId || null, job: { id: job.id, title: job.title, company: job.companyName } }, 201);
+        } catch (e) {
+            next(e);
+        }
+    });
+
+    // POST /api/clients/:email/add-role — body { role }
+    // Self-learning loop: when AI verdict says "add Data Engineer to
+    // preferredRoles", operator clicks one button and we append it to
+    // the client's saved filter intent.roles. Next scrape sees the
+    // wider taxonomy. Idempotent — duplicate roles are silently merged.
+    router.post('/clients/:email/add-role', async (req, res, next) => {
+        try {
+            const email = decodeEmailParam(req.params.email);
+            if (!email) return respondErr(res, req, { code: 'BAD_INPUT', message: 'invalid email param' });
+            const role = String((req.body || {}).role || '').trim();
+            if (!role) return respondErr(res, req, { code: 'BAD_INPUT', message: 'role required' });
+            if (!container.clientFilters) {
+                return respondErr(res, req, { code: 'BAD_INPUT', message: 'client filter store unavailable' });
+            }
+            const existing = await container.clientFilters.get(email);
+            const currentIntent = existing?.intent || {};
+            const currentRoles = Array.isArray(currentIntent.roles) ? currentIntent.roles : [];
+            if (currentRoles.some((r) => String(r).toLowerCase() === role.toLowerCase())) {
+                return respondOk(res, req, { record: existing, alreadyPresent: true });
+            }
+            const nextIntent = { ...currentIntent, roles: [...currentRoles, role] };
+            const record = await container.clientFilters.put(email, {
+                intent: nextIntent,
+                overrides: existing?.overrides || null,
+                meta: { source: 'explain-add-role' },
+            });
+            respondOk(res, req, { record, alreadyPresent: false });
+        } catch (e) {
+            next(e);
+        }
+    });
+
     // POST /api/clients/:email/explain-job — body { jobUrl }
     // Self-learning loop: paste a JR URL, get an AI verdict on why this
     // candidate would / wouldn't have been picked + a concrete fix.

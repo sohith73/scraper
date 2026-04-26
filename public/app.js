@@ -137,6 +137,22 @@ async function selectClient(email) {
     if ($('explain-result')) { $('explain-result').hidden = true; $('explain-result').innerHTML = ''; }
     if ($('explain-url')) $('explain-url').value = '';
     if ($('explain-go')) $('explain-go').disabled = true;
+    // Show the explain panel only when a client is picked. Otherwise
+    // the empty-state placeholder reads "pick a client first".
+    const exSec = $('explain-section');
+    const exEmpty = $('explain-empty');
+    const tag = $('explain-client-tag');
+    if (email) {
+        if (exSec) exSec.hidden = false;
+        if (exEmpty) exEmpty.hidden = true;
+        if (tag) {
+            const who = state.clients?.find?.((c) => c.email === email);
+            tag.textContent = `· ${who?.name || ''} · ${email}`;
+        }
+    } else {
+        if (exSec) exSec.hidden = true;
+        if (exEmpty) exEmpty.hidden = false;
+    }
     setStatus('profile-status', 'loading profile…');
 
     try {
@@ -652,41 +668,137 @@ async function explainJobUrl() {
             out.innerHTML = `<strong>Failed:</strong> ${body.error || 'unknown'} — ${body.message || ''}`;
             return;
         }
-        const v = body.verdict || {};
-        const verdictLabel = v.pick
-            ? `<span style="color:#4ade80">✓ Would pick</span>`
-            : `<span style="color:#f87171">✗ Would skip</span>`;
-        const findings = (body.pipelineFindings || []).map((f) => `<li>${escapeHtml(f)}</li>`).join('');
-        const blockers = (body.blockingCandidates || []).map((f) => `<li>${escapeHtml(f)}</li>`).join('');
-        const fixBlock = v.fix
-            ? `<div style="margin-top:6px"><strong>How to fix:</strong> ${escapeHtml(v.fix)}</div>`
-            : '';
-        out.innerHTML = `
-            <div style="display:flex;gap:12px;align-items:baseline;flex-wrap:wrap">
-                <strong>${escapeHtml(body.job?.title || '(unknown title)')}</strong>
-                <span class="muted">${escapeHtml(body.job?.company || '')}</span>
-                <span class="muted">· ${escapeHtml(body.job?.location || '')}</span>
-            </div>
-            <div style="margin-top:6px">${verdictLabel}
-                <span class="muted">score ${v.score ?? '?'} / 100</span></div>
-            <div style="margin-top:4px">${escapeHtml(v.primaryReason || '')}</div>
-            ${fixBlock}
-            <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px;font-size:11px;color:#aaa">
-                <div><strong>Roles</strong><br>${escapeHtml(v.rolesAlignment || '—')}</div>
-                <div><strong>Seniority</strong><br>${escapeHtml(v.seniorityAlignment || '—')}</div>
-                <div><strong>Location</strong><br>${escapeHtml(v.locationAlignment || '—')}</div>
-            </div>
-            ${findings ? `<div style="margin-top:8px"><strong>Pipeline checks (passed):</strong><ul>${findings}</ul></div>` : ''}
-            ${blockers ? `<div style="margin-top:6px"><strong>Pipeline blockers:</strong><ul>${blockers}</ul></div>` : ''}
-            <div class="muted" style="margin-top:6px;font-size:10px">
-                Apply URL: <a href="${escapeHtml(body.job?.applyUrl || '#')}" target="_blank" rel="noopener">${escapeHtml(body.job?.applyUrl || '')}</a>
-            </div>
-        `;
+        // Stash the last verdict so action buttons can read it.
+        state.lastExplain = { url, body };
+        renderExplainResult(out, body);
     } catch (err) {
         out.innerHTML = `<strong>Error:</strong> ${escapeHtml(err.message)}`;
     } finally {
         btn.disabled = false;
         btn.textContent = orig;
+    }
+}
+
+// renderExplainResult: builds the explainer card. Split out from
+// explainJobUrl so action handlers can refresh the card after they
+// mutate state (push, add-role, calibration).
+function renderExplainResult(out, body) {
+    const v = body.verdict || {};
+    const verdictLabel = v.pick
+        ? `<span style="color:#4ade80">✓ Would pick</span>`
+        : `<span style="color:#f87171">✗ Would skip</span>`;
+    const findings = (body.pipelineFindings || []).map((f) => `<li>${escapeHtml(f)}</li>`).join('');
+    const blockers = (body.blockingCandidates || []).map((f) => `<li>${escapeHtml(f)}</li>`).join('');
+    const fixBlock = v.fix
+        ? `<div style="margin-top:6px"><strong>Suggested fix:</strong> ${escapeHtml(v.fix)}</div>`
+        : '';
+
+    // Pull a likely role to add — heuristic: if the AI's fix mentions
+    // "add X to roles", parse the role; else use the job's title minus
+    // seniority words. Operator can override via the prompt that opens
+    // when they click "Add to roles".
+    const proposedRole = (() => {
+        const m = (v.fix || '').match(/add ['"]?([^'"]+?)['"]? to (?:preferredRoles|roles)/i);
+        if (m) return m[1].trim();
+        const t = body.job?.title || '';
+        return t.replace(/\b(senior|junior|associate|principal|staff|lead|sr\.?|jr\.?|i+|2|3)\b/gi, '').replace(/\s+/g, ' ').trim();
+    })();
+
+    // Action row — the buttons every operator wants in arms reach.
+    const actions = `
+        <div style="display:flex;flex-wrap:wrap;gap:6px;margin-top:10px">
+            <button class="btn-primary" data-explain-action="push">⤴ Push to dashboard anyway</button>
+            ${proposedRole
+                ? `<button class="btn-secondary" data-explain-action="add-role" data-role="${escapeHtml(proposedRole)}">＋ Add "${escapeHtml(proposedRole)}" to roles</button>`
+                : ''}
+            <button class="btn-secondary" data-explain-action="feedback-good">👍 Mark as good pick (calibrate)</button>
+            <button class="btn-secondary" data-explain-action="feedback-bad-skip">👎 Mark as bad skip (calibrate)</button>
+            <a class="btn-secondary" href="${escapeHtml(body.job?.applyUrl || '#')}" target="_blank" rel="noopener" style="text-decoration:none">↗ Open apply URL</a>
+        </div>
+        <div id="explain-action-status" class="muted" style="margin-top:6px;font-size:11px"></div>
+    `;
+
+    out.innerHTML = `
+        <div style="display:flex;gap:12px;align-items:baseline;flex-wrap:wrap">
+            <strong>${escapeHtml(body.job?.title || '(unknown title)')}</strong>
+            <span class="muted">${escapeHtml(body.job?.company || '')}</span>
+            <span class="muted">· ${escapeHtml(body.job?.location || '')}</span>
+        </div>
+        <div style="margin-top:6px">${verdictLabel}
+            <span class="muted">score ${v.score ?? '?'} / 100</span></div>
+        <div style="margin-top:4px">${escapeHtml(v.primaryReason || '')}</div>
+        ${fixBlock}
+        <div style="display:grid;grid-template-columns:1fr 1fr 1fr;gap:8px;margin-top:8px;font-size:11px;color:#aaa">
+            <div><strong>Roles</strong><br>${escapeHtml(v.rolesAlignment || '—')}</div>
+            <div><strong>Seniority</strong><br>${escapeHtml(v.seniorityAlignment || '—')}</div>
+            <div><strong>Location</strong><br>${escapeHtml(v.locationAlignment || '—')}</div>
+        </div>
+        ${findings ? `<div style="margin-top:8px"><strong>Pipeline checks (passed):</strong><ul>${findings}</ul></div>` : ''}
+        ${blockers ? `<div style="margin-top:6px"><strong>Pipeline blockers:</strong><ul>${blockers}</ul></div>` : ''}
+        ${actions}
+    `;
+
+    // Wire action buttons. Delegated by data-explain-action.
+    out.querySelectorAll('[data-explain-action]').forEach((el) => {
+        el.addEventListener('click', () => handleExplainAction(el.dataset.explainAction, el.dataset.role || ''));
+    });
+}
+
+async function handleExplainAction(action, role) {
+    const out = $('explain-result');
+    const statusEl = $('explain-action-status');
+    if (!state.lastExplain || !state.selectedEmail) return;
+    const { url, body } = state.lastExplain;
+    const setStatus = (msg, isErr = false) => {
+        if (!statusEl) return;
+        statusEl.textContent = msg;
+        statusEl.style.color = isErr ? '#f87171' : '#4ade80';
+    };
+    try {
+        if (action === 'push') {
+            setStatus('Pushing to dashboard…');
+            const r = await fetch(
+                `${API}/clients/${encodeURIComponent(state.selectedEmail)}/push-explain-job`,
+                { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ jobUrl: url }) },
+            );
+            const j = await r.json();
+            if (!j.success) return setStatus(`Push failed: ${j.error} — ${j.message || ''}`, true);
+            setStatus(`✓ ${j.outcome === 'created' ? `Pushed (id: ${j.createdJobId?.slice?.(0, 8) || ''}…)` : j.outcome === 'duplicate' ? 'Already in dashboard (duplicate)' : `Pushed: ${j.outcome}`}`);
+        } else if (action === 'add-role') {
+            const r = role || prompt('Role to add to client preferredRoles:');
+            if (!r) return;
+            setStatus(`Adding "${r}" to preferredRoles…`);
+            const res = await fetch(
+                `${API}/clients/${encodeURIComponent(state.selectedEmail)}/add-role`,
+                { method: 'POST', headers: { 'content-type': 'application/json' }, body: JSON.stringify({ role: r }) },
+            );
+            const j = await res.json();
+            if (!j.success) return setStatus(`Add-role failed: ${j.error}`, true);
+            setStatus(j.alreadyPresent ? `"${r}" already in roles` : `✓ Added "${r}" — re-run Build Summary or Scrape to use it`);
+        } else if (action === 'feedback-good' || action === 'feedback-bad-skip') {
+            const verdict = action === 'feedback-good' ? 'good_pick' : 'bad_skip';
+            setStatus('Recording calibration feedback…');
+            const r = await fetch(
+                `${API}/clients/${encodeURIComponent(state.selectedEmail)}/feedback`,
+                {
+                    method: 'POST',
+                    headers: { 'content-type': 'application/json' },
+                    body: JSON.stringify({
+                        verdict,
+                        jobId: body.jobId || body.job?.id,
+                        title: body.job?.title,
+                        company: body.job?.company,
+                        applyUrl: body.job?.applyUrl,
+                        reason: body.verdict?.primaryReason || '',
+                    }),
+                },
+            );
+            const j = await r.json();
+            if (!j.success) return setStatus(`Feedback failed: ${j.error}`, true);
+            setStatus(`✓ Saved as ${verdict} — next AI run uses this as calibration.`);
+        }
+    } catch (e) {
+        setStatus(`Error: ${e.message}`, true);
     }
 }
 

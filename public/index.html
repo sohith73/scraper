@@ -210,12 +210,15 @@
                     <div id="relaxation-prompt" class="warn-banner" hidden></div>
                     <div id="run-stats" class="stats-grid" hidden></div>
                 </section>
-                <section id="explain-section" class="profile-section">
-                    <h3>Why didn't a JR job get picked? <span class="muted">(self-learning)</span></h3>
+                <section id="explain-section" class="profile-section" hidden>
+                    <h3>
+                        Why wasn't this picked?
+                        <span class="muted" id="explain-client-tag" style="font-size:11px"></span>
+                    </h3>
                     <p class="muted" style="font-size:11px;margin:0 0 6px">
                         Paste a JR job URL (<code>https://jobright.ai/jobs/info/&lt;jobId&gt;</code>).
-                        We fetch it, run the same AI verdict against the selected client, and tell you
-                        which filter or profile field would need to change.
+                        We fetch + run the same AI verdict against this client and surface every
+                        action you can take.
                     </p>
                     <div class="action-group">
                         <input id="explain-url" type="url"
@@ -224,6 +227,13 @@
                         <button id="explain-go" class="btn-secondary" disabled>Explain</button>
                     </div>
                     <div id="explain-result" class="warn-banner" hidden style="margin-top:8px"></div>
+                </section>
+                <section id="explain-empty" class="profile-section">
+                    <h3>Why wasn't a JR job picked? <span class="muted">(self-learning)</span></h3>
+                    <p class="muted" style="font-size:12px">
+                        Pick a client on the left first — then paste any JR job URL here to see
+                        why our scraper would or wouldn't have picked it for them.
+                    </p>
                 </section>
                 <section id="picks-section" class="profile-section" hidden>
                     <h3>Picks <span id="picks-count" class="muted"></span></h3>
