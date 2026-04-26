@@ -456,6 +456,9 @@ export async function runPipeline({
                     intent,
                     jobs: freshJobs,
                     calibration: calibrationBlock,
+                    // Smaller AI batches = better per-job reasoning + safer
+                    // re: token-cap drops. 40 jobs/JR-call → ~6 batches.
+                    batchSize: 7,
                 }),
             );
             if (!filterRes.ok) return failRun(store, runId, filterRes.error, logger, notifier);
@@ -704,8 +707,11 @@ export async function runPipeline({
             const finalRun = store.get(runId);
             const pushedCount = finalRun?.progress?.pushed?.pushed ?? 0;
             const scanned = finalRun?.progress?.searched?.totalNormalized ?? 0;
-            if (pushedCount === 0 && scanned === 0) {
-                // JR returned nothing for this filter — dedicated alert.
+            // Fire the no-jobs alert whenever 0 jobs were pushed — even
+            // when JR DID return candidates and the AI rejected them
+            // all. Operator still wants the heads-up that the run hit
+            // empty so they can widen filters / update profile.
+            if (pushedCount === 0) {
                 notifyNoJobs({
                     notifier,
                     run: finalRun,
