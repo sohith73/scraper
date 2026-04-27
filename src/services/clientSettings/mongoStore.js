@@ -5,9 +5,10 @@
 //     _id: <email lowercased>,
 //     email, scrapeCount,
 //     // Optional per-client JR credentials (set via PUT /api/clients/:email/jr-creds).
-//     // The password is AES-256-GCM-encrypted with env JR_CRED_KEY before
-//     // it lands here — the store NEVER sees plaintext.
-//     jrEmail?, jrPasswordEnc?, jrCredsSetAt?,
+//     // PLAINTEXT password storage per operator direction 2026-04-27.
+//     // Mongo on a private cluster behind a service token; encryption was
+//     // deemed operator overhead.
+//     jrEmail?, jrPassword?, jrCredsSetAt?,
 //     // Per-client persistent-context dir name (slug of email). Set
 //     // automatically on first login attempt.
 //     jrStorageDir?, jrLastLoginAt?, jrLastLoginOk?,
@@ -125,13 +126,13 @@ export function createMongoClientSettingsStore({
             const c = await coll();
             const doc = await c.findOne(
                 { _id: key },
-                { projection: { jrEmail: 1, jrPasswordEnc: 1, jrCredsSetAt: 1, jrStorageDir: 1, jrLastLoginAt: 1, jrLastLoginOk: 1 } },
+                { projection: { jrEmail: 1, jrPassword: 1, jrCredsSetAt: 1, jrStorageDir: 1, jrLastLoginAt: 1, jrLastLoginOk: 1 } },
             );
             if (!doc || !doc.jrEmail) return null;
             return {
                 email: key,
                 jrEmail: doc.jrEmail,
-                jrPasswordEnc: doc.jrPasswordEnc || null,
+                jrPassword: doc.jrPassword || null,
                 jrCredsSetAt: doc.jrCredsSetAt ? new Date(doc.jrCredsSetAt).toISOString() : null,
                 jrStorageDir: doc.jrStorageDir || null,
                 jrLastLoginAt: doc.jrLastLoginAt ? new Date(doc.jrLastLoginAt).toISOString() : null,
@@ -143,14 +144,14 @@ export function createMongoClientSettingsStore({
         }
     }
 
-    async function putCredentials(email, { jrEmail, jrPasswordEnc }) {
+    async function putCredentials(email, { jrEmail, jrPassword }) {
         const key = normaliseEmail(email);
         if (!key) throw new Error('clientSettings.putCredentials: valid email required');
         if (typeof jrEmail !== 'string' || !jrEmail.includes('@')) {
             throw new Error('clientSettings.putCredentials: jrEmail must be an email');
         }
-        if (typeof jrPasswordEnc !== 'string' || jrPasswordEnc.length < 16) {
-            throw new Error('clientSettings.putCredentials: jrPasswordEnc must be a non-empty encrypted envelope');
+        if (typeof jrPassword !== 'string' || jrPassword.length === 0) {
+            throw new Error('clientSettings.putCredentials: jrPassword must be a non-empty string');
         }
         const now = new Date();
         const c = await coll();
@@ -160,7 +161,7 @@ export function createMongoClientSettingsStore({
                 $set: {
                     email: key,
                     jrEmail: jrEmail.trim().toLowerCase(),
-                    jrPasswordEnc,
+                    jrPassword,
                     jrCredsSetAt: now,
                     updatedAt: now,
                 },
@@ -177,7 +178,7 @@ export function createMongoClientSettingsStore({
         const c = await coll();
         const r = await c.updateOne(
             { _id: key },
-            { $unset: { jrEmail: '', jrPasswordEnc: '', jrCredsSetAt: '', jrStorageDir: '', jrLastLoginAt: '', jrLastLoginOk: '' } },
+            { $unset: { jrEmail: '', jrPassword: '', jrCredsSetAt: '', jrStorageDir: '', jrLastLoginAt: '', jrLastLoginOk: '' } },
         );
         return r.matchedCount === 1;
     }

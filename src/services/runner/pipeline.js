@@ -127,7 +127,7 @@ export async function runPipeline({
     if (!run) return;
     const { clientEmail, requestedCount, clientName } = run;
     const { dashboard, resume, summariser, browser, mutex, ai, env, clientFilters, feedback, notifier,
-        clientBrowsers, credCrypto, clientSettings, logger: rootLogger } = container;
+        clientBrowsers, clientSettings, logger: rootLogger } = container;
     const runArtDir = store.runDir(runId);
 
     // Per-run logger: tees every line to runs/<id>/run.log AND stdout.
@@ -341,30 +341,25 @@ export async function runPipeline({
         };
 
         // ---- per-client browser session resolution -------------------
-        // If the client has stored JR credentials AND credCrypto is ready,
-        // we use their own JR account. JR's recommender then personalises
-        // against THEIR resume, not the shared (Sohith) account. This is
-        // the architectural pivot that makes /jobs/recommend produce
-        // genuinely relevant jobs.
+        // If the client has stored JR credentials, log in AS them. JR's
+        // recommender then personalises against THEIR resume + their saved
+        // filter (the architectural pivot away from shared-account filter
+        // manipulation). Plain-text password storage per operator direction
+        // 2026-04-27.
         //
         // Fallback to shared browser when:
         //   - no credentials saved for this client, OR
-        //   - JR_CRED_KEY missing on server, OR
         //   - login attempt fails (wrong password / JR rate-limit / etc).
         let searchBrowser = browser;
         let searchMode = 'shared';
         let clientLoginInfo = null;
         try {
-            if (clientBrowsers && credCrypto?.ready && clientSettings?.getCredentials) {
+            if (clientBrowsers && clientSettings?.getCredentials) {
                 const creds = await clientSettings.getCredentials(clientEmail);
-                if (creds?.jrEmail && creds?.jrPasswordEnc) {
+                if (creds?.jrEmail && creds?.jrPassword) {
                     const handle = clientBrowsers.get(clientEmail);
-                    let jrPassword;
-                    try { jrPassword = credCrypto.decrypt(creds.jrPasswordEnc); }
-                    catch (e) {
-                        logger?.warn?.({ err: e.message, clientEmail }, 'pipeline: cred decrypt failed; falling back to shared');
-                    }
-                    if (jrPassword) {
+                    const jrPassword = creds.jrPassword;
+                    {
                         const { loginClient } = await import('../../playwright/clientSession.js');
                         const r = await loginClient({
                             browserHandle: handle, mutex, env, logger,

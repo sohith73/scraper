@@ -126,7 +126,7 @@ export function createClientSettingsStore({ dir, logger = null } = {}) {
         return {
             email: key,
             jrEmail: rec.jrEmail,
-            jrPasswordEnc: rec.jrPasswordEnc || null,
+            jrPassword: rec.jrPassword || null,
             jrCredsSetAt: rec.jrCredsSetAt || null,
             jrStorageDir: rec.jrStorageDir || null,
             jrLastLoginAt: rec.jrLastLoginAt || null,
@@ -134,14 +134,14 @@ export function createClientSettingsStore({ dir, logger = null } = {}) {
         };
     }
 
-    async function putCredentials(email, { jrEmail, jrPasswordEnc }) {
+    async function putCredentials(email, { jrEmail, jrPassword }) {
         const key = normaliseEmail(email);
         if (!key) throw new Error('clientSettings.putCredentials: valid email required');
         if (typeof jrEmail !== 'string' || !jrEmail.includes('@')) {
             throw new Error('clientSettings.putCredentials: jrEmail must be an email');
         }
-        if (typeof jrPasswordEnc !== 'string' || jrPasswordEnc.length < 16) {
-            throw new Error('clientSettings.putCredentials: jrPasswordEnc must be a non-empty encrypted envelope');
+        if (typeof jrPassword !== 'string' || jrPassword.length === 0) {
+            throw new Error('clientSettings.putCredentials: jrPassword must be a non-empty string');
         }
         const now = new Date().toISOString();
         const result = writing.then(async () => {
@@ -150,7 +150,7 @@ export function createClientSettingsStore({ dir, logger = null } = {}) {
             all[key] = {
                 ...prev,
                 jrEmail: jrEmail.trim().toLowerCase(),
-                jrPasswordEnc,
+                jrPassword,
                 jrCredsSetAt: now,
                 updatedAt: now,
             };
@@ -169,7 +169,7 @@ export function createClientSettingsStore({ dir, logger = null } = {}) {
             const prev = all[key];
             if (!prev) return false;
             delete prev.jrEmail;
-            delete prev.jrPasswordEnc;
+            delete prev.jrPassword;
             delete prev.jrCredsSetAt;
             delete prev.jrStorageDir;
             delete prev.jrLastLoginAt;

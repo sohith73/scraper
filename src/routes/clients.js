@@ -301,7 +301,7 @@ export function clientsRouter({ container }) {
                     ? {
                           email: creds.email,
                           jrEmail: creds.jrEmail,
-                          hasPassword: !!creds.jrPasswordEnc,
+                          hasPassword: !!creds.jrPassword,
                           jrCredsSetAt: creds.jrCredsSetAt,
                           jrLastLoginAt: creds.jrLastLoginAt,
                           jrLastLoginOk: creds.jrLastLoginOk,
@@ -315,9 +315,9 @@ export function clientsRouter({ container }) {
     });
 
     // PUT /api/clients/:email/jr-creds — body { jrEmail, jrPassword }.
-    // Server encrypts jrPassword via env JR_CRED_KEY before persisting; the
-    // plaintext is dropped immediately after. If JR_CRED_KEY is unset the
-    // route returns 503 — no plaintext fallback.
+    // Plain-text storage per operator direction 2026-04-27. Mongo on a
+    // private cluster behind a service token; encryption was deemed
+    // operator overhead. Anyone with Mongo read access sees passwords.
     router.put('/clients/:email/jr-creds', async (req, res, next) => {
         try {
             const email = decodeEmailParam(req.params.email);
@@ -329,17 +329,10 @@ export function clientsRouter({ container }) {
             if (typeof jrPassword !== 'string' || jrPassword.length === 0) {
                 return respondErr(res, req, { code: 'BAD_INPUT', message: 'jrPassword required' });
             }
-            if (!container.credCrypto?.ready) {
-                return respondErr(res, req, {
-                    code: 'NO_CRED_KEY',
-                    message: 'JR_CRED_KEY not configured on the server — cannot store credentials securely',
-                });
-            }
             if (!container.clientSettings?.putCredentials) {
                 return respondErr(res, req, { code: 'BAD_INPUT', message: 'credentials store unavailable' });
             }
-            const jrPasswordEnc = container.credCrypto.encrypt(jrPassword);
-            const result = await container.clientSettings.putCredentials(email, { jrEmail, jrPasswordEnc });
+            const result = await container.clientSettings.putCredentials(email, { jrEmail, jrPassword });
             respondOk(res, req, { creds: result });
         } catch (e) {
             next(e);

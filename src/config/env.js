@@ -143,13 +143,6 @@ const schema = z.object({
     // Gates /api/debug/* — when empty the routes are open (use only on a
     // firewalled box). When set, callers must send `X-Debug-Token: <val>`.
     DEBUG_TOKEN: z.string().optional().default(''),
-
-    // --- Per-client JR credential encryption (recommended) -------------
-    // 32 random bytes (base64 or hex). Required when storing per-client
-    // JR email+password in Mongo via /api/clients/:email/jr-creds. Without
-    // this set, the credentials API returns 503 — no plaintext fallback.
-    // Generate: openssl rand -base64 32
-    JR_CRED_KEY: z.string().optional().default(''),
 });
 
 // loadEnv: parses process.env against the schema. On failure, formats a clear

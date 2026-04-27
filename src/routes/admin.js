@@ -81,25 +81,15 @@ export function adminRouter({ container }) {
             if (!email.includes('@')) {
                 return respondErr(res, req, { code: 'BAD_INPUT', message: 'invalid email param' });
             }
-            const { clientSettings, credCrypto, clientBrowsers, mutex, env, logger } = container;
+            const { clientSettings, clientBrowsers, mutex, env, logger } = container;
             if (!clientSettings?.getCredentials) {
                 return respondErr(res, req, { code: 'BAD_INPUT', message: 'credentials store unavailable' });
             }
             const creds = await clientSettings.getCredentials(email);
-            if (!creds || !creds.jrEmail || !creds.jrPasswordEnc) {
+            if (!creds || !creds.jrEmail || !creds.jrPassword) {
                 return respondErr(res, req, { code: 'NOT_FOUND', message: `no JR credentials saved for ${email}` });
             }
-            if (!credCrypto?.ready) {
-                return respondErr(res, req, {
-                    code: 'NO_CRED_KEY',
-                    message: 'JR_CRED_KEY not configured — cannot decrypt stored credentials',
-                });
-            }
-            let jrPassword;
-            try { jrPassword = credCrypto.decrypt(creds.jrPasswordEnc); }
-            catch (e) {
-                return respondErr(res, req, { code: 'CRED_DECRYPT_FAILED', message: e.message });
-            }
+            const jrPassword = creds.jrPassword;
             const browserHandle = clientBrowsers.get(email);
             const force = req.body?.force === true;
             const headed = req.body?.headed === true;
