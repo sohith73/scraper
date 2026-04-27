@@ -8,8 +8,8 @@ const PHASE_SEQUENCE = [
     { key: 'loading-profile', label: 'Loading client profile from dashboard' },
     { key: 'loading-exclusions', label: 'Loading excluded companies + locations' },
     { key: 'loading-resume', label: 'Fetching linked resume' },
-    { key: 'summarising', label: 'Passing profile + resume to gpt-4o-mini' },
-    { key: 'searching', label: 'Querying JobRight (paginates until target met)' },
+    { key: 'summarising', label: 'Building search intent (stub in client mode, AI in shared mode)' },
+    { key: 'searching', label: 'Logging in + paginating JR /jobs/recommend' },
     { key: 'filtering', label: 'Analysing jobs with AI (pick / skip / borderline)' },
     { key: 'enriching', label: 'Validating job completeness' },
     { key: 'preflight', label: 'Applying exclusion guard + dedupe' },
@@ -44,11 +44,12 @@ const state = {
 
 const $ = (id) => document.getElementById(id);
 
-function setStatus(id, message, { error = false } = {}) {
+function setStatus(id, message, { error = false, warn = false } = {}) {
     const el = $(id);
     if (!el) return;
     el.textContent = message;
     el.classList.toggle('error', Boolean(error));
+    el.classList.toggle('warn', Boolean(warn));
 }
 
 function fmtMs(ms) {
@@ -1299,16 +1300,28 @@ function onRunTerminal() {
         const cl = state.run.progress?.clientLogin;
         const acct = mode === '🔑 client account' && cl?.jrEmail ? ` (${cl.jrEmail})` : '';
         const funnel = `${mode}${acct} · JR ${jrReturned} → ${uniq} unique → AI ${aiPicked}/${aiTotal} (${pickRate}%) → ${n} pushed`;
+        // Pool-exhaustion message from pipeline (client mode, target unmet,
+        // past-24h pool tapped out). Appended to whichever status line wins.
+        const poolMsg = state.run.progress?.clientPoolMessage;
+        const tail = poolMsg ? ` · ${poolMsg}` : '';
         if (n === 0 && uniq === 0) {
             setStatus(
                 'console-status',
-                `done — 0 jobs found${ctx} (see banner above for why)`,
+                `done — 0 jobs found${ctx} (see banner above for why)${tail}`,
                 { error: true },
             );
         } else if (n === 0) {
             setStatus(
                 'console-status',
-                `done — ${funnel}${ctx} · 0 pushed (all skipped/blocked/duplicate)`,
+                `done — ${funnel}${ctx} · 0 pushed (all skipped/blocked/duplicate)${tail}`,
+            );
+        } else if (n < state.run.requestedCount && poolMsg) {
+            // Target undershot, JR pool exhausted — surface the suggestion
+            // prominently (yellow not red).
+            setStatus(
+                'console-status',
+                `done — ${funnel}${ctx} (${fmtMs(state.run.durationMs)}) · ${poolMsg}`,
+                { warn: true },
             );
         } else {
             setStatus(

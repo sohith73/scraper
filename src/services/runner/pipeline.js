@@ -48,6 +48,60 @@ const COOLDOWN_TRIGGER_CODES = new Set([
 
 // checkAbort: if the operator has requested abort, mark the run and signal
 // the pipeline to exit. Returns true when aborted.
+// buildClientModeStubIntent: assemble a SearchIntent shape from raw
+// profile + resume WITHOUT calling the summariser AI. Used only in
+// client mode where JR's own recommender does the role/seniority
+// matching — this stub exists to feed downstream relevance prompts and
+// preflight (exclusions, locations) with the fields they expect.
+//
+// The relevance prompt's quality drops a bit vs an AI-summarised intent
+// (roles are raw from the profile, no relatedRoles inference), but JR's
+// recommendations are already pre-filtered against the candidate's JR
+// resume so the AI is judging fit, not discovering it.
+function buildClientModeStubIntent({ profile = {}, resume = null, exclusions = null, clientName = '' } = {}) {
+    const splitCsv = (v) => {
+        if (Array.isArray(v)) return v.map((s) => String(s).trim()).filter(Boolean);
+        if (typeof v !== 'string') return [];
+        return v.split(/\s*[/|,]\s*|\s{2,}/).map((s) => s.trim()).filter(Boolean);
+    };
+    const dedupe = (xs) => [...new Set(xs.map((s) => s.trim()).filter(Boolean))];
+    const roles = dedupe(splitCsv(profile.preferredRoles)).slice(0, 8);
+    const locations = dedupe(splitCsv(profile.preferredLocations)).slice(0, 10);
+    const companies = dedupe(splitCsv(profile.targetCompanies)).slice(0, 30);
+    const exp = String(profile.experienceLevel || '').toLowerCase();
+    const seniority = exp.includes('intern') ? 'intern'
+        : exp.includes('0-2') || exp.includes('0–2') || exp.includes('entry') ? 'entry'
+        : exp.includes('2-4') || exp.includes('2–4') || exp.includes('mid') ? 'mid'
+        : exp.includes('5-7') || exp.includes('5–7') || exp.includes('senior') ? 'senior'
+        : exp.includes('7-10') || exp.includes('lead') ? 'lead'
+        : exp.includes('10+') || exp.includes('exec') || exp.includes('director') ? 'exec'
+        : 'mid';
+    const workAuth = String(profile.usWorkEligibility || profile.visaStatus || '').trim() || 'unspecified';
+    const name = clientName || [profile.firstName, profile.lastName].filter(Boolean).join(' ').trim() || 'candidate';
+    const resumeBlurb = resume && typeof resume === 'object'
+        ? JSON.stringify(resume).slice(0, 600)
+        : '';
+    const aboutCandidate = [
+        `${name} is a ${seniority}-level candidate looking at ${roles.slice(0, 3).join(' / ') || 'roles in their saved JR profile'}.`,
+        locations.length ? `Open to ${locations.slice(0, 5).join(', ')}.` : '',
+        workAuth !== 'unspecified' ? `Work authorisation: ${workAuth}.` : '',
+        resumeBlurb ? `Resume signal: ${resumeBlurb}` : '',
+    ].filter(Boolean).join(' ').slice(0, 1500);
+    return {
+        roles: roles.length ? roles : ['Software Engineer'],
+        relatedRoles: null,
+        locations,
+        seniority,
+        companies,
+        workAuth,
+        narrative: '',
+        futurePreferences: '',
+        aboutCandidate,
+        exclusions: exclusions || { companies: [], locations: [] },
+        country: 'US',
+    };
+}
+
 function checkAbort(store, runId, logger) {
     const r = store.get(runId);
     if (!r) return true; // run gone: treat as aborted
@@ -208,15 +262,25 @@ export async function runPipeline({
             resumeRes.ok && resumeRes.value.found ? resumeRes.value.resume : null;
         if (checkAbort(store, runId, logger)) return;
 
-        // ---- 4. summarise → SearchIntent ----------------------------
-        // Resume is MANDATORY unless the operator provided a prebuilt
-        // overrideIntent (typically pre-saved from a prior run where the
-        // resume was present). Without it, gpt-4o-mini has to guess roles
-        // and skills from the onboarding profile alone → relevance filter
-        // downstream starts picking random jobs.
+        // ---- 4. SearchIntent --------------------------------------------
+        // Two paths:
+        //   A. CLIENT MODE — client has stored JR credentials. JR's own
+        //      recommender already personalises against their resume + saved
+        //      filter; we don't need an AI summariser. Build a thin stub
+        //      intent from profile + resume so downstream phases (relevance
+        //      filter, exclusions, push) have the fields they need.
+        //   B. SHARED MODE — fallback path, runs the AI summariser to infer
+        //      roles / locations / seniority for the shared-account filter.
+        const willUseClientMode = await (async () => {
+            try {
+                const c = await clientSettings?.getCredentials?.(clientEmail);
+                return !!(c && c.jrEmail && c.jrPassword);
+            } catch { return false; }
+        })();
+
         store.update(runId, { phase: PHASES.SUMMARISING });
         let intent = overrideIntent;
-        if (!intent && !resumeDoc) {
+        if (!intent && !resumeDoc && !willUseClientMode) {
             return failRun(
                 store,
                 runId,
@@ -229,7 +293,19 @@ export async function runPipeline({
                 notifier,
             );
         }
-        if (!intent) {
+        if (!intent && willUseClientMode) {
+            // Build stub intent — NO AI cost. JR's recommender does the
+            // role/seniority matching against the client's JR resume; we
+            // just need profile fields for the relevance filter's prompt
+            // context (aboutCandidate paragraph).
+            intent = buildClientModeStubIntent({
+                profile: profileRes.value.profile,
+                resume: resumeDoc,
+                exclusions,
+                clientName,
+            });
+            logger?.info?.({ clientEmail, roles: intent.roles }, 'summarising skipped — client mode (stub intent built)');
+        } else if (!intent) {
             const sumRes = await phaseTimer('summarising', () =>
                 summariser({
                     profile: profileRes.value.profile,
@@ -675,12 +751,25 @@ export async function runPipeline({
         //     compute relaxation plan, ask operator
         if (allPicks.length >= requestedCount) break;
         if (checkAbort(store, runId, logger)) return;
-        // CLIENT mode: relaxation is a no-op. We never pushed our own intent
-        // to JR, so widening it locally won't change what /recommend returns
-        // — JR already personalises against the candidate's saved filter and
-        // resume. Stop the outer loop once pagination exhausts.
+        // CLIENT mode: past-24h pool is finite. Once we've paged through it
+        // and hit either exhaustion or AI-batch caps, we stop. We do NOT
+        // widen the client's saved JR filter — the operator wants strict
+        // past-24h. Surface a helpful message on the run so the UI can show
+        // "JR past-24h pool exhausted — try LinkedIn for more."
         if (searchMode === 'client') {
-            logger?.info?.({ pushed: allPicks.length, target: requestedCount }, 'client mode: pagination exhausted, no relaxation');
+            const totalSeen = seenJrIds.size;
+            const aiPicked = agg.filtered.picked + agg.filtered.borderline;
+            store.update(runId, {
+                progress: {
+                    clientPoolMessage: allPicks.length < requestedCount
+                        ? `JR past-24h pool exhausted: ${totalSeen} unique jobs returned, ${aiPicked} matched ≥30% AI fit, ${allPicks.length} pushed (target ${requestedCount}). Try LinkedIn / Indeed for more — JR has no further past-24h jobs for this candidate today.`
+                        : null,
+                },
+            });
+            logger?.info?.(
+                { pushed: allPicks.length, target: requestedCount, totalSeen, aiPicked },
+                'client mode: past-24h pool exhausted — no widening (operator policy)',
+            );
             break;
         }
         if (relaxationRound >= MAX_RELAXATION_ROUNDS) {
