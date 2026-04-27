@@ -311,8 +311,13 @@ export async function runPipeline({
         // ("bad request"); count=10 returns 10 jobs cleanly with the same
         // session + filter. Stay at 10 and use more pages.
         const PAGE_SIZE = 10;
-        const MAX_PAGES = 30;               // up to 30 × 10 = 300 candidates per round
-        const MAX_AI_BATCHES = 25;
+        // Bumped 2026-04-27: operator now requests 100+ jobs per run.
+        // 50 pages × 10 = 500 candidates per relaxation round; 80 AI batches
+        // × 7 jobs = 560-job AI ceiling. Leaves headroom for low-yield
+        // clients (most candidates skipped on score) without hard-capping
+        // mid-run.
+        const MAX_PAGES = 50;
+        const MAX_AI_BATCHES = 80;
 
         const traceDir = env?.DEBUG_CAPTURE ? runArtDir : null;
         // resumeFrom may preload previously-seen JR ids so a retried run

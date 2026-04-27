@@ -71,19 +71,9 @@ export function computeRelaxationPlan({ intent, limit = 4 } = {}) {
     }
 
     // --- salary floor ---------------------------------------------------
-    if (Number.isInteger(intent.salaryMinimumUsd) && intent.salaryMinimumUsd > 0) {
-        const cur = intent.salaryMinimumUsd;
-        const next = cur > 120000 ? cur - 30000 : null;
-        plans.push({
-            field: 'salaryMinimumUsd',
-            label: 'Min salary',
-            from: `$${cur.toLocaleString()}`,
-            to: next ? `$${next.toLocaleString()}` : 'any (many postings omit salary)',
-            reason: 'Most postings don\'t publish salary; the filter drops them all.',
-            priority: 7,
-            apply: (i) => ({ ...i, salaryMinimumUsd: next }),
-        });
-    }
+    // Removed 2026-04-27: filterMapper now hardcodes annualSalaryMinimum=null,
+    // so salary widening would never reach JR. Skipping keeps the operator's
+    // "auto-changed filters" panel honest.
 
     // --- locations ------------------------------------------------------
     // Locations widening removed — mapLocations now hardcodes the JR

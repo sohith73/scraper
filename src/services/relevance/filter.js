@@ -149,10 +149,10 @@ export async function filterJobsByRelevance({
         };
     });
 
-    // Borderline = pick=false but score ≥ 55. Raised from 40 so the
-    // pipeline's "picks + borderline" set doesn't carry weak matches into
-    // the client's tracker.
-    const BORDERLINE_FLOOR = 55;
+    // Borderline = pick=false but score ≥ 50. Threshold lowered 2026-04-27
+    // so the operator's wider-net request is honoured: anything ≥50 flows
+    // through to push (pipeline forwards picks + borderline together).
+    const BORDERLINE_FLOOR = 50;
     const picks = scored.filter((s) => s.decision.pick === true).map((s) => s.job);
     const skips = scored
         .filter((s) => s.decision.pick !== true && s.decision.score < BORDERLINE_FLOOR)

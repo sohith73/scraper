@@ -328,9 +328,11 @@ export function searchIntentToJRFilter({ intent, existing = null, resolvedTaxono
     // and intent.daysAgo are intentionally ignored here.
     const daysAgo = 1;
 
-    const annualSalaryMinimum = Number.isInteger(intent.salaryMinimumUsd)
-        ? intent.salaryMinimumUsd
-        : (base.annualSalaryMinimum ?? null);
+    // Salary filter HARDCODED to null per product direction 2026-04-27.
+    // Most JR postings omit salary; the floor was dropping ~70% of viable
+    // matches. Operator wants the widest pool — ignore intent.salaryMinimumUsd
+    // and any saved-record floor.
+    const annualSalaryMinimum = null;
 
     const minYearsOfExperienceRange = mapYoeRange(intent)
         ?? (Array.isArray(base.minYearsOfExperienceRange) ? base.minYearsOfExperienceRange : null);

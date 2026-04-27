@@ -338,10 +338,12 @@ test('YoE range: minOnly→[min,40]; maxOnly→[0,max]; both→[min,max]; neithe
     );
 });
 
-test('salaryMinimumUsd → annualSalaryMinimum', () => {
+test('annualSalaryMinimum hardcoded to null — salary filter disabled', () => {
+    // 2026-04-27: operator wants the widest pool; salary floor was dropping
+    // ~70% of viable matches because most JR postings omit salary.
     assert.equal(
         searchIntentToJRFilter({ intent: { ...MIN_INTENT, salaryMinimumUsd: 150000 } }).annualSalaryMinimum,
-        150000,
+        null,
     );
 });
 

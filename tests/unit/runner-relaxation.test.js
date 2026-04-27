@@ -52,12 +52,13 @@ test('single-model workModels proposed', () => {
     assert.match(wm.to, /any/i);
 });
 
-test('salaryMinimumUsd > 0 proposed with $30k drop for high floors', () => {
+test('salaryMinimumUsd no longer in plan — mapper hardcodes null', () => {
+    // 2026-04-27: filterMapper forces annualSalaryMinimum=null regardless
+    // of intent; relaxation skips salary widening so the operator-visible
+    // "auto-changed filters" panel never lists Min-salary changes that
+    // wouldn't reach JR.
     const p = computeRelaxationPlan({ intent: intent({ salaryMinimumUsd: 200000 }) });
-    const s = p.find((x) => x.field === 'salaryMinimumUsd');
-    assert.ok(s);
-    assert.match(s.from, /200,000|200k/);
-    assert.match(s.to, /170,000|170k/);
+    assert.equal(p.find((x) => x.field === 'salaryMinimumUsd'), undefined);
 });
 
 test('locations no longer in plan — mapper hardcodes country-wide', () => {
@@ -139,7 +140,7 @@ test('limit caps returned plans', () => {
         limit: 2,
     });
     assert.equal(p.length, 2);
-    // Top two by priority after daysAgo removed: workModels (8), salary (7)
+    // Top two by priority after daysAgo + salary removed: workModels (8), yoe (5)
     assert.equal(p[0].field, 'workModels');
-    assert.equal(p[1].field, 'salaryMinimumUsd');
+    assert.equal(p[1].field, 'yoe');
 });

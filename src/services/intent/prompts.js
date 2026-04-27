@@ -22,22 +22,42 @@ Core rules (ALWAYS fill these):
     non-tech:       preserve the candidate's canonical terms (e.g. "Paralegal",
                     "Licensed Clinical Social Worker", "Line Cook", "Patient Care Technician").
   Derive from preferredRoles, then resume if preferredRoles is empty.
-- relatedRoles: 3–6 ADJACENT job titles the candidate is realistically
+- relatedRoles: 6–8 ADJACENT job titles the candidate is realistically
   qualified for, used as a wider net when past-24-h matches in 'roles'
-  are thin. Stay within the SAME domain — never bridge tech↔medical etc.
-  Examples (NOT verbatim — derive from the real profile):
-    roles=["AI Engineer","ML Engineer"]
-      → relatedRoles=["Data Engineer","Backend Engineer","Applied Scientist","NLP Engineer"]
-    roles=["Data Engineer"]
-      → relatedRoles=["Analytics Engineer","ML Engineer","Backend Engineer","Data Platform Engineer"]
-    roles=["Frontend Engineer"]
-      → relatedRoles=["Full-Stack Engineer","UI Engineer","Web Engineer","React Engineer"]
-    roles=["Product Manager"]
-      → relatedRoles=["Technical Product Manager","Program Manager","Product Operations Manager"]
+  are thin. ALWAYS populate this — operators want the widest realistic
+  pool. Stay within the SAME domain — never bridge tech↔medical etc.
+  MUST cover BOTH dimensions:
+    (a) seniority-adjacent variants of the primary role(s) — Associate,
+        Junior, "I", "II", "III", Staff, Lead — pick the variants that
+        match the candidate's seniority +/- 1 step. E.g. seniority=mid +
+        roles=["Software Engineer"] → also include "Associate Software
+        Engineer", "Software Engineer II", "Software Engineer III",
+        "Senior Software Engineer".
+    (b) discipline-adjacent titles in the same field. Examples:
+    roles=["Software Engineer"], seniority=entry
+      → relatedRoles=["Associate Software Engineer","Junior Software Engineer",
+                       "Software Engineer I","Software Developer","Backend Engineer",
+                       "Full-Stack Engineer","Application Engineer","Programmer"]
+    roles=["AI Engineer","ML Engineer"], seniority=mid
+      → relatedRoles=["Senior AI Engineer","ML Engineer II","Applied Scientist",
+                       "Data Engineer","Backend Engineer","NLP Engineer",
+                       "MLOps Engineer","Research Engineer"]
+    roles=["Data Engineer"], seniority=mid
+      → relatedRoles=["Senior Data Engineer","Data Engineer II","Analytics Engineer",
+                       "ML Engineer","Backend Engineer","Data Platform Engineer",
+                       "ETL Engineer","BI Engineer"]
+    roles=["Frontend Engineer"], seniority=entry
+      → relatedRoles=["Junior Frontend Engineer","Frontend Engineer I","Web Developer",
+                       "UI Engineer","React Developer","Full-Stack Engineer",
+                       "JavaScript Developer","Application Developer"]
+    roles=["Product Manager"], seniority=mid
+      → relatedRoles=["Senior Product Manager","Associate Product Manager",
+                       "Technical Product Manager","Program Manager",
+                       "Product Operations Manager","Product Owner"]
     roles=["Registered Nurse"]
-      → relatedRoles=["Charge Nurse","Clinical Nurse","Staff Nurse","Patient Care Coordinator"]
-  Empty/null when the primary roles already span the discipline (e.g. a
-  generalist with 5+ roles listed). NEVER copy any string from 'roles'.
+      → relatedRoles=["Charge Nurse","Clinical Nurse","Staff Nurse","Patient Care Coordinator","ICU Nurse","Med-Surg Nurse"]
+  NEVER copy any string from 'roles' verbatim. Only return empty/null when
+  the primary roles already span 6+ titles AND cover seniority adjacency.
 - locations: canonical US city/state strings, plus "Remote" if the candidate
   is open to remote. Empty array = no location filter (country-wide).
 - seniority: one of intern | entry | mid | senior | lead | exec. Pick the
