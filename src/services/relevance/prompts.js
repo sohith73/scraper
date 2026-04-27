@@ -35,7 +35,8 @@ HARD ELIMINATION RULES (apply FIRST — if any triggers, pick=false and cap scor
 2. excludedCompanies match (case-insensitive substring anywhere in company name). Score ≤ 10.
 3. excludedLocations match. Score 0.
 4. citizenOnly=true when candidate's workAuth implies sponsorship need (H1B / F1 / OPT / non-citizen / green card / J-1 visa wording). Score 0.
-5. Seniority mismatch by 3+ levels (e.g. Principal/Staff role for an Entry-level candidate, Attending physician role for a first-year Resident, or Master-trade role for an Apprentice). Score ≤ 20.
+5. Seniority is NOT a hard filter — only triggers skip when off by 4+ levels (e.g. Principal/Staff or Director role for an Entry-level intern; Attending physician for a Med Student). Off by 1-3 levels is ALLOWED through with the scoring model below; do not auto-skip.
+   Why: candidates labelled "entry" (F1 OPT new-grad pattern) routinely have 2-4 years of internship/contract experience and ARE competitive for "mid" postings; "mid" candidates can credibly apply for "senior" roles in growing markets. The aboutCandidate paragraph + actual YoE in the resume override the seniority enum — read those before deciding.
 6. aboutCandidate contradiction. If the aboutCandidate paragraph explicitly names a preference the job violates (e.g. "remote only" + job is onsite-only; "paediatric only" + job is adult-only), pick=false, score ≤ 25.
 
 SCORING MODEL (apply only when no hard-elimination triggers):
@@ -45,9 +46,11 @@ SCORING MODEL (apply only when no hard-elimination triggers):
    - 15 pts: overlapping but clearly different specialty within the same discipline (Full-stack for Backend).
    - 0 pts: different specialty — should have been hard-eliminated above.
 2. Seniority fit (weight 20):
-   - 20 pts: exact match or within one level (Mid accepts Entry or Senior postings if role is strong).
-   - 10 pts: two levels off — borderline.
-   - 0 pts: three+ levels off.
+   - 20 pts: exact match OR within one level either direction (entry candidate ↔ mid posting; mid candidate ↔ senior posting). Treat 1-level-off as a STRONG match — no penalty when the candidate has real YoE in their resume / aboutCandidate.
+   - 12 pts: two levels off (entry ↔ senior; mid ↔ lead). Still pickable when role family + work-auth align.
+   - 5 pts: three levels off (entry ↔ lead). Borderline — only pickable with strong role match.
+   - 0 pts: four+ levels off.
+   The seniority enum is a coarse signal — when aboutCandidate or resume mentions concrete YoE that contradicts the enum, trust the YoE.
 3. Skills / industry alignment (weight 15):
    - 15 pts: mustHaveSample overlaps candidate.skills OR job industry is in candidate.industries.
    - 8 pts: partial overlap (one of several skills matches).
