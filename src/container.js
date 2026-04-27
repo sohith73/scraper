@@ -21,6 +21,8 @@ import {
     createBrowserHandle,
     createSessionService,
 } from './playwright/index.js';
+import { createClientBrowserPool } from './playwright/clientBrowserPool.js';
+import { createCredCrypto } from './services/clientSettings/crypto.js';
 import { createRunsService } from './services/runner/index.js';
 import { createBatchRunner } from './services/runner/batchRunner.js';
 import { createClientFilterStore } from './services/clientFilters/store.js';
@@ -92,6 +94,20 @@ export function buildContainer({ overrides = {}, logger = rootLogger } = {}) {
     const browser = createBrowserHandle({ env, logger });
     const session = createSessionService({ env, browser, mutex, logger });
 
+    // Per-client browser pool — one persistent context per client when the
+    // client supplies their own JR creds. Pool LRU-evicts at 8 to keep
+    // disk + memory bounded; revisit if we routinely scrape > 8 distinct
+    // clients in a single uptime.
+    const clientBrowsers = createClientBrowserPool({ env, logger, max: 8 });
+
+    // Credential crypto — required for /api/clients/:email/jr-creds.
+    // When env.JR_CRED_KEY is empty, `credCrypto.ready === false` and
+    // the route returns 503 instead of falling back to plaintext.
+    const credCrypto = createCredCrypto(env.JR_CRED_KEY);
+    if (!credCrypto.ready) {
+        logger?.warn?.('JR_CRED_KEY not set — per-client JR credential storage disabled');
+    }
+
     // Per-client persistence. Mongo when MONGO_URI is set (durable +
     // replicable), on-disk JSON otherwise (zero-infra dev default).
     // Interfaces are identical — callers don't change.
@@ -153,6 +169,8 @@ export function buildContainer({ overrides = {}, logger = rootLogger } = {}) {
         mutex,
         browser,
         session,
+        clientBrowsers,
+        credCrypto,
         clientFilters,
         feedback,
         clientSettings,

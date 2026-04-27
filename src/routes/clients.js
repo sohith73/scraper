@@ -285,6 +285,84 @@ export function clientsRouter({ container }) {
         }
     });
 
+    // GET /api/clients/:email/jr-creds — credential metadata only (NEVER
+    // returns the password — encrypted or not). Returns whether creds are
+    // set, the JR email saved, last login outcome.
+    router.get('/clients/:email/jr-creds', async (req, res, next) => {
+        try {
+            const email = decodeEmailParam(req.params.email);
+            if (!email) return respondErr(res, req, { code: 'BAD_INPUT', message: 'invalid email param' });
+            if (!container.clientSettings?.getCredentials) {
+                return respondOk(res, req, { creds: null });
+            }
+            const creds = await container.clientSettings.getCredentials(email);
+            respondOk(res, req, {
+                creds: creds
+                    ? {
+                          email: creds.email,
+                          jrEmail: creds.jrEmail,
+                          hasPassword: !!creds.jrPasswordEnc,
+                          jrCredsSetAt: creds.jrCredsSetAt,
+                          jrLastLoginAt: creds.jrLastLoginAt,
+                          jrLastLoginOk: creds.jrLastLoginOk,
+                          jrStorageDir: creds.jrStorageDir,
+                      }
+                    : null,
+            });
+        } catch (e) {
+            next(e);
+        }
+    });
+
+    // PUT /api/clients/:email/jr-creds — body { jrEmail, jrPassword }.
+    // Server encrypts jrPassword via env JR_CRED_KEY before persisting; the
+    // plaintext is dropped immediately after. If JR_CRED_KEY is unset the
+    // route returns 503 — no plaintext fallback.
+    router.put('/clients/:email/jr-creds', async (req, res, next) => {
+        try {
+            const email = decodeEmailParam(req.params.email);
+            if (!email) return respondErr(res, req, { code: 'BAD_INPUT', message: 'invalid email param' });
+            const { jrEmail, jrPassword } = req.body || {};
+            if (typeof jrEmail !== 'string' || !jrEmail.includes('@')) {
+                return respondErr(res, req, { code: 'BAD_INPUT', message: 'jrEmail must be an email' });
+            }
+            if (typeof jrPassword !== 'string' || jrPassword.length === 0) {
+                return respondErr(res, req, { code: 'BAD_INPUT', message: 'jrPassword required' });
+            }
+            if (!container.credCrypto?.ready) {
+                return respondErr(res, req, {
+                    code: 'NO_CRED_KEY',
+                    message: 'JR_CRED_KEY not configured on the server — cannot store credentials securely',
+                });
+            }
+            if (!container.clientSettings?.putCredentials) {
+                return respondErr(res, req, { code: 'BAD_INPUT', message: 'credentials store unavailable' });
+            }
+            const jrPasswordEnc = container.credCrypto.encrypt(jrPassword);
+            const result = await container.clientSettings.putCredentials(email, { jrEmail, jrPasswordEnc });
+            respondOk(res, req, { creds: result });
+        } catch (e) {
+            next(e);
+        }
+    });
+
+    // DELETE /api/clients/:email/jr-creds — wipe stored creds. Persistent
+    // browser context for this client is left in place; call POST
+    // /api/admin/client-login/:email/evict to drop it too.
+    router.delete('/clients/:email/jr-creds', async (req, res, next) => {
+        try {
+            const email = decodeEmailParam(req.params.email);
+            if (!email) return respondErr(res, req, { code: 'BAD_INPUT', message: 'invalid email param' });
+            if (!container.clientSettings?.removeCredentials) {
+                return respondOk(res, req, { removed: false });
+            }
+            const removed = await container.clientSettings.removeCredentials(email);
+            respondOk(res, req, { removed });
+        } catch (e) {
+            next(e);
+        }
+    });
+
     // PUT /api/client-settings/:email — body { scrapeCount }
     router.put('/client-settings/:email', async (req, res, next) => {
         try {

@@ -112,5 +112,95 @@ export function createClientSettingsStore({ dir, logger = null } = {}) {
     // ensureIndexes: parity with the Mongo store — no-op here.
     async function ensureIndexes() {}
 
-    return { get, put, listAll, remove, ensureIndexes };
+    // --- per-client JR credentials (parity with the Mongo store) -------
+    // Stored in the same JSON file alongside scrapeCount. Password is the
+    // already-encrypted envelope produced by services/clientSettings/crypto.js
+    // — this layer never sees plaintext.
+
+    async function getCredentials(email) {
+        const key = normaliseEmail(email);
+        if (!key) return null;
+        const all = await readAll();
+        const rec = all[key];
+        if (!rec || !rec.jrEmail) return null;
+        return {
+            email: key,
+            jrEmail: rec.jrEmail,
+            jrPasswordEnc: rec.jrPasswordEnc || null,
+            jrCredsSetAt: rec.jrCredsSetAt || null,
+            jrStorageDir: rec.jrStorageDir || null,
+            jrLastLoginAt: rec.jrLastLoginAt || null,
+            jrLastLoginOk: typeof rec.jrLastLoginOk === 'boolean' ? rec.jrLastLoginOk : null,
+        };
+    }
+
+    async function putCredentials(email, { jrEmail, jrPasswordEnc }) {
+        const key = normaliseEmail(email);
+        if (!key) throw new Error('clientSettings.putCredentials: valid email required');
+        if (typeof jrEmail !== 'string' || !jrEmail.includes('@')) {
+            throw new Error('clientSettings.putCredentials: jrEmail must be an email');
+        }
+        if (typeof jrPasswordEnc !== 'string' || jrPasswordEnc.length < 16) {
+            throw new Error('clientSettings.putCredentials: jrPasswordEnc must be a non-empty encrypted envelope');
+        }
+        const now = new Date().toISOString();
+        const result = writing.then(async () => {
+            const all = await readAll();
+            const prev = all[key] || {};
+            all[key] = {
+                ...prev,
+                jrEmail: jrEmail.trim().toLowerCase(),
+                jrPasswordEnc,
+                jrCredsSetAt: now,
+                updatedAt: now,
+            };
+            await writeAll(all);
+            return { email: key, jrEmail: all[key].jrEmail, jrCredsSetAt: now };
+        });
+        writing = result.catch(() => {});
+        return result;
+    }
+
+    async function removeCredentials(email) {
+        const key = normaliseEmail(email);
+        if (!key) return false;
+        const result = writing.then(async () => {
+            const all = await readAll();
+            const prev = all[key];
+            if (!prev) return false;
+            delete prev.jrEmail;
+            delete prev.jrPasswordEnc;
+            delete prev.jrCredsSetAt;
+            delete prev.jrStorageDir;
+            delete prev.jrLastLoginAt;
+            delete prev.jrLastLoginOk;
+            all[key] = prev;
+            await writeAll(all);
+            return true;
+        });
+        writing = result.catch(() => {});
+        return result;
+    }
+
+    async function markLogin(email, { ok, storageDir }) {
+        const key = normaliseEmail(email);
+        if (!key) return;
+        const now = new Date().toISOString();
+        const result = writing.then(async () => {
+            const all = await readAll();
+            const prev = all[key] || {};
+            all[key] = {
+                ...prev,
+                jrLastLoginAt: now,
+                jrLastLoginOk: !!ok,
+                ...(storageDir ? { jrStorageDir: storageDir } : {}),
+                updatedAt: now,
+            };
+            await writeAll(all);
+        });
+        writing = result.catch(() => {});
+        return result;
+    }
+
+    return { get, put, listAll, remove, ensureIndexes, getCredentials, putCredentials, removeCredentials, markLogin };
 }

@@ -126,8 +126,8 @@ export async function runPipeline({
     const run = store.get(runId);
     if (!run) return;
     const { clientEmail, requestedCount, clientName } = run;
-    const { dashboard, resume, summariser, browser, mutex, ai, env, clientFilters, feedback, notifier, logger: rootLogger } =
-        container;
+    const { dashboard, resume, summariser, browser, mutex, ai, env, clientFilters, feedback, notifier,
+        clientBrowsers, credCrypto, clientSettings, logger: rootLogger } = container;
     const runArtDir = store.runDir(runId);
 
     // Per-run logger: tees every line to runs/<id>/run.log AND stdout.
@@ -340,6 +340,61 @@ export async function runPipeline({
             pushed: { total: 0, pushed: 0, duplicates: 0, blocked: 0, errors: 0, durationMs: 0 },
         };
 
+        // ---- per-client browser session resolution -------------------
+        // If the client has stored JR credentials AND credCrypto is ready,
+        // we use their own JR account. JR's recommender then personalises
+        // against THEIR resume, not the shared (Sohith) account. This is
+        // the architectural pivot that makes /jobs/recommend produce
+        // genuinely relevant jobs.
+        //
+        // Fallback to shared browser when:
+        //   - no credentials saved for this client, OR
+        //   - JR_CRED_KEY missing on server, OR
+        //   - login attempt fails (wrong password / JR rate-limit / etc).
+        let searchBrowser = browser;
+        let searchMode = 'shared';
+        let clientLoginInfo = null;
+        try {
+            if (clientBrowsers && credCrypto?.ready && clientSettings?.getCredentials) {
+                const creds = await clientSettings.getCredentials(clientEmail);
+                if (creds?.jrEmail && creds?.jrPasswordEnc) {
+                    const handle = clientBrowsers.get(clientEmail);
+                    let jrPassword;
+                    try { jrPassword = credCrypto.decrypt(creds.jrPasswordEnc); }
+                    catch (e) {
+                        logger?.warn?.({ err: e.message, clientEmail }, 'pipeline: cred decrypt failed; falling back to shared');
+                    }
+                    if (jrPassword) {
+                        const { loginClient } = await import('../../playwright/clientSession.js');
+                        const r = await loginClient({
+                            browserHandle: handle, mutex, env, logger,
+                            jrEmail: creds.jrEmail, jrPassword, force: false, headed: false,
+                        });
+                        if (r.ok) {
+                            searchBrowser = handle;
+                            searchMode = 'client';
+                            clientLoginInfo = {
+                                jrEmail: creds.jrEmail,
+                                action: r.value?.action,
+                                userInfo: r.value?.userInfo || null,
+                            };
+                            await clientSettings.markLogin(clientEmail, { ok: true }).catch(() => {});
+                            logger?.info?.({ clientEmail, jrEmail: creds.jrEmail, action: r.value?.action }, 'pipeline: client-mode login OK');
+                        } else {
+                            await clientSettings.markLogin(clientEmail, { ok: false }).catch(() => {});
+                            logger?.warn?.(
+                                { clientEmail, code: r.error?.code, message: r.error?.message },
+                                'pipeline: client login failed — falling back to shared browser',
+                            );
+                        }
+                    }
+                }
+            }
+        } catch (e) {
+            logger?.warn?.({ err: e.message, clientEmail }, 'pipeline: client-mode resolution threw — falling back');
+        }
+        store.update(runId, { progress: { mode: searchMode, clientLogin: clientLoginInfo } });
+
         // Outer "relaxation rounds" loop. Every inner pass is a full
         // pagination over JR with the current intent. If we exhaust below
         // target, we pause and ask the operator which filter to widen.
@@ -367,11 +422,12 @@ export async function runPipeline({
             store.update(runId, { phase: PHASES.SEARCHING });
             const searchRes = await phaseTimer(`searching.page${page}`, () =>
                 runSearch({
-                    browser, mutex, env, logger,
+                    browser: searchBrowser, mutex, env, logger,
                     intent,
                     count: PAGE_SIZE,
                     position: page * PAGE_SIZE,
                     traceDir,
+                    mode: searchMode,
                 }),
             );
             if (!searchRes.ok) {
@@ -624,6 +680,14 @@ export async function runPipeline({
         //     compute relaxation plan, ask operator
         if (allPicks.length >= requestedCount) break;
         if (checkAbort(store, runId, logger)) return;
+        // CLIENT mode: relaxation is a no-op. We never pushed our own intent
+        // to JR, so widening it locally won't change what /recommend returns
+        // — JR already personalises against the candidate's saved filter and
+        // resume. Stop the outer loop once pagination exhausts.
+        if (searchMode === 'client') {
+            logger?.info?.({ pushed: allPicks.length, target: requestedCount }, 'client mode: pagination exhausted, no relaxation');
+            break;
+        }
         if (relaxationRound >= MAX_RELAXATION_ROUNDS) {
             logger?.info?.(
                 { appliedRelaxations: appliedRelaxations.length },

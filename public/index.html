@@ -54,6 +54,29 @@
                         <span class="muted" id="about-char-count">0 / 2000</span>
                     </div>
                 </section>
+                <section id="jr-creds-section" class="profile-section" hidden>
+                    <h3>JobRight account <span class="muted" id="jr-creds-status"></span></h3>
+                    <div class="muted" style="margin-bottom:4px">
+                        Per-client JR login. Scraper logs in AS this client and pulls JR's own personalised recommendations. Password is encrypted (AES-256-GCM) on save and never returned.
+                    </div>
+                    <div class="filter-grid" style="grid-template-columns:1fr 1fr;gap:8px">
+                        <label>
+                            JR email
+                            <input id="jr-creds-email" type="email" autocomplete="off" placeholder="client@example.com" />
+                        </label>
+                        <label>
+                            JR password
+                            <input id="jr-creds-password" type="password" autocomplete="new-password" placeholder="leave blank to keep saved" />
+                        </label>
+                    </div>
+                    <div class="filter-actions">
+                        <button id="jr-creds-save" class="btn-primary">Save credentials</button>
+                        <button id="jr-creds-login" class="btn-secondary" disabled>Login &amp; test</button>
+                        <button id="jr-creds-clear" class="btn-secondary" disabled>Forget</button>
+                        <span class="muted" id="jr-creds-meta"></span>
+                    </div>
+                </section>
+
                 <section id="profile-exclusions-editor" class="profile-section" hidden>
                     <h3>Exclusions (synced with dashboard)</h3>
                     <div class="exclusion-editor">

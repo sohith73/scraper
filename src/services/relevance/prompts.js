@@ -77,9 +77,9 @@ SCORING MODEL (apply only when no hard-elimination triggers):
 8. Target-company bonus (+10, not in base 100): if the job's company matches any name in candidate.companies (case-insensitive substring), add +10 to the final score (cap at 100). Nice-to-have, not a filter.
 
 DECISION THRESHOLDS:
-- pick=true when score ≥ 35.
-- pick=false and score < 35 = clear skip.
-Operator wants the widest realistic net — anything that scores ≥35 is pushable.
+- pick=true when score ≥ 30.
+- pick=false and score < 30 = clear skip.
+Operator wants the widest realistic net — anything that scores ≥30 is pushable. Per-client JR accounts mean JR's recommender already personalised against the client's resume, so most candidates are at least loosely relevant — be permissive.
 
 Reason sentences MUST reference the specific signal that drove the decision — not generic phrases. Good examples across domains:
 - Tech: "Strong fit — Senior Backend Engineer at Stripe, Python+Go matches candidate's stack, remote + H1B sponsor."

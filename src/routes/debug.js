@@ -157,6 +157,12 @@ async function buildRunBundle({ runs, runId, env, logger, logLines = 100 }) {
         },
         intent: progress.intent || null,
         appliedRelaxations: progress.appliedRelaxations || [],
+        // Per-client architecture telemetry: which JR account did the run
+        // log in as? `mode === 'client'` means we used the candidate's
+        // own JR creds + their personalised recommender. `'shared'` means
+        // we fell back to the Sohith account.
+        sessionMode: progress.mode || 'shared',
+        clientLogin: progress.clientLogin || null,
         // Most important debugging slice: what JR actually saw.
         jobright: {
             lastListUrl: searched.lastListUrl || null,

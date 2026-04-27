@@ -123,7 +123,7 @@ test('single batch: jobs scored + attached to decisions in input order', async (
             ids.map((id, i) => ({
                 id,
                 pick: i === 0,
-                score: [85, 30, 55][i],
+                score: [85, 20, 55][i],
                 reason: `r${i}`,
             })),
     });
@@ -134,8 +134,8 @@ test('single batch: jobs scored + attached to decisions in input order', async (
     assert.equal(r.value.scored[0].decision.pick, true);
     assert.equal(r.value.scored[0].decision.score, 85);
     assert.deepEqual(r.value.picks.map((j) => j.id), ['j1']);
-    assert.deepEqual(r.value.skips.map((j) => j.id), ['j2']);           // score 30 < 40 → skip
-    assert.deepEqual(r.value.borderline.map((j) => j.id), ['j3']);      // pick=false & score≥40
+    assert.deepEqual(r.value.skips.map((j) => j.id), ['j2']);           // score 20 < 30 → skip
+    assert.deepEqual(r.value.borderline.map((j) => j.id), ['j3']);      // pick=false & score≥30
     assert.equal(r.value.stats.totalJobs, 3);
     assert.equal(r.value.stats.picked, 1);
     assert.equal(r.value.stats.skipped, 1);

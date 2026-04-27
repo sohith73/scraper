@@ -26,7 +26,7 @@ const SESSION_PROBE_PATH = '/swan/auth/newinfo';
 // NOTE: fetches from `about:blank` are blocked by the browser's same-origin
 // and secure-context gates, so we always navigate to JR first if we're
 // still on about:blank. Subsequent calls reuse the loaded page.
-async function probeViaPage(page, env) {
+export async function probeViaPage(page, env) {
     const base = env.JOBRIGHT_BASE.replace(/\/+$/, '');
     if (!page.url() || page.url().startsWith('about:')) {
         await page.goto(base, { waitUntil: 'domcontentloaded', timeout: 30_000 });
@@ -123,7 +123,7 @@ async function performLoginViaApi(page, { email, password, env, logger }) {
 // + click, so JR's client-side password hashing runs. We then observe the
 // POST /swan/auth/login/pwd response for the authoritative verdict — no
 // fragile DOM-error-text matching.
-async function performLoginViaForm(page, { email, password, env, logger }) {
+export async function performLoginViaForm(page, { email, password, env, logger }) {
     const base = env.JOBRIGHT_BASE.replace(/\/+$/, '');
     await page.goto(`${base}/`, { waitUntil: 'domcontentloaded', timeout: 30_000 });
     logger?.debug?.('login(form): page loaded');

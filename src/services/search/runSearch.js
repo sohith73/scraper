@@ -82,6 +82,12 @@ export async function runSearch({
     position = 0,
     existingFilter = null,
     traceDir = null,
+    // mode='client' means the browser handle is logged in AS the end-client
+    // (not the shared Sohith account). In this mode we DO NOT mutate JR's
+    // server-side filter — the client has set their own preferences in their
+    // JR profile and JR's recommender already personalises against THEIR
+    // resume. We just probe + read the saved filter + fetch the list.
+    mode = 'shared',
 } = {}) {
     // --- input validation (outside the mutex — fail fast) ---------------
     if (!browser || typeof browser.withContext !== 'function') {
@@ -165,6 +171,56 @@ export async function runSearch({
                 const probe = await probeLoggedInOnPage(page, base);
                 if (!probe.loggedIn) {
                     return err('NEEDS_REAUTH', 'not logged in; POST /api/admin/login first');
+                }
+
+                // ---- CLIENT mode short-circuit ----
+                // We are logged in AS the end-client. Skip filter mutation —
+                // their saved JR filter is already personalised by the
+                // client themselves. Pull current filter for the return
+                // shape, then go straight to list fetch.
+                if (mode === 'client') {
+                    let savedFilter = null;
+                    try {
+                        const cur = await pageFetch(page, {
+                            url: `${base}${FILTER_GET_PATH}`,
+                            method: 'POST',
+                            body: {},
+                        });
+                        if (cur.status === 200 && cur.body?.result) {
+                            savedFilter = cur.body.result;
+                        }
+                    } catch (e) {
+                        logger?.warn?.({ err: e.message }, 'runSearch.client: filter/get failed — continuing without it');
+                    }
+                    const listUrl = `${base}${LIST_URL_PATH}?refresh=${position === 0}&sortCondition=0&position=${position}&count=${count}&syncRerank=false`;
+                    const list = await pageFetch(page, { url: listUrl });
+                    if (list.status !== 200 || list.body?.success !== true) {
+                        logger?.error?.(
+                            { status: list.status, jrResponseBody: list.body, listUrl, position, count },
+                            'runSearch.client: list fetch failed',
+                        );
+                        return err(classifyListError(list.status, list.body), 'list fetch failed', {
+                            status: list.status, bodyJson: list.body,
+                        });
+                    }
+                    const rawList = list.body?.result?.jobList;
+                    if (!Array.isArray(rawList)) {
+                        return err('LIST_EMPTY_SHAPE', 'list response missing result.jobList', {
+                            bodyJson: list.body,
+                        });
+                    }
+                    const jobs = rawList.map(normalizeJobRightJob).filter(Boolean);
+                    outcome = ok({
+                        jobs,
+                        totalReturned: rawList.length,
+                        totalNormalized: jobs.length,
+                        filter: savedFilter,
+                        listUrl,
+                        probe,
+                        durationMs: Date.now() - startedAt,
+                        mode: 'client',
+                    });
+                    return outcome;
                 }
 
                 // 3. Optionally fetch current server-side filter so we only

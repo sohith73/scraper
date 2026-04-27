@@ -187,6 +187,8 @@ async function selectClient(email) {
         }
 
         renderProfile();
+        // Fire-and-forget: hydrate the JR-creds panel for this client.
+        loadJrCreds(email).catch(() => {});
         setStatus(
             'profile-status',
             saved
@@ -196,6 +198,135 @@ async function selectClient(email) {
     } catch (err) {
         setStatus('profile-status', `error: ${err.message}`, { error: true });
     }
+}
+
+// ---------- JR per-client credentials ---------------------------------
+// loadJrCreds: pull credential METADATA (no plaintext) for the selected
+// client and reflect it in the section header. Empty form means no creds
+// saved yet; the password input always starts blank.
+async function loadJrCreds(email) {
+    const sec = $('jr-creds-section');
+    if (sec) sec.hidden = false;
+    const emailIn = $('jr-creds-email');
+    const pwIn = $('jr-creds-password');
+    const meta = $('jr-creds-meta');
+    const status = $('jr-creds-status');
+    const loginBtn = $('jr-creds-login');
+    const clearBtn = $('jr-creds-clear');
+    if (emailIn) emailIn.value = '';
+    if (pwIn) pwIn.value = '';
+    if (meta) meta.textContent = '';
+    if (status) status.textContent = '';
+    try {
+        const r = await fetch(`${API}/clients/${encodeURIComponent(email)}/jr-creds`);
+        const body = await r.json();
+        if (!body.success) {
+            if (meta) meta.textContent = `error: ${body.message || body.error}`;
+            return;
+        }
+        const c = body.creds;
+        if (!c) {
+            if (status) status.textContent = '· no credentials saved';
+            if (loginBtn) loginBtn.disabled = true;
+            if (clearBtn) clearBtn.disabled = true;
+            return;
+        }
+        if (emailIn) emailIn.value = c.jrEmail || '';
+        if (loginBtn) loginBtn.disabled = !c.hasPassword;
+        if (clearBtn) clearBtn.disabled = false;
+        const dot = c.jrLastLoginOk === true ? '🟢'
+            : c.jrLastLoginOk === false ? '🔴'
+            : '⚪';
+        const last = c.jrLastLoginAt ? new Date(c.jrLastLoginAt).toLocaleString() : 'never';
+        if (status) status.textContent = `${dot} last login: ${last}`;
+        if (meta) meta.textContent = c.jrCredsSetAt ? `saved ${new Date(c.jrCredsSetAt).toLocaleString()}` : '';
+    } catch (e) {
+        if (meta) meta.textContent = `error: ${e.message}`;
+    }
+}
+
+async function saveJrCreds() {
+    const email = state.selectedEmail;
+    if (!email) return;
+    const jrEmail = $('jr-creds-email')?.value?.trim();
+    const jrPassword = $('jr-creds-password')?.value;
+    const meta = $('jr-creds-meta');
+    if (!jrEmail || !jrEmail.includes('@')) {
+        if (meta) meta.textContent = 'enter a valid JR email';
+        return;
+    }
+    if (!jrPassword) {
+        if (meta) meta.textContent = 'enter a password';
+        return;
+    }
+    if (meta) meta.textContent = 'saving…';
+    try {
+        const r = await fetch(`${API}/clients/${encodeURIComponent(email)}/jr-creds`, {
+            method: 'PUT',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({ jrEmail, jrPassword }),
+        });
+        const body = await r.json();
+        if (!body.success) {
+            if (meta) meta.textContent = `error: ${body.message || body.error}`;
+            return;
+        }
+        if ($('jr-creds-password')) $('jr-creds-password').value = '';
+        await loadJrCreds(email);
+    } catch (e) {
+        if (meta) meta.textContent = `error: ${e.message}`;
+    }
+}
+
+async function loginJrClient() {
+    const email = state.selectedEmail;
+    if (!email) return;
+    const meta = $('jr-creds-meta');
+    const btn = $('jr-creds-login');
+    if (btn) btn.disabled = true;
+    if (meta) meta.textContent = 'logging in…';
+    try {
+        const r = await fetch(`${API}/admin/client-login/${encodeURIComponent(email)}`, {
+            method: 'POST',
+            headers: { 'content-type': 'application/json' },
+            body: JSON.stringify({ force: false }),
+        });
+        const body = await r.json();
+        if (!body.success) {
+            if (meta) meta.textContent = `❌ ${body.error}: ${body.message}`;
+            return;
+        }
+        if (meta) {
+            const action = body.action || 'logged-in';
+            const who = body.userInfo?.email || body.userInfo?.userId || '';
+            meta.textContent = `✅ ${action}${who ? ` · ${who}` : ''}`;
+        }
+        await loadJrCreds(email);
+    } catch (e) {
+        if (meta) meta.textContent = `error: ${e.message}`;
+    } finally {
+        if (btn) btn.disabled = false;
+    }
+}
+
+async function clearJrCreds() {
+    const email = state.selectedEmail;
+    if (!email) return;
+    if (!confirm(`Forget JobRight credentials for ${email}?`)) return;
+    const meta = $('jr-creds-meta');
+    if (meta) meta.textContent = 'clearing…';
+    try {
+        await fetch(`${API}/clients/${encodeURIComponent(email)}/jr-creds`, { method: 'DELETE' });
+        await loadJrCreds(email);
+    } catch (e) {
+        if (meta) meta.textContent = `error: ${e.message}`;
+    }
+}
+
+function wireJrCredHandlers() {
+    $('jr-creds-save')?.addEventListener('click', saveJrCreds);
+    $('jr-creds-login')?.addEventListener('click', loginJrClient);
+    $('jr-creds-clear')?.addEventListener('click', clearJrCreds);
 }
 
 // resetFilterInputs: reset every Advanced Filters control to its DEFAULT
@@ -1152,12 +1283,23 @@ function onRunTerminal() {
     const phase = state.run.phase;
     if (phase === 'done') {
         const n = state.run.progress?.pushed?.pushed ?? 0;
-        const searched = state.run.progress?.searched?.totalNormalized ?? 0;
+        const sObj = state.run.progress?.searched || {};
+        const jrReturned = sObj.totalReturned ?? 0;
+        const uniq = sObj.totalNormalized ?? 0;
+        const f = state.run.progress?.filtered || {};
+        const aiPicked = (f.picked ?? 0) + (f.borderline ?? 0);
+        const aiTotal = f.totalJobs ?? uniq;
+        const pickRate = aiTotal > 0 ? Math.round((aiPicked / aiTotal) * 100) : 0;
         // Add a "found X for [roles] · past 24h" sub-line so the operator
         // knows exactly what JR returned for the configured filter.
         const roles = (state.run.progress?.intent?.roles || []).slice(0, 4).join(', ');
         const ctx = roles ? ` · roles=[${roles}] · past 24 h` : ' · past 24 h';
-        if (n === 0 && searched === 0) {
+        // Funnel summary: JR raw → unique (dedupe) → AI pick rate → pushed.
+        const mode = state.run.progress?.mode === 'client' ? '🔑 client account' : '⚙ shared account';
+        const cl = state.run.progress?.clientLogin;
+        const acct = mode === '🔑 client account' && cl?.jrEmail ? ` (${cl.jrEmail})` : '';
+        const funnel = `${mode}${acct} · JR ${jrReturned} → ${uniq} unique → AI ${aiPicked}/${aiTotal} (${pickRate}%) → ${n} pushed`;
+        if (n === 0 && uniq === 0) {
             setStatus(
                 'console-status',
                 `done — 0 jobs found${ctx} (see banner above for why)`,
@@ -1166,12 +1308,12 @@ function onRunTerminal() {
         } else if (n === 0) {
             setStatus(
                 'console-status',
-                `done — found ${searched}${ctx} · 0 pushed (all skipped/blocked/duplicate)`,
+                `done — ${funnel}${ctx} · 0 pushed (all skipped/blocked/duplicate)`,
             );
         } else {
             setStatus(
                 'console-status',
-                `done — ${n} pushed · found ${searched}${ctx} (${fmtMs(state.run.durationMs)})`,
+                `done — ${funnel}${ctx} (${fmtMs(state.run.durationMs)})`,
             );
         }
     } else if (phase === 'failed') {
@@ -1582,11 +1724,19 @@ function phaseSubline(key, progress) {
     if (key === 'searching' && progress.searched) {
         const s = progress.searched;
         const liSkip = s.linkedInSkipped ? `, ${s.linkedInSkipped} LinkedIn skipped` : '';
-        return `${s.totalNormalized} jobs${liSkip} (${fmtMs(s.durationMs)})`;
+        // JR keeps re-serving the same past-24h pool across relaxation rounds —
+        // surface both totals so operators see the dedupe gap. e.g. "160 JR
+        // returned → 38 unique" tells them widening filters didn't expand pool.
+        const jr = s.totalReturned ?? 0;
+        const uniq = s.totalNormalized ?? 0;
+        const dupNote = jr > uniq ? ` (${jr - uniq} JR duplicates dropped)` : '';
+        return `${jr} JR returned → ${uniq} unique${dupNote}${liSkip} (${fmtMs(s.durationMs)})`;
     }
     if (key === 'filtering' && progress.filtered) {
         const f = progress.filtered;
-        return `${f.picked} picked, ${f.skipped} skipped, ${f.borderline} borderline (${fmtMs(f.durationMs)})`;
+        const total = f.totalJobs ?? (f.picked + f.skipped + f.borderline);
+        const rate = total > 0 ? Math.round(((f.picked + f.borderline) / total) * 100) : 0;
+        return `${f.picked} picked, ${f.skipped} skipped, ${f.borderline} borderline · ${rate}% of ${total} (${fmtMs(f.durationMs)})`;
     }
     if (key === 'enriching' && progress.enriched) {
         const e = progress.enriched;
@@ -1885,6 +2035,8 @@ document.querySelectorAll('input[name="decisions-filter"]').forEach((el) => {
         }
     });
 });
+
+wireJrCredHandlers();
 
 window.addEventListener('beforeunload', closeEventSource);
 
