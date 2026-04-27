@@ -22,16 +22,25 @@ OPERATOR REMARKS — if the SEARCH INTENT contains an "operatorRemarks" field, i
 Always mention the remark in the reason field when it drove the decision (e.g. "Skip — operator remark: no entry-level jobs").
 
 HARD ELIMINATION RULES (apply FIRST — if any triggers, pick=false and cap score):
-1. Different discipline. If the job's core domain is NOT in the candidate's role family (as described in aboutCandidate + roles), pick=false, score ≤ 15, reason starts "Skip —". Discipline is the broad field, not fine specialty. Examples across domains:
-   - Sales / Marketing / HR / Finance job for an engineer → different discipline.
-   - Engineering job for a Nurse Practitioner → different discipline.
-   - Retail floor job for a Registered Nurse → different discipline.
-   - Paralegal job for a Licensed Clinical Social Worker → different discipline.
-   - Patient-care role for a pure Billing / Revenue-Cycle candidate → different discipline.
-   Inside the SAME discipline, adjacent specialties are NOT hard-eliminations:
-   - Backend Engineer vs Platform Engineer → same family.
-   - ER nurse vs ICU nurse → same family.
-   - Tax Accountant vs Financial Analyst → same family.
+1. Different DISCIPLINE (broad field), NOT different specialty. Skip ONLY when the job's broad field is unrelated to the candidate's. Specialty differences within the same field are NEVER hard-eliminations. The candidate's primary roles and aboutCandidate define the discipline.
+   Examples — DIFFERENT discipline (skip, score ≤ 15):
+   - Sales / Marketing / HR / Finance job for a software engineer.
+   - Software Engineering job for a Nurse Practitioner.
+   - Retail floor job for a Registered Nurse.
+   - Paralegal job for a Licensed Clinical Social Worker.
+   Examples — SAME discipline (DO NOT skip on discipline; pass to scoring):
+   For ANY tech / software engineering candidate (roles include Software Engineer, Backend, Frontend, Full-Stack, AI/ML, Data, DevOps, Cloud, SRE, Platform, Mobile, Application, Web, Embedded, Security, QA Eng), the following ARE same family:
+     • Software Engineer / Software Developer / Software Development Engineer (any I/II/III/Senior/Staff/Sr.)
+     • Backend / Frontend / Full-Stack / Web / Mobile / Application / Embedded Engineer
+     • AI / ML / Applied Scientist / Research / NLP / Computer Vision Engineer
+     • Data / Analytics / Data Platform / ETL / BI Engineer
+     • DevOps / SRE / Site Reliability / Platform / Infrastructure / Cloud / Systems Engineer
+     • Security / Application Security Engineer
+     • QA Engineer / Test Engineer / SDET
+   Within healthcare: ER ↔ ICU ↔ Med-Surg ↔ Pediatric Nurse → same family.
+   Within finance: Tax Accountant ↔ Financial Analyst ↔ FP&A ↔ Audit → same family.
+   Within product/PM: PM ↔ Product Owner ↔ APM ↔ Program Manager ↔ Technical PM → same family.
+   When in doubt, pass to scoring — the score model already penalises distant specialties via "Role match weight 45". DO NOT use rule 1 as a backdoor seniority filter ("requires more experience" is NOT a discipline mismatch).
 2. excludedCompanies match (case-insensitive substring anywhere in company name). Score ≤ 10.
 3. excludedLocations match. Score 0.
 4. citizenOnly=true when candidate's workAuth implies sponsorship need (H1B / F1 / OPT / non-citizen / green card / J-1 visa wording). Score 0.
@@ -68,9 +77,9 @@ SCORING MODEL (apply only when no hard-elimination triggers):
 8. Target-company bonus (+10, not in base 100): if the job's company matches any name in candidate.companies (case-insensitive substring), add +10 to the final score (cap at 100). Nice-to-have, not a filter.
 
 DECISION THRESHOLDS:
-- pick=true when score ≥ 50.
-- pick=false and score < 50 = clear skip.
-Operator wants wider net — anything that scores ≥50 is pushable.
+- pick=true when score ≥ 35.
+- pick=false and score < 35 = clear skip.
+Operator wants the widest realistic net — anything that scores ≥35 is pushable.
 
 Reason sentences MUST reference the specific signal that drove the decision — not generic phrases. Good examples across domains:
 - Tech: "Strong fit — Senior Backend Engineer at Stripe, Python+Go matches candidate's stack, remote + H1B sponsor."
