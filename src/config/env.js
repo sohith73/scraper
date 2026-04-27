@@ -138,6 +138,11 @@ const schema = z.object({
     // Comma-separated list of extra origins that may call /api/* beyond
     // the built-in loopback + hq.flashfirejobs.com defaults.
     CORS_EXTRA_ORIGINS: z.string().optional().default(''),
+
+    // --- Debug-routes shared secret (optional) -------------------------
+    // Gates /api/debug/* — when empty the routes are open (use only on a
+    // firewalled box). When set, callers must send `X-Debug-Token: <val>`.
+    DEBUG_TOKEN: z.string().optional().default(''),
 });
 
 // loadEnv: parses process.env against the schema. On failure, formats a clear

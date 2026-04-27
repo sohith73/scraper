@@ -212,7 +212,6 @@ function resetFilterInputs() {
     if (el('filter-daysAgo')) el('filter-daysAgo').value = '1';
     if (el('filter-seniority')) el('filter-seniority').value = '';
     if (el('filter-yoe')) el('filter-yoe').value = '';
-    if (el('filter-salary')) el('filter-salary').value = '';
     for (const cb of document.querySelectorAll(
         'input[name="employmentTypes"],input[name="workModels"],input[name="companyStages"]',
     )) {
@@ -269,7 +268,6 @@ function applySavedOverrides(saved) {
     }
     const yoeSel = yoeSelectFromRange(pick('minYearsOfExperience'), pick('maxYearsOfExperience'));
     if (yoeSel && $('filter-yoe')) $('filter-yoe').value = yoeSel;
-    if (Number.isInteger(pick('salaryMinimumUsd'))) $('filter-salary').value = String(pick('salaryMinimumUsd'));
 
     const setChecks = (name, values) => {
         if (!Array.isArray(values)) return;
@@ -984,8 +982,6 @@ function collectFilterOverrides() {
         out.minYearsOfExperience = yoe.min;
         out.maxYearsOfExperience = yoe.max;
     }
-    const salary = Number.parseInt($('filter-salary').value, 10);
-    if (Number.isInteger(salary)) out.salaryMinimumUsd = salary;
     const grab = (name) =>
         [...document.querySelectorAll(`input[name="${name}"]:checked`)].map((el) => el.value);
     const et = grab('employmentTypes'); if (et.length) out.employmentTypes = et;
@@ -1662,9 +1658,6 @@ function renderNoJobsHint(r) {
         if (span <= 3) {
             culprits.push(`<li><strong>YoE</strong> = ${intent.minYearsOfExperience}–${intent.maxYearsOfExperience} — narrow range; try the next wider bucket</li>`);
         }
-    }
-    if (Number.isInteger(intent.salaryMinimumUsd) && intent.salaryMinimumUsd >= 150000) {
-        culprits.push(`<li><strong>Min salary</strong> = $${intent.salaryMinimumUsd.toLocaleString()} — try a lower floor; many postings omit salary</li>`);
     }
     if (Array.isArray(intent.locations) && intent.locations.length > 0 && intent.locations.length <= 4) {
         culprits.push(`<li><strong>Locations</strong> limited to ${intent.locations.length} cities — add Remote, or clear locations for nationwide</li>`);

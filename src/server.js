@@ -18,6 +18,7 @@ import { clientsRouter } from './routes/clients.js';
 import { adminRouter } from './routes/admin.js';
 import { runsRouter } from './routes/runs.js';
 import { batchesRouter } from './routes/batches.js';
+import { debugRouter } from './routes/debug.js';
 import { buildContainer } from './container.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -109,6 +110,9 @@ export function buildApp({ container = buildContainer() } = {}) {
     if (container.batches) {
         app.use('/api', batchesRouter({ container }));
     }
+    // Debug routes — single-shot bundles for remote inspection. Gated by
+    // env.DEBUG_TOKEN when set. See src/routes/debug.js for endpoint list.
+    app.use('/api', debugRouter({ container }));
 
     // Static UI. Served AFTER /api so a stray public/api.html can't shadow.
     app.use(

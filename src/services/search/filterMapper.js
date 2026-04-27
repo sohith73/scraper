@@ -271,11 +271,14 @@ export function searchIntentToJRFilter({ intent, existing = null, resolvedTaxono
         excludedCompanies.push({ companyName: name });
     }
 
-    // Industries (companyCategory) — free-text list. Merge intent + base.
-    const industries = Array.isArray(intent.industries) ? intent.industries : null;
-    const companyCategory = industries && industries.length
-        ? [...new Set(industries.map((s) => String(s).trim()).filter(Boolean))]
-        : (Array.isArray(base.companyCategory) ? base.companyCategory : []);
+    // Industries (companyCategory) HARDCODED [] 2026-04-27.
+    // JR treats companyCategory as a hard narrowing filter — restricting
+    // to ["Information Technology","Data Analytics"] caused JR to return
+    // only IT-flavored jobs (Tech Support Analyst, Application Engineer)
+    // when the candidate was actually a Project Manager. Operator wants
+    // the widest pool; the AI relevance phase already filters by domain.
+    // JR's deserialiser requires an array (not null) for this field.
+    const companyCategory = [];
 
     // Excluded industries.
     const excludedIndustries = Array.isArray(intent.excludedIndustries)
@@ -285,11 +288,15 @@ export function searchIntentToJRFilter({ intent, existing = null, resolvedTaxono
         ? [...new Set(excludedIndustries.map((s) => String(s).trim()).filter(Boolean))]
         : (base.excludeCompanyCategory ?? null);
 
-    // Skills.
-    const intentSkills = Array.isArray(intent.skills) ? intent.skills : null;
-    const skills = intentSkills && intentSkills.length
-        ? [...new Set(intentSkills.map((s) => String(s).trim()).filter(Boolean))]
-        : (Array.isArray(base.skills) ? base.skills : []);
+    // Skills HARDCODED [] 2026-04-27.
+    // JR treats `skills` as a tag filter and DOMINATES the role-taxonomy
+    // signal — sending ["SQL","Python","Excel"] for a PM candidate caused
+    // JR to surface random data-analyst / IT-support roles tagged with
+    // those tools instead of actual PM postings. AI then rightly skipped
+    // them as "different discipline" and the run pushed 0 jobs. Skills
+    // belong in the AI relevance prompt (already there via aboutCandidate),
+    // not the JR pre-filter. JR requires an array (not null).
+    const skills = [];
 
     const intentExcludedSkills = Array.isArray(intent.excludedSkills)
         ? intent.excludedSkills
@@ -337,9 +344,11 @@ export function searchIntentToJRFilter({ intent, existing = null, resolvedTaxono
     const minYearsOfExperienceRange = mapYoeRange(intent)
         ?? (Array.isArray(base.minYearsOfExperienceRange) ? base.minYearsOfExperienceRange : null);
 
-    const companyStages = mapCompanyStages(intent) ?? (base.companyStages ?? null);
-
-    const roleType = mapRoleType(intent) ?? (base.roleType ?? null);
+    // companyStages + roleType HARDCODED null 2026-04-27 — same reason as
+    // skills/companyCategory. Both narrow JR pool below the AI's ability
+    // to recover. AI relevance phase scores against fit anyway.
+    const companyStages = null;
+    const roleType = null;
 
     const excludeStaffingAgency = typeof intent.excludeStaffingAgency === 'boolean'
         ? intent.excludeStaffingAgency

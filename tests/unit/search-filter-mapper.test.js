@@ -347,7 +347,11 @@ test('annualSalaryMinimum hardcoded to null — salary filter disabled', () => {
     );
 });
 
-test('industries → companyCategory; excludedIndustries → excludeCompanyCategory', () => {
+test('industries / companyCategory hardcoded [] — excludedIndustries still flows', () => {
+    // 2026-04-27: companyCategory was over-narrowing the JR pool (returning
+    // only IT-flavoured roles for non-IT candidates because the AI seeded
+    // industries=["Information Technology"] from one resume bullet). Forced
+    // to [] regardless of intent. Excluded categories still flow through.
     const f = searchIntentToJRFilter({
         intent: {
             ...MIN_INTENT,
@@ -355,23 +359,29 @@ test('industries → companyCategory; excludedIndustries → excludeCompanyCateg
             excludedIndustries: ['Gambling'],
         },
     });
-    assert.deepEqual(f.companyCategory, ['Finance', 'Information Technology']);
+    assert.deepEqual(f.companyCategory, []);
     assert.deepEqual(f.excludeCompanyCategory, ['Gambling']);
 });
 
-test('skills + excludedSkills pass through + dedupe', () => {
+test('skills hardcoded [] — JR was using skills as dominant filter', () => {
+    // 2026-04-27: JR's skill-tag filter was overriding the role taxonomy,
+    // surfacing data-analyst jobs for PM candidates because their resumes
+    // listed Python/SQL. Skills now belong to AI relevance (aboutCandidate),
+    // not the JR pre-filter. excludedSkills still flows.
     const f = searchIntentToJRFilter({
         intent: { ...MIN_INTENT, skills: ['Python', 'Python', 'Go'], excludedSkills: ['Perl'] },
     });
-    assert.deepEqual(f.skills.sort(), ['Go', 'Python']);
+    assert.deepEqual(f.skills, []);
     assert.deepEqual(f.excludedSkills, ['Perl']);
 });
 
-test('companyStages alias → JR string codes', () => {
-    const f = searchIntentToJRFilter({
-        intent: { ...MIN_INTENT, companyStages: ['seed', 'growth-stage', 'public'] },
-    });
-    assert.deepEqual(f.companyStages.sort(), ['1', '3', '5']);
+test('companyStages hardcoded null — over-narrow filter', () => {
+    assert.equal(
+        searchIntentToJRFilter({
+            intent: { ...MIN_INTENT, companyStages: ['seed', 'growth-stage', 'public'] },
+        }).companyStages,
+        null,
+    );
 });
 
 test('companyStages: empty → null', () => {
@@ -381,14 +391,14 @@ test('companyStages: empty → null', () => {
     );
 });
 
-test('roleType alias → JR string', () => {
+test('roleType hardcoded null — over-narrow filter', () => {
     assert.equal(
         searchIntentToJRFilter({ intent: { ...MIN_INTENT, roleType: 'ic' } }).roleType,
-        'IC',
+        null,
     );
     assert.equal(
         searchIntentToJRFilter({ intent: { ...MIN_INTENT, roleType: 'manager' } }).roleType,
-        'Manager',
+        null,
     );
 });
 
