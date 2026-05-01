@@ -19,6 +19,7 @@ import { adminRouter } from './routes/admin.js';
 import { runsRouter } from './routes/runs.js';
 import { batchesRouter } from './routes/batches.js';
 import { debugRouter } from './routes/debug.js';
+import { jrRouter } from './routes/jr.js';
 import { buildContainer } from './container.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -82,14 +83,28 @@ export function buildApp({ container = buildContainer() } = {}) {
     const allowedOrigins = [...defaultOrigins, ...extra.filter((o) => o !== '*')];
     app.use(
         cors({
-            origin: allowAnyOrigin ? true : allowedOrigins,
+            origin: allowAnyOrigin
+                ? true
+                : (origin, cb) => {
+                      // Same-origin / curl / Node fetch sends no Origin → allow.
+                      if (!origin) return cb(null, true);
+                      if (allowedOrigins.includes(origin)) return cb(null, true);
+                      // The manual-capture browser extension is unpacked locally,
+                      // so its origin (`chrome-extension://<random-id>`) varies per
+                      // install. Allow the whole scheme rather than maintaining
+                      // a brittle ID allowlist.
+                      if (/^chrome-extension:\/\//.test(origin)) return cb(null, true);
+                      cb(new Error(`origin not allowed: ${origin}`));
+                  },
             credentials: false,
             maxAge: 600,
         }),
     );
 
-    // Body parsers with defensive limits — scraper payloads are small.
-    app.use(express.json({ limit: '256kb' }));
+    // Body parsers. Manual-capture runs POST the entire raw JR payload buffer
+    // (operator-scrolled jobs); 200 captures × ~5KB each ≈ 1MB. 4MB cap covers
+    // a generous scrolling session without inviting OOM via /api/runs spam.
+    app.use(express.json({ limit: '4mb' }));
     app.use(express.urlencoded({ extended: false, limit: '64kb' }));
 
     // Minimal hardening headers.
@@ -113,6 +128,13 @@ export function buildApp({ container = buildContainer() } = {}) {
     // Debug routes — single-shot bundles for remote inspection. Gated by
     // env.DEBUG_TOKEN when set. See src/routes/debug.js for endpoint list.
     app.use('/api', debugRouter({ container }));
+    // Direct JR endpoints used by the browser extension: a job-detail scraper
+    // that opens jobright.ai/jobs/info/<id> in the persistent context and
+    // returns the composed JD + real applyLink. Only mount when the
+    // Playwright primitives are wired — tests stub them out.
+    if (container.browser && container.mutex) {
+        app.use('/api', jrRouter({ container }));
+    }
 
     // Static UI. Served AFTER /api so a stray public/api.html can't shadow.
     app.use(

@@ -1,3 +1,6 @@
-2026/04/24-13:37:46.976 c9aed Reusing MANIFEST /home/bsc/Codding/DEPLOY/deploy v1/DASH/scraper/storage/Default/Session Storage/MANIFEST-000001
-2026/04/24-13:37:46.976 c9aed Recovering log #4
-2026/04/24-13:37:46.978 c9aed Reusing old log /home/bsc/Codding/DEPLOY/deploy v1/DASH/scraper/storage/Default/Session Storage/000004.log 
+2026/04/30-16:44:05.276 29337 Reusing MANIFEST /home/bsc/Codding/DEPLOY/deploy v1/DASH/scraper/storage/Default/Session Storage/MANIFEST-000001
+2026/04/30-16:44:05.276 29337 Recovering log #4
+2026/04/30-16:44:05.277 29337 Reusing old log /home/bsc/Codding/DEPLOY/deploy v1/DASH/scraper/storage/Default/Session Storage/000004.log 
+2026/04/30-16:45:30.153 2933b Level-0 table #8: started
+2026/04/30-16:45:30.155 2933b Level-0 table #8: 13720 bytes OK
+2026/04/30-16:45:30.157 2933b Delete type=0 #4

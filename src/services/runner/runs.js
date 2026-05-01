@@ -8,6 +8,7 @@
 
 import { createRunStore } from './runStore.js';
 import { runPipeline } from './pipeline.js';
+import { runManualPipeline } from './manualPipeline.js';
 import {
     readCooldown,
     isCooldownActive,
@@ -25,6 +26,7 @@ export function createRunsService({
     runsDir,
     logger = null,
     pipelineImpl = runPipeline,
+    manualPipelineImpl = runManualPipeline,
 } = {}) {
     if (!container) throw new TypeError('createRunsService: container is required');
     const store = createRunStore({ runsDir, logger });
@@ -137,8 +139,62 @@ export function createRunsService({
         });
     }
 
+    // startManual: launch a run that consumes operator-captured raw JR
+    // payloads (from the browser extension) instead of fetching from JR
+    // ourselves. Skips summariser + search; enters at relevance filter.
+    //
+    // input  : { clientEmail, clientName?, capturedJobs:RawJrJob[] }
+    // output : run state object (same shape as start())
+    function startManual({
+        clientEmail,
+        clientName = '',
+        capturedJobs = [],
+    }) {
+        if (typeof clientEmail !== 'string' || !clientEmail.includes('@')) {
+            throw new Error('clientEmail required');
+        }
+        if (!Array.isArray(capturedJobs) || capturedJobs.length === 0) {
+            throw new Error('capturedJobs (non-empty array) required');
+        }
+        if (capturedJobs.length > 1000) {
+            throw new Error('capturedJobs cap is 1000 per run');
+        }
+        if (isCooldownActive(cooldownCache)) {
+            const err = new Error(describeCooldown(cooldownCache));
+            err.code = 'COOLDOWN';
+            err.cooldown = cooldownCache;
+            throw err;
+        }
+        const run = store.create({
+            clientEmail,
+            clientName,
+            requestedCount: capturedJobs.length,
+        });
+        // Tag the run as manual-mode immediately so subscribers see the
+        // mode before the pipeline transitions phases.
+        store.update(run.id, { progress: { mode: 'manual' } });
+        Promise.resolve()
+            .then(() =>
+                manualPipelineImpl({
+                    store,
+                    runId: run.id,
+                    container,
+                    capturedJobs,
+                }),
+            )
+            .then(() => refreshCooldown())
+            .catch((err) => {
+                logger?.error?.(
+                    { runId: run.id, err: err.message },
+                    'manual pipeline promise rejected',
+                );
+            });
+        return run;
+    }
+
     return {
         start,
+        startManual,
         resume,
         get: (id) => store.get(id),
         list: () => store.list(),

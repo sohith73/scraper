@@ -60,6 +60,12 @@ export function composeDescription(jobResult) {
     const skills = arr(jr.skillSummaries);
     if (skills.length) parts.push(`Key skills:\n${bullet(skills)}`);
 
+    const benefits = arr(jr.benefitsSummaries);
+    if (benefits.length) parts.push(`Benefits:\n${bullet(benefits)}`);
+
+    const why = str(jr.whyJoinUs).trim();
+    if (why) parts.push(`Why join us:\n${why}`);
+
     return parts.join('\n\n').trim();
 }
 

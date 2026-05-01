@@ -1,5 +1,6 @@
 // Run routes:
 //   POST /api/runs                     start a new run, returns {runId, state}
+//   POST /api/manual-runs              start a run from extension-captured jobs
 //   GET  /api/runs                     list all runs (summary view)
 //   GET  /api/runs/:id                 snapshot of one run
 //   GET  /api/runs/:id/events          SSE stream of state transitions
@@ -63,6 +64,42 @@ export function runsRouter({ container }) {
                     requestedCount,
                     overrideIntent: overrideIntent || null,
                     overrideFields: overrideFields || null,
+                });
+                respondOk(res, req, { run: summariseRun(run) }, 201);
+            } catch (e) {
+                if (e?.code === 'COOLDOWN') {
+                    return res.status(429).json({
+                        success: false,
+                        error: 'COOLDOWN',
+                        message: e.message,
+                        cooldown: e.cooldown || null,
+                        requestId: req.id,
+                    });
+                }
+                respondErr(res, req, 'BAD_INPUT', e.message);
+            }
+        } catch (e) {
+            next(e);
+        }
+    });
+
+    // POST /api/manual-runs — operator captured raw JR payloads via the
+    // browser extension; ingest them through the manual pipeline.
+    router.post('/manual-runs', async (req, res, next) => {
+        try {
+            const { clientEmail, clientName, capturedJobs } = req.body || {};
+            if (!clientEmail) return respondErr(res, req, 'BAD_INPUT', 'clientEmail required');
+            if (!Array.isArray(capturedJobs) || capturedJobs.length === 0) {
+                return respondErr(res, req, 'BAD_INPUT', 'capturedJobs (non-empty array) required');
+            }
+            if (typeof container.runs.startManual !== 'function') {
+                return respondErr(res, req, 'INTERNAL', 'manual runs not available on this server');
+            }
+            try {
+                const run = container.runs.startManual({
+                    clientEmail,
+                    clientName: clientName || '',
+                    capturedJobs,
                 });
                 respondOk(res, req, { run: summariseRun(run) }, 201);
             } catch (e) {
