@@ -69,19 +69,24 @@ export function composeDescription(jobResult) {
     return parts.join('\n\n').trim();
 }
 
-// isLinkedInApplyUrl: returns true when the apply URL routes through
-// LinkedIn. We skip these entirely because:
-//  - they require a LinkedIn account to actually apply
-//  - LinkedIn's apply flow is less reliable than direct career-site URLs
-//  - the dashboard tracker prefers direct links
-// Defensive parse so a malformed URL just returns false (filter stays fast).
+// isLinkedInApplyUrl: returns true when the apply URL routes through any
+// blocked job board (operator policy — direct employer career-site links
+// preferred). Currently blocks LinkedIn + Dice. Add new hostnames to
+// BLOCKED_HOST_RX (anchored at end) AND BLOCKED_LOOSE_RX so a parser
+// failure still catches them. Name kept for backwards compat with all
+// existing call sites; rename to `isBlockedApplyUrl` when convenient.
+// Anchored host matches — hostname-end. Aggregators + career-portal aliases
+// + SPECIFIC Workday tenants (humana.wd5 only — other tenants pass).
+const BLOCKED_HOST_RX = /(^|\.)(linkedin\.com|dice\.com|indeed\.com|lifeattiktok\.com|dataannotation\.tech|jobs\.apple\.com|humana\.wd5\.myworkdayjobs\.com)$/i;
+// Substring tokens — employer-specific where subdomain pattern varies.
+const BLOCKED_SUBSTRING_RX = /(linkedin\.com|dice\.com|indeed\.com|lifeattiktok\.com|dataannotation\.tech|dickssportinggoods)/i;
 export function isLinkedInApplyUrl(url) {
     if (typeof url !== 'string' || !url) return false;
+    if (BLOCKED_SUBSTRING_RX.test(url)) return true;
     try {
-        const u = new URL(url);
-        return /(^|\.)linkedin\.com$/i.test(u.hostname);
+        return BLOCKED_HOST_RX.test(new URL(url).hostname);
     } catch {
-        return /linkedin\.com/i.test(url);
+        return BLOCKED_SUBSTRING_RX.test(url);
     }
 }
 

@@ -1,0 +1,72 @@
+# FlashFire JR scraper stack.
+# Single service. State (Chromium profile, run artifacts, AI cache) lives in
+# bind-mounted volumes so it survives image rebuilds. `restart: always`
+# keeps the container alive across crashes + host reboots. tini in the
+# image handles SIGTERM → graceful Playwright shutdown.
+
+services:
+  scraper:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: flashfire-scraper:latest
+    container_name: flashfire-scraper
+    ports:
+      - "${PORT:-8092}:${PORT:-8092}"
+    environment:
+      - NODE_ENV=${NODE_ENV:-production}
+      - PORT=${PORT:-8092}
+      # Playwright: persistent context lives at /app/storage, runs at /app/runs.
+      # Override only when you know what you're doing.
+      - STORAGE_DIR=/app/storage
+      - RUNS_DIR=/app/runs
+      - AI_CACHE_DIR=/app/ai-cache
+      # Container has no display server → headless is the only option.
+      - HEADLESS=true
+    # `env_file` pulls every other var from .env (DASHBOARD_BASE, OPENAI_API_KEY,
+    # JOBRIGHT_*, MONGO_URI, DISCORD_WEBHOOK_URL, DEBUG_TOKEN, etc.) without
+    # enumerating them here. New vars in .env need no compose edit.
+    env_file:
+      - .env
+    volumes:
+      # Cookies + Chromium profile — survives rebuilds. chmod 0700 from the
+      # Dockerfile keeps it readable only by `pwuser`.
+      - ./storage:/app/storage
+      # Per-run artifacts: state.json, picks.json, run.log, trace.zip, etc.
+      - ./runs:/app/runs
+      # OpenAI response cache — repeated profile builds skip the API call.
+      - ./ai-cache:/app/ai-cache
+    restart: always
+    stop_grace_period: 30s
+    # Chromium needs a real /dev/shm or it crashes ("Aw, Snap!"). Default
+    # /dev/shm size is 64MB; 1GB is plenty for a single browser context.
+    shm_size: 1gb
+    # Drop CAP_SYS_ADMIN dependency — Chromium uses its own sandbox via
+    # user namespaces. Most distros need SYS_ADMIN for the seccomp default;
+    # if your host blocks it, set HEADLESS=true (already on) and drop the
+    # security_opt below.
+    security_opt:
+      - seccomp:unconfined
+    healthcheck:
+      test: ["CMD", "curl", "-fsS", "http://localhost:${PORT:-8092}/api/health"]
+      interval: 30s
+      timeout: 5s
+      retries: 3
+      start_period: 40s
+    logging:
+      driver: json-file
+      options:
+        max-size: "20m"
+        max-file: "5"
+    deploy:
+      resources:
+        limits:
+          # Chromium can balloon under heavy scrolls. 2GB cap stops one
+          # rogue session from OOM-ing the host.
+          memory: 2048M
+        reservations:
+          memory: 512M
+
+networks:
+  default:
+    name: flashfire-scraper-network

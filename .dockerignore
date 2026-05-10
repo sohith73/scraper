@@ -1,0 +1,43 @@
+node_modules
+npm-debug.log
+.env
+.env.*
+!.env.example
+.git
+.gitignore
+.gitattributes
+.dockerignore
+Dockerfile
+docker-compose.yml
+docker.sh
+deploy.sh
+run.sh
+README.md
+CLAUDE.md
+*.md
+*.log
+server.log
+.DS_Store
+.vscode
+.idea
+
+# Persistent data — bind-mounted at runtime, not baked into image.
+storage
+runs
+ai-cache
+
+# Graphify dumps + screenshots.
+.graphify_*
+graphify-out
+*.png
+
+# Render template (Render.com deploy yaml).
+render.yaml
+
+# Test fixtures don't need to ship.
+tests
+coverage
+.nyc_output
+
+# recon/ stays in the image — `./docker.sh first-login` runs
+# recon/jobright-recon.mjs to capture cookies headed.
