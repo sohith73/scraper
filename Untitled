@@ -1,0 +1,40 @@
+{success: false, error: "INTERNAL_ERROR",…}
+error
+: 
+"INTERNAL_ERROR"
+message
+: 
+"browserType.launchPersistentContext: Executable doesn't exist at /ms-playwright/chromium_headless_shell-1217/chrome-headless-shell-linux64/chrome-headless-shell\n╔════════════════════════════════════════════════════════╗\n║ Looks like Playwright was just updated to 1.59.1.      ║\n║ Please update docker image as well.                    ║\n║ -  current: mcr.microsoft.com/playwright:v1.48.0-jammy ║\n║ - required: mcr.microsoft.com/playwright:v1.59.1-jammy ║\n║                                                        ║\n║ <3 Playwright Team                                     ║\n╚════════════════════════════════════════════════════════╝"
+requestId
+: 
+"cfcfd848-daff-4072-92e1-803220e671da"
+stack
+: 
+[,…]
+0
+: 
+"browserType.launchPersistentContext: Executable doesn't exist at /ms-playwright/chromium_headless_shell-1217/chrome-headless-shell-linux64/chrome-headless-shell"
+1
+: 
+"╔════════════════════════════════════════════════════════╗"
+2
+: 
+"║ Looks like Playwright was just updated to 1.59.1.      ║"
+3
+: 
+"║ Please update docker image as well.                    ║"
+4
+: 
+"║ -  current: mcr.microsoft.com/playwright:v1.48.0-jammy ║"
+5
+: 
+"║ - required: mcr.microsoft.com/playwright:v1.59.1-jammy ║"
+6
+: 
+"║                                                        ║"
+7
+: 
+"║ <3 Playwright Team                                     ║"
+success
+: 
+false

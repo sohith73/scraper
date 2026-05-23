@@ -1,9 +1,11 @@
 # FlashFire JR scraper image.
 # Uses Microsoft's official Playwright image — ships Chromium + every system
-# lib Playwright needs (libnss3, libnspr4, fonts, etc.). Pinned to v1.48.0
-# to match package.json devDependencies. Bumping playwright requires bumping
-# this tag in lock-step.
-FROM mcr.microsoft.com/playwright:v1.48.0-jammy
+# lib Playwright needs (libnss3, libnspr4, fonts, etc.). Pinned to v1.59.1
+# to match package-lock.json's resolved playwright version. Base image
+# Chromium and npm playwright MUST match exactly, else
+# launchPersistentContext errors w/ "Executable doesn't exist at
+# /ms-playwright/chromium_headless_shell-<n>/...".
+FROM mcr.microsoft.com/playwright:v1.59.1-jammy
 
 # Tools used at runtime + by docker.sh's healthcheck (curl).
 RUN apt-get update \

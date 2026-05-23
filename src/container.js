@@ -34,6 +34,7 @@ import {
 } from './services/clientSettings/index.js';
 import { createMongoConnection } from './storage/mongo.js';
 import { createDiscordNotifier } from './services/notify/index.js';
+import { createJdFetcher } from './services/jdFetch/index.js';
 
 // buildContainer: returns `{ dashboard, resume, ai, summariser, logger, env }`.
 // Any field in `overrides` wins over the default construction — handy for
@@ -150,6 +151,19 @@ export function buildContainer({ overrides = {}, logger = rootLogger } = {}) {
         logger?.info?.('discord: webhook configured — ops alerts active');
     }
 
+    // jdFetcher — opens an apply URL in the persistent context, runs the
+    // ported FlashFire DOM extractors, returns description + location.
+    // Optional: only constructed when a browser handle is available.
+    const jdFetcher = browser
+        ? createJdFetcher({
+              browser,
+              logger,
+              navTimeoutMs: Number(env.JDFETCH_NAV_TIMEOUT_MS) || 25000,
+              minDescriptionChars: Number(env.JDFETCH_MIN_DESC_CHARS) || 300,
+              maxConcurrent: Number(env.JDFETCH_MAX_CONCURRENT) || 2,
+          })
+        : null;
+
     const defaults = {
         env,
         logger,
@@ -165,6 +179,7 @@ export function buildContainer({ overrides = {}, logger = rootLogger } = {}) {
         feedback,
         clientSettings,
         notifier,
+        jdFetcher,
         mongo,  // null when using file store — health route uses for ping
     };
 

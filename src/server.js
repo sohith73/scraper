@@ -20,6 +20,7 @@ import { runsRouter } from './routes/runs.js';
 import { batchesRouter } from './routes/batches.js';
 import { debugRouter } from './routes/debug.js';
 import { jrRouter } from './routes/jr.js';
+import { fetchJdRouter } from './routes/fetchJd.js';
 import { buildContainer } from './container.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
@@ -134,6 +135,10 @@ export function buildApp({ container = buildContainer() } = {}) {
     // Playwright primitives are wired — tests stub them out.
     if (container.browser && container.mutex) {
         app.use('/api', jrRouter({ container }));
+    }
+    // fetch-jd: site-side JD enrichment for the JR-direct extension.
+    if (container.jdFetcher) {
+        app.use('/api', fetchJdRouter({ container }));
     }
 
     // Static UI. Served AFTER /api so a stray public/api.html can't shadow.
