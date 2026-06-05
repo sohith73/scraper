@@ -112,6 +112,71 @@ install_node_lts_nvm() {
     hash -r 2>/dev/null || true
 }
 
+wait_for_apt_locks() {
+    local timeout_sec="${APT_LOCK_TIMEOUT_SEC:-900}"
+    local interval_sec="${APT_LOCK_POLL_SEC:-5}"
+    local started now elapsed lock busy
+    local locks=(
+        /var/lib/apt/lists/lock
+        /var/lib/dpkg/lock
+        /var/lib/dpkg/lock-frontend
+    )
+
+    if ! command -v fuser >/dev/null 2>&1 && ! command -v lsof >/dev/null 2>&1; then
+        log "WARN: neither fuser nor lsof available — skipping apt lock wait"
+        return 0
+    fi
+
+    started="$(date +%s)"
+    while :; do
+        busy=""
+        for lock in "${locks[@]}"; do
+            if command -v fuser >/dev/null 2>&1; then
+                if fuser "$lock" >/dev/null 2>&1; then
+                    busy="$lock"
+                    break
+                fi
+            elif command -v lsof >/dev/null 2>&1; then
+                if lsof "$lock" >/dev/null 2>&1; then
+                    busy="$lock"
+                    break
+                fi
+            fi
+        done
+
+        if [[ -z "$busy" ]]; then
+            return 0
+        fi
+
+        now="$(date +%s)"
+        elapsed=$((now - started))
+        if (( elapsed >= timeout_sec )); then
+            log "ERROR: apt lock still busy after ${timeout_sec}s: $busy"
+            return 1
+        fi
+
+        log "Waiting for apt lock to clear: $busy (${elapsed}s/${timeout_sec}s)"
+        sleep "$interval_sec"
+    done
+}
+
+install_playwright_chromium() {
+    if [[ "${PLAYWRIGHT_WITH_DEPS:-0}" == 1 ]]; then
+        log "npx playwright install --with-deps chromium (Render build parity)"
+        if ! wait_for_apt_locks; then
+            return 1
+        fi
+        if ! npx playwright install --with-deps chromium; then
+            log "WARN: Playwright deps install failed, checking apt locks and retrying once"
+            wait_for_apt_locks || return 1
+            npx playwright install --with-deps chromium
+        fi
+    else
+        log "npx playwright install chromium"
+        npx playwright install chromium
+    fi
+}
+
 if need_node; then
     install_node_lts_nvm
 fi
@@ -137,13 +202,7 @@ log "npm install"
 npm install
 
 if [[ "${SKIP_PLAYWRIGHT:-0}" != 1 ]]; then
-    if [[ "${PLAYWRIGHT_WITH_DEPS:-0}" == 1 ]]; then
-        log "npx playwright install --with-deps chromium (Render build parity)"
-        npx playwright install --with-deps chromium
-    else
-        log "npx playwright install chromium"
-        npx playwright install chromium
-    fi
+    install_playwright_chromium
 else
     log "SKIP_PLAYWRIGHT=1 — skipping Playwright Chromium install"
 fi
