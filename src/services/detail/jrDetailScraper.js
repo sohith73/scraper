@@ -19,6 +19,7 @@
 import { ok, err } from '../../clients/common/result.js';
 import { composeDescription } from '../../adapters/jobright.js';
 import { probeViaPage } from '../../playwright/session.js';
+import { scrapeEmployerPage, isScrapableEmployerUrl } from './employerPage.js';
 
 const JR_DETAIL_PATH = (jobId) => `https://jobright.ai/jobs/info/${jobId}`;
 
@@ -204,11 +205,51 @@ export async function scrapeJobDetail({ browser, mutex, env, logger, jobId, reqI
                     logger?.warn?.(ctxLog({ phase: 'no-applylink' }), 'jrDetailScraper: NO_APPLYLINK');
                     return err('NO_APPLYLINK', 'dataSource has no applyLink/originalUrl');
                 }
+
+                // Prefer the REAL employer-site JD + location. JR only gives a
+                // summary; the operator wants the description scraped from the
+                // ORIGINAL company page. Navigate the (already-authenticated)
+                // page to the employer applyLink and extract. Best-effort: keep
+                // JR's composed JD as the floor if the employer page fails or is
+                // bot-walled. Toggle with env JR_SCRAPE_EMPLOYER (default on).
+                let location = jr.jobLocation || '';
+                let descriptionSource = usedDomFallback ? 'jr-dom' : 'jr-ssr';
+                const wantEmployer = !env || env.JR_SCRAPE_EMPLOYER !== false;
+                if (wantEmployer && isScrapableEmployerUrl(applyLink)) {
+                    const empTimeout = Number(env?.JR_EMPLOYER_TIMEOUT_MS) || 25_000;
+                    logger?.info?.(ctxLog({ phase: 'employer-navigate', applyLink }), 'jrDetailScraper: scraping employer site');
+                    const emp = await scrapeEmployerPage({ page, url: applyLink, logger, ctxLog, timeoutMs: empTimeout });
+                    if (emp.ok && emp.description && emp.description.length >= 200) {
+                        description = emp.description;
+                        descriptionSource = `employer:${emp.source}`;
+                    }
+                    if (emp.location) location = emp.location;
+                    logger?.info?.(
+                        ctxLog({
+                            phase: 'employer-result',
+                            ok: emp.ok,
+                            source: emp.source || '',
+                            empDescLen: emp.description?.length || 0,
+                            empLocation: emp.location || '',
+                            error: emp.error || '',
+                            finalUrl: emp.finalUrl || '',
+                        }),
+                        'jrDetailScraper: employer scrape result',
+                    );
+                } else {
+                    logger?.info?.(
+                        ctxLog({ phase: 'employer-skip', applyLink, reason: wantEmployer ? 'host-not-scrapable' : 'disabled' }),
+                        'jrDetailScraper: skipped employer scrape',
+                    );
+                }
+
                 logger?.info?.(
                     ctxLog({
                         phase: 'extract-ok',
                         applyLink,
                         descLen: description.length,
+                        descriptionSource,
+                        location,
                         usedDomFallback,
                         totalMs: Date.now() - t0,
                     }),
@@ -220,7 +261,8 @@ export async function scrapeJobDetail({ browser, mutex, env, logger, jobId, reqI
                     raw: {
                         title: jr.jobTitle || '',
                         company: ds.companyResult?.companyName || '',
-                        location: jr.jobLocation || '',
+                        location,
+                        descriptionSource,
                         publishedAt: jr.publishTime || '',
                         tags: [
                             ...(jr.recommendationTags || []),

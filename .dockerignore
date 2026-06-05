@@ -26,6 +26,11 @@ storage
 runs
 ai-cache
 
+# Per-replica cluster state + generated LB config (cluster.sh).
+cluster
+docker-compose.cluster.yml
+cluster.sh
+
 # Graphify dumps + screenshots.
 .graphify_*
 graphify-out

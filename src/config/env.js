@@ -101,6 +101,15 @@ const schema = z.object({
     RECORD_HAR: envBool(false),
     DRY_RUN: envBool(false),
 
+    // When true (default), JR job-detail extraction navigates to the ORIGINAL
+    // employer applyLink and scrapes the real job description + location from
+    // the company / ATS page (JSON-LD JobPosting → ATS selectors → heuristic),
+    // falling back to JR's composed summary only if that fails / is bot-walled.
+    // Set false to use JR's structured JD directly (faster, but summary-only).
+    JR_SCRAPE_EMPLOYER: envBool(true),
+    // Per-employer-page navigation budget. Raise if target ATSes are slow.
+    JR_EMPLOYER_TIMEOUT_MS: envInt(25_000, { min: 5_000, max: 60_000 }),
+
     DASHBOARD_BASE: envUrl('http://localhost:8086'),
     DASHBOARD_SERVICE_TOKEN: z.string().optional().default(''),
 
