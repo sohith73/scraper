@@ -76,6 +76,73 @@ function settleFor(url) {
     return 1500;
 }
 
+const COUNTRY_HINTS = [
+    [/united states|usa|u\.s\.a\.|u\.s\.|us\b|remote\s*-\s*us|\bny\b|\bca\b|\btx\b|\bfl\b|\bwa\b/i, 'United States'],
+    [/canada|\bca\b|toronto|vancouver|ontario|british columbia/i, 'Canada'],
+    [/united kingdom|\buk\b|england|london/i, 'United Kingdom'],
+    [/india|bengaluru|bangalore|mumbai|delhi|hyderabad|pune/i, 'India'],
+    [/germany|berlin|munich/i, 'Germany'],
+    [/france|paris/i, 'France'],
+    [/australia|sydney|melbourne/i, 'Australia'],
+    [/singapore/i, 'Singapore'],
+];
+
+function providerFor(url) {
+    try {
+        const host = new URL(url).hostname.toLowerCase();
+        if (host.includes('greenhouse.io')) return 'greenhouse';
+        if (host.includes('ashbyhq.com')) return 'ashby';
+        if (host.includes('myworkdayjobs.com') || host.includes('workday')) return 'workday';
+        if (host.includes('lever.co')) return 'lever';
+        if (host.includes('smartrecruiters.com')) return 'smartrecruiters';
+        if (host.includes('bamboohr.com')) return 'bamboohr';
+        if (host.includes('icims.com')) return 'icims';
+        if (host.includes('indeed.')) return 'indeed';
+        if (host.includes('linkedin.com')) return 'linkedin';
+        return host.replace(/^www\./, '');
+    } catch {
+        return 'unknown';
+    }
+}
+
+function countryFromLocation(location) {
+    const loc = String(location || '').trim();
+    if (!loc) return '';
+    for (const [rx, country] of COUNTRY_HINTS) {
+        if (rx.test(loc)) return country;
+    }
+    const parts = loc.split(/[,|/]/).map((s) => s.trim()).filter(Boolean);
+    return parts.length ? parts[parts.length - 1] : '';
+}
+
+function textFromHtml(value) {
+    return String(value || '')
+        .replace(/<script[\s\S]*?<\/script>/gi, ' ')
+        .replace(/<style[\s\S]*?<\/style>/gi, ' ')
+        .replace(/<[^>]+>/g, ' ')
+        .replace(/&nbsp;/gi, ' ')
+        .replace(/&amp;/gi, '&')
+        .replace(/\s+/g, ' ')
+        .trim();
+}
+
+function locationFromDescription(description) {
+    const text = textFromHtml(description);
+    const patterns = [
+        /\b(Vancouver(?:,\s*British Columbia)?(?:,\s*Canada)?)\b/i,
+        /\b(Toronto(?:,\s*Ontario)?(?:,\s*Canada)?)\b/i,
+        /\b(San Francisco(?:,\s*CA)?(?:,\s*United States)?)\b/i,
+        /\b(New York(?:,\s*NY)?(?:,\s*United States)?)\b/i,
+        /\b(London(?:,\s*United Kingdom)?)\b/i,
+        /\b(Bengaluru|Bangalore|Hyderabad|Pune|Mumbai|Delhi)(?:,\s*India)?\b/i,
+    ];
+    for (const rx of patterns) {
+        const m = text.match(rx);
+        if (m) return m[0];
+    }
+    return '';
+}
+
 function isHttpUrl(u) {
     if (!u || typeof u !== 'string') return false;
     try {
@@ -177,7 +244,8 @@ export function createJdFetcher({
                 }
                 if (!extracted) return { ok: false, error: 'NO_DATA', message: 'pipeline returned null' };
                 const desc = String(extracted.data.description || '').trim();
-                const loc = String(extracted.data.location || '').trim();
+                const loc = String(extracted.data.location || '').trim() || locationFromDescription(desc);
+                const country = countryFromLocation(loc);
                 if (desc.length < minDescriptionChars) {
                     return {
                         ok: false,
@@ -194,11 +262,18 @@ export function createJdFetcher({
                 return {
                     ok: true,
                     description: desc,
+                    mainJd: desc,
                     location: loc,
+                    country,
+                    title: extracted.data.position || '',
+                    company: extracted.data.company || '',
+                    employmentType: extracted.data.type || '',
+                    provider: providerFor(extracted.finalUrl || url),
                     method: extracted.method,
                     confidence: extracted.confidence,
                     fieldSources: extracted.fieldSources,
                     finalUrl: extracted.finalUrl,
+                    sourceUrl: url,
                 };
             });
             return { ...result, durationMs: Date.now() - t0 };

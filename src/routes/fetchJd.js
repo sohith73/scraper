@@ -1,6 +1,8 @@
 // POST /api/fetch-jd
+// POST /api/extract/infor
+// GET  /extract/infor=<encoded job url>
 //   body : { url: string }
-//   200  : { ok:true, description, location, method, confidence, fieldSources, finalUrl, durationMs }
+//   200  : { ok:true, mainJd, description, country, location, provider, method, confidence, fieldSources, finalUrl, durationMs }
 //   400  : BAD_INPUT
 //   502  : NAV_TIMEOUT | EVAL_FAILED | NO_DATA | BROWSER_FAILURE | THIN_CONTENT
 //
@@ -31,23 +33,48 @@ export function fetchJdRouter({ container }) {
     }
     const router = Router();
 
-    router.post('/fetch-jd', async (req, res, next) => {
+    async function handleExtract(req, res, next, rawUrl) {
         const log = container.logger;
         try {
-            const url = typeof req.body?.url === 'string' ? req.body.url.trim() : '';
+            const url = typeof rawUrl === 'string' ? rawUrl.trim() : '';
             if (!url) return respondErr(res, req, 'BAD_INPUT', 'url required');
-            log?.info?.({ reqId: req.id, url }, 'fetch-jd: request');
+            log?.info?.(
+                {
+                    reqId: req.id,
+                    url,
+                    route: req.originalUrl || req.url,
+                    origin: req.get?.('origin') || '',
+                    ua: req.get?.('user-agent') || '',
+                },
+                'extract/infor: request',
+            );
             const r = await container.jdFetcher.fetchJobDetail(url);
             if (r.ok) {
                 log?.info?.(
-                    { reqId: req.id, url, method: r.method, descLen: r.description.length, durMs: r.durationMs },
-                    'fetch-jd: ok',
+                    {
+                        reqId: req.id,
+                        url,
+                        provider: r.provider,
+                        method: r.method,
+                        country: r.country || '',
+                        location: r.location || '',
+                        title: r.title || '',
+                        company: r.company || '',
+                        descLen: r.description.length,
+                        durMs: r.durationMs,
+                    },
+                    'extract/infor: ok',
                 );
-                return respondOk(res, req, r);
+                return respondOk(res, req, {
+                    ok: true,
+                    ...r,
+                    jobDescription: r.description,
+                    mainJd: r.mainJd || r.description,
+                });
             }
             log?.warn?.(
                 { reqId: req.id, url, error: r.error, message: r.message, durMs: r.durationMs },
-                'fetch-jd: failed',
+                'extract/infor: failed',
             );
             return respondErr(res, req, r.error || 'UNEXPECTED', r.message, {
                 durationMs: r.durationMs,
@@ -56,6 +83,27 @@ export function fetchJdRouter({ container }) {
         } catch (err) {
             next(err);
         }
+    }
+
+    router.post('/fetch-jd', async (req, res, next) => {
+        const url = typeof req.body?.url === 'string' ? req.body.url.trim() : '';
+        return handleExtract(req, res, next, url);
+    });
+
+    router.post('/extract/infor', async (req, res, next) => {
+        const url = typeof req.body?.url === 'string' ? req.body.url.trim() : '';
+        return handleExtract(req, res, next, url);
+    });
+
+    router.get(/^\/extract\/infor=(.+)$/i, async (req, res, next) => {
+        const encoded = req.params?.[0] || '';
+        let url = encoded;
+        try {
+            url = decodeURIComponent(encoded);
+        } catch {
+            // Keep the raw segment; fetchJobDetail will validate it.
+        }
+        return handleExtract(req, res, next, url);
     });
 
     return router;

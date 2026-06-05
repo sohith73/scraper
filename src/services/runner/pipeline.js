@@ -489,6 +489,20 @@ export async function runPipeline({
         ) {
             if (checkAbort(store, runId, logger)) return;
 
+            // Anti-throttle: space out JR page fetches with a jittered pause
+            // so our request cadence doesn't look robotic. Skip page 0 (no
+            // prior request to space from). Wait = DELAY + random(0..JITTER).
+            if (page > 0) {
+                const delayMs = Number(env?.JOBRIGHT_PAGE_DELAY_MS) || 0;
+                const jitterMs = Number(env?.JOBRIGHT_PAGE_JITTER_MS) || 0;
+                const waitMs = delayMs + (jitterMs > 0 ? Math.floor(Math.random() * jitterMs) : 0);
+                if (waitMs > 0) {
+                    logger?.debug?.({ runId, page, waitMs }, 'pipeline: inter-page jitter');
+                    await new Promise((r) => setTimeout(r, waitMs));
+                    if (checkAbort(store, runId, logger)) return;
+                }
+            }
+
             // 5. JR page fetch
             store.update(runId, { phase: PHASES.SEARCHING });
             const searchRes = await phaseTimer(`searching.page${page}`, () =>
@@ -504,13 +518,23 @@ export async function runPipeline({
             if (!searchRes.ok) {
                 if (COOLDOWN_TRIGGER_CODES.has(searchRes.error.code)) {
                     const ms = Number(env?.JOBRIGHT_COOLDOWN_MS) || 900_000;
-                    const expiresAt = new Date(Date.now() + ms).toISOString();
-                    await setCooldown(env?.RUNS_DIR || './runs', {
+                    const cd = await setCooldown(env?.RUNS_DIR || './runs', {
                         ms,
+                        maxMs: Number(env?.JOBRIGHT_COOLDOWN_MAX_MS) || 4 * 60 * 60 * 1000,
                         reason: `${searchRes.error.code}: ${searchRes.error.message}`,
                         code: searchRes.error.code,
                     });
-                    logger?.warn?.({ code: searchRes.error.code, cooldownMs: ms }, 'cooldown set');
+                    // Use the escalated wait from the record (exp backoff) so
+                    // the ops alert + logs reflect the ACTUAL retry time.
+                    const expiresAt = cd?.record?.until || new Date(Date.now() + ms).toISOString();
+                    logger?.warn?.(
+                        {
+                            code: searchRes.error.code,
+                            cooldownMs: cd?.record?.effectiveMs || ms,
+                            consecutive: cd?.record?.consecutiveCount ?? 0,
+                        },
+                        'cooldown set',
+                    );
                     // Fire-and-forget ops alert.
                     notifyCooldown({
                         notifier,

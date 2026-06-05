@@ -32,17 +32,43 @@ export async function readCooldown(runsDir) {
     }
 }
 
-// setCooldown: writes a cooldown record. Best-effort; failures logged by
-// the caller (if provided).
-// input  : runsDir, { ms, reason?, code?, now? }
-// output : Promise<{record, path} | null>
-export async function setCooldown(runsDir, { ms, reason = '', code = 'COOLDOWN', now = Date.now() } = {}) {
+// setCooldown: writes a cooldown record with EXPONENTIAL BACKOFF across
+// consecutive throttles. A flat 15-minute wait does nothing if JR is
+// repeatedly angry; each repeat throttle doubles the base wait (15m→30m→1h…)
+// up to `maxMs`. A "repeat" is a new cooldown set while the previous one is
+// still active or within one base-window of having expired — otherwise the
+// streak is considered broken and the count resets to 0.
+// Best-effort; failures logged by the caller (if provided).
+// input  : runsDir, { ms, reason?, code?, now?, maxMs? }
+// output : Promise<{record, path} | null>  (record.until reflects the backoff)
+export async function setCooldown(
+    runsDir,
+    { ms, reason = '', code = 'COOLDOWN', now = Date.now(), maxMs = 4 * 60 * 60 * 1000 } = {},
+) {
     if (!Number.isFinite(ms) || ms <= 0) return null;
+
+    let consecutiveCount = 0;
+    const prev = await readCooldown(runsDir);
+    if (prev) {
+        const prevUntil = Date.parse(prev.until);
+        const prevBase = Number(prev.baseMs) || ms;
+        // Still cooling (now < until) OR re-throttled within one base-window
+        // of expiry → JR is still mad, escalate. Else the streak is broken.
+        if (Number.isFinite(prevUntil) && now - prevUntil <= prevBase) {
+            consecutiveCount = (Number(prev.consecutiveCount) || 0) + 1;
+        }
+    }
+    const cap = Number.isFinite(maxMs) && maxMs > 0 ? maxMs : Infinity;
+    const effectiveMs = Math.min(ms * 2 ** consecutiveCount, cap);
+
     const record = {
         code,
         reason: String(reason).slice(0, 500),
         setAt: new Date(now).toISOString(),
-        until: new Date(now + ms).toISOString(),
+        until: new Date(now + effectiveMs).toISOString(),
+        baseMs: ms,
+        effectiveMs,
+        consecutiveCount,
     };
     try {
         await writeFile(cooldownPath(runsDir), JSON.stringify(record, null, 2), 'utf8');

@@ -94,6 +94,25 @@ export function buildContainer({ overrides = {}, logger = rootLogger } = {}) {
     const browser = createBrowserHandle({ env, logger });
     const session = createSessionService({ env, browser, mutex, logger });
 
+    // Periodic Chromium context recycle — long-running headless Chromium
+    // grows unbounded (DOM caches, V8 heap, history). Close the context on a
+    // timer so withContext() reopens a fresh one on the next scrape. Routed
+    // THROUGH the mutex so it never closes a context mid-scrape; close() is a
+    // no-op when nothing is open. unref() so the timer never holds the
+    // process open on shutdown.
+    const recycleMs = Number(env.CHROMIUM_RECYCLE_MS) || 0;
+    if (recycleMs > 0) {
+        const recycleTimer = setInterval(() => {
+            mutex
+                .run(async () => {
+                    logger?.info?.('scheduled chromium context recycle — flushing memory');
+                    await browser.close();
+                })
+                .catch((e) => logger?.warn?.({ err: e?.message }, 'chromium recycle failed'));
+        }, recycleMs);
+        if (recycleTimer.unref) recycleTimer.unref();
+    }
+
     // Per-client browser pool — one persistent context per client when the
     // client supplies their own JR creds. Pool LRU-evicts at 8 to keep
     // disk + memory bounded; revisit if we routinely scrape > 8 distinct

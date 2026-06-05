@@ -122,6 +122,26 @@ const schema = z.object({
 
     JOBRIGHT_BASE: envUrl('https://jobright.ai'),
     JOBRIGHT_COOLDOWN_MS: envInt(900_000, { min: 0 }),
+    // Exponential-backoff ceiling for CONSECUTIVE cooldowns. Each repeat
+    // throttle doubles the base wait (15m→30m→1h…) up to this cap.
+    JOBRIGHT_COOLDOWN_MAX_MS: envInt(4 * 60 * 60 * 1000, { min: 0 }),
+    // Anti-throttle: pause between JR page fetches so request cadence isn't
+    // robotic. Actual wait = DELAY + random(0..JITTER). Set both 0 to disable.
+    JOBRIGHT_PAGE_DELAY_MS: envInt(400, { min: 0, max: 60_000 }),
+    JOBRIGHT_PAGE_JITTER_MS: envInt(2_000, { min: 0, max: 60_000 }),
+    // Browser fingerprint normalisation (reduces automation signal).
+    JR_USER_AGENT: z.string().optional().default(''),
+    JR_LOCALE: z.string().default('en-US'),
+    JR_TIMEZONE: z.string().optional().default(''),
+    // Recycle the shared Chromium context every N ms to flush memory leaks
+    // (long-running headless Chromium grows unbounded). 0 disables.
+    CHROMIUM_RECYCLE_MS: envInt(6 * 60 * 60 * 1000, { min: 0 }),
+    // Caller-side timeout for a single mutex-guarded browser op. Surfaces a
+    // clean error to the HTTP caller instead of an indefinite hang. 0 = off.
+    MUTEX_OP_TIMEOUT_MS: envInt(0, { min: 0, max: 600_000 }),
+    // Delete runs/<id>/ directories older than N days on boot (keeps the
+    // cold-start state scan + disk bounded). 0 disables pruning.
+    RUNS_RETENTION_DAYS: envInt(7, { min: 0, max: 365 }),
 
     // JobRight credentials for programmatic login. If absent, the scraper
     // falls back to manual headed login via POST /api/admin/first-login.

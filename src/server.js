@@ -22,6 +22,7 @@ import { debugRouter } from './routes/debug.js';
 import { jrRouter } from './routes/jr.js';
 import { fetchJdRouter } from './routes/fetchJd.js';
 import { buildContainer } from './container.js';
+import { pruneOldRuns } from './services/runner/prune.js';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const PUBLIC_DIR = resolve(__dirname, '../public');
@@ -139,6 +140,7 @@ export function buildApp({ container = buildContainer() } = {}) {
     // fetch-jd: site-side JD enrichment for the JR-direct extension.
     if (container.jdFetcher) {
         app.use('/api', fetchJdRouter({ container }));
+        app.use('/', fetchJdRouter({ container }));
     }
 
     // Static UI. Served AFTER /api so a stray public/api.html can't shadow.
@@ -202,6 +204,16 @@ export async function startServer({ port = env.PORT } = {}) {
             resolveListen();
         });
     });
+
+    // Boot-time housekeeping: drop run dirs older than the retention window so
+    // the cold-start state scan + disk stay bounded. Runs only here (the real
+    // server entrypoint), never in buildApp()/buildContainer() used by tests.
+    // Fire-and-forget — never blocks the listener.
+    const retentionDays = Number(env.RUNS_RETENTION_DAYS ?? 7);
+    if (retentionDays > 0) {
+        pruneOldRuns(env.RUNS_DIR, { maxAgeDays: retentionDays, logger })
+            .catch((e) => logger.warn({ err: e?.message }, 'startup runs prune failed'));
+    }
 
     // --- graceful shutdown ------------------------------------------------
     let shuttingDown = false;

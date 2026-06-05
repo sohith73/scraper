@@ -82,7 +82,6 @@ const BLOCKED_HOST_RX = /(^|\.)(linkedin\.com|dice\.com|indeed\.com|lifeattiktok
 const BLOCKED_SUBSTRING_RX = /(linkedin\.com|dice\.com|indeed\.com|lifeattiktok\.com|dataannotation\.tech|dickssportinggoods)/i;
 export function isLinkedInApplyUrl(url) {
     if (typeof url !== 'string' || !url) return false;
-    if (BLOCKED_SUBSTRING_RX.test(url)) return true;
     try {
         return BLOCKED_HOST_RX.test(new URL(url).hostname);
     } catch {

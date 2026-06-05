@@ -101,6 +101,9 @@ export async function scrapeJobDetail({ browser, mutex, env, logger, jobId, reqI
     const t0 = Date.now();
     const ctxLog = (extra) => ({ reqId, jobId, ...extra });
     logger?.info?.(ctxLog({ phase: 'queue' }), 'jrDetailScraper: queued for mutex');
+    // Caller-side timeout so a wedged JR/employer navigation returns a clean
+    // error to the extension instead of hanging the request. 0 = off.
+    const opTimeoutMs = Number(env?.MUTEX_OP_TIMEOUT_MS) || 0;
     return mutex.run(async () => {
         const tMutex = Date.now();
         logger?.info?.(ctxLog({ phase: 'mutex-acquired', waitMs: tMutex - t0 }), 'jrDetailScraper: mutex acquired');
@@ -282,5 +285,5 @@ export async function scrapeJobDetail({ browser, mutex, env, logger, jobId, reqI
                 await page.close().catch(() => {});
             }
         });
-    });
+    }, { timeoutMs: opTimeoutMs, label: `jr/job-detail ${jobId}` });
 }

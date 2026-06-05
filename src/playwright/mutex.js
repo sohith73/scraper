@@ -16,7 +16,14 @@ export function createMutex() {
     let tail = Promise.resolve();
     let waiting = 0;
 
-    function run(fn) {
+    // run(fn, opts?) — opts.timeoutMs (>0) makes the CALLER's promise reject
+    // if fn hasn't settled in time, so a wedged navigation surfaces a clean
+    // error to the HTTP handler instead of hanging it. The queue ordering is
+    // unchanged: the next waiter still chains off `attempt` (the real fn), so
+    // we never run two ops against the single Chromium context concurrently.
+    // Playwright's own per-action timeouts bound how long the queue can stay
+    // blocked behind a slow op; this guard just unblocks the caller.
+    function run(fn, { timeoutMs = 0, label = '' } = {}) {
         waiting += 1;
         const attempt = tail.then(
             () => fn(),
@@ -33,6 +40,19 @@ export function createMutex() {
         tail.finally(() => {
             waiting -= 1;
         });
+        if (timeoutMs > 0) {
+            let timer;
+            const guard = new Promise((_, reject) => {
+                timer = setTimeout(
+                    () => reject(new Error(`mutex op timeout after ${timeoutMs}ms${label ? `: ${label}` : ''}`)),
+                    timeoutMs,
+                );
+            });
+            return Promise.race([
+                attempt.finally(() => clearTimeout(timer)),
+                guard,
+            ]);
+        }
         return attempt;
     }
 
