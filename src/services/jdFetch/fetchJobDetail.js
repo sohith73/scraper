@@ -18,6 +18,7 @@
 import { readFile } from 'node:fs/promises';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
+import { httpExtractJobDetail } from './htmlExtract.js';
 
 const HERE = dirname(fileURLToPath(import.meta.url));
 const EXTRACTORS_DIR = join(HERE, '..', '..', 'playwright', 'extractors');
@@ -165,9 +166,64 @@ export function createJdFetcher({
     navTimeoutMs = 25000,
     minDescriptionChars = 300,
     maxConcurrent = 2,
+    // Tier 0 (HTTP-first). When true, every request first tries a plain HTTP
+    // GET + JSON-LD parse (no browser). Only thin/empty results fall through
+    // to the Chromium tier below. This is where the throughput win comes from.
+    httpFirst = true,
+    httpTimeoutMs = 8000,
+    httpConcurrency = 40,
+    // URL-level result cache (createUrlCache). null disables caching.
+    cache = null,
+    // Hard cap on URLs accepted per batch call.
+    batchMax = 50,
+    userAgent = '',
 } = {}) {
     if (!browser?.withContext) {
         throw new Error('createJdFetcher: browser handle required');
+    }
+
+    // Hosts where a plain HTTP GET is pointless or actively bot-walled (returns
+    // a login/challenge page, never JSON-LD) — skip Tier 0, go straight to the
+    // browser tier. Most of these are excluded upstream anyway, but guard here
+    // too so a stray URL doesn't waste a round-trip.
+    const BROWSER_ONLY_HOST = /(^|\.)(linkedin\.com|indeed\.|glassdoor\.|ziprecruiter\.)/i;
+    function isBrowserOnlyHost(url) {
+        try {
+            return BROWSER_ONLY_HOST.test(new URL(url).hostname);
+        } catch {
+            return false;
+        }
+    }
+
+    // Tier 0: HTTP GET + JSON-LD. Returns a full, route-shaped result on
+    // success, or null to signal "fall through to the browser tier". Never
+    // touches the Chromium semaphore.
+    async function tryHttp(url) {
+        const t0 = Date.now();
+        const r = await httpExtractJobDetail(url, { timeoutMs: httpTimeoutMs, userAgent: userAgent || undefined });
+        if (!r.ok) return null;
+        const desc = String(r.description || '').trim();
+        // Accept only when JSON-LD carried a real description. A bare location
+        // with no/thin JD still warrants a browser render attempt.
+        if (desc.length < minDescriptionChars) return null;
+        const loc = String(r.location || '').trim();
+        return {
+            ok: true,
+            description: desc,
+            mainJd: desc,
+            location: loc,
+            country: r.country || '',
+            title: r.position || '',
+            company: r.company || '',
+            employmentType: r.type || '',
+            provider: providerFor(r.finalUrl || url),
+            method: 'json-ld-http',
+            tier: 'http',
+            confidence: 95,
+            finalUrl: r.finalUrl || url,
+            sourceUrl: url,
+            durationMs: Date.now() - t0,
+        };
     }
 
     // Tiny semaphore. Resolve a slot, do the work, release.
@@ -189,11 +245,11 @@ export function createJdFetcher({
         }
     }
 
-    async function runOnce(url) {
+    // Tier 1: full Chromium render + in-page extractor pipeline. Holds a
+    // browser semaphore slot for its whole duration. Only reached when Tier 0
+    // (HTTP/JSON-LD) missed or was skipped.
+    async function runBrowser(url) {
         const t0 = Date.now();
-        if (!isHttpUrl(url)) {
-            return { ok: false, error: 'BAD_INPUT', message: 'http(s) url required', durationMs: 0 };
-        }
         const bundle = await loadBundle();
         let page = null;
         try {
@@ -270,6 +326,7 @@ export function createJdFetcher({
                     employmentType: extracted.data.type || '',
                     provider: providerFor(extracted.finalUrl || url),
                     method: extracted.method,
+                    tier: 'browser',
                     confidence: extracted.confidence,
                     fieldSources: extracted.fieldSources,
                     finalUrl: extracted.finalUrl,
@@ -292,14 +349,105 @@ export function createJdFetcher({
         }
     }
 
-    async function fetchJobDetail(url) {
+    // Browser tier wrapped in the semaphore. Caches successful results.
+    async function browserTier(url) {
         await acquire();
+        let r;
         try {
-            return await runOnce(url);
+            r = await runBrowser(url);
         } finally {
             release();
         }
+        if (r && r.ok && cache) await cache.set(url, r);
+        return r;
     }
 
-    return { fetchJobDetail };
+    // Single-URL extraction. Order: cache → Tier 0 (HTTP/JSON-LD) → Tier 1
+    // (browser). Tier 0 never takes a browser slot, so most traffic bypasses
+    // the Chromium bottleneck entirely.
+    async function fetchJobDetail(url) {
+        if (!isHttpUrl(url)) {
+            return { ok: false, error: 'BAD_INPUT', message: 'http(s) url required', durationMs: 0 };
+        }
+        if (cache) {
+            const hit = await cache.get(url);
+            if (hit) return { ...hit, cached: true };
+        }
+        if (httpFirst && !isBrowserOnlyHost(url)) {
+            const t = await tryHttp(url);
+            if (t) {
+                if (cache) await cache.set(url, t);
+                return t;
+            }
+        }
+        return browserTier(url);
+    }
+
+    // Bounded-concurrency map. Runs `fn` over `items` with at most `limit`
+    // in flight. Errors per-item are caught and surfaced as the rejected
+    // value so one bad URL never sinks the batch.
+    async function mapLimit(items, limit, fn) {
+        const out = new Array(items.length);
+        let cursor = 0;
+        const workers = Array.from({ length: Math.min(Math.max(1, limit), items.length || 1) }, async () => {
+            while (cursor < items.length) {
+                const idx = cursor;
+                cursor += 1;
+                try {
+                    out[idx] = await fn(items[idx], idx);
+                } catch (e) {
+                    out[idx] = { ok: false, error: 'UNEXPECTED', message: e?.message || 'failed' };
+                }
+            }
+        });
+        await Promise.all(workers);
+        return out;
+    }
+
+    // Batch extraction. Phase 1 runs cache + Tier 0 across ALL urls at high
+    // concurrency (httpConcurrency) — cheap, no browser. Only the Tier-0
+    // misses go to Phase 2 (browser tier, capped by the semaphore). Returns a
+    // plain object keyed by the original URL → result.
+    async function fetchJobDetailBatch(urls) {
+        const seen = new Set();
+        const list = [];
+        for (const raw of Array.isArray(urls) ? urls : []) {
+            const u = typeof raw === 'string' ? raw.trim() : '';
+            if (!isHttpUrl(u) || seen.has(u)) continue;
+            seen.add(u);
+            list.push(u);
+            if (list.length >= batchMax) break;
+        }
+        const results = {};
+        if (!list.length) return results;
+
+        const misses = [];
+        await mapLimit(list, httpConcurrency, async (url) => {
+            if (cache) {
+                const hit = await cache.get(url);
+                if (hit) {
+                    results[url] = { ...hit, cached: true };
+                    return;
+                }
+            }
+            if (httpFirst && !isBrowserOnlyHost(url)) {
+                const t = await tryHttp(url);
+                if (t) {
+                    if (cache) await cache.set(url, t);
+                    results[url] = t;
+                    return;
+                }
+            }
+            misses.push(url);
+        });
+
+        if (misses.length) {
+            await mapLimit(misses, maxConcurrent, async (url) => {
+                results[url] = await browserTier(url);
+            });
+        }
+        return results;
+    }
+
+    return { fetchJobDetail, fetchJobDetailBatch };
 }

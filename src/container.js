@@ -34,7 +34,7 @@ import {
 } from './services/clientSettings/index.js';
 import { createMongoConnection } from './storage/mongo.js';
 import { createDiscordNotifier } from './services/notify/index.js';
-import { createJdFetcher } from './services/jdFetch/index.js';
+import { createJdFetcher, createUrlCache } from './services/jdFetch/index.js';
 
 // buildContainer: returns `{ dashboard, resume, ai, summariser, logger, env }`.
 // Any field in `overrides` wins over the default construction — handy for
@@ -173,6 +173,13 @@ export function buildContainer({ overrides = {}, logger = rootLogger } = {}) {
     // jdFetcher — opens an apply URL in the persistent context, runs the
     // ported FlashFire DOM extractors, returns description + location.
     // Optional: only constructed when a browser handle is available.
+    // URL-level JD cache — repeat URLs skip extraction. Shared across replicas
+    // when the dir lives on a shared volume (cluster.sh mounts ./jd-cache).
+    const jdCache = createUrlCache({
+        dir: env.JDFETCH_CACHE_DIR,
+        ttlMs: Number(env.JDFETCH_CACHE_TTL_MS ?? 0),
+        logger,
+    });
     const jdFetcher = browser
         ? createJdFetcher({
               browser,
@@ -180,6 +187,12 @@ export function buildContainer({ overrides = {}, logger = rootLogger } = {}) {
               navTimeoutMs: Number(env.JDFETCH_NAV_TIMEOUT_MS) || 25000,
               minDescriptionChars: Number(env.JDFETCH_MIN_DESC_CHARS) || 300,
               maxConcurrent: Number(env.JDFETCH_MAX_CONCURRENT) || 2,
+              httpFirst: env.JDFETCH_HTTP_FIRST !== false,
+              httpTimeoutMs: Number(env.JDFETCH_HTTP_TIMEOUT_MS) || 8000,
+              httpConcurrency: Number(env.JDFETCH_HTTP_CONCURRENCY) || 40,
+              batchMax: Number(env.JDFETCH_BATCH_MAX) || 50,
+              userAgent: env.JR_USER_AGENT || '',
+              cache: jdCache,
           })
         : null;
 

@@ -90,6 +90,47 @@ export function fetchJdRouter({ container }) {
         return handleExtract(req, res, next, url);
     });
 
+    // POST /api/fetch-jd/batch  { urls: string[] }
+    //   200 : { success:true, results: { <url>: <result>, ... }, counts }
+    // Each result mirrors the single-URL shape (ok / description / country /
+    // location / provider / tier / error …). Tier-0 (HTTP/JSON-LD) URLs are
+    // resolved at high concurrency; only browser-tier misses queue on the
+    // Chromium semaphore. One bad URL never sinks the batch.
+    router.post('/fetch-jd/batch', async (req, res, next) => {
+        const log = container.logger;
+        try {
+            if (!container.jdFetcher.fetchJobDetailBatch) {
+                return respondErr(res, req, 'UNEXPECTED', 'batch not supported');
+            }
+            const urls = Array.isArray(req.body?.urls) ? req.body.urls : null;
+            if (!urls || !urls.length) {
+                return respondErr(res, req, 'BAD_INPUT', 'urls[] required');
+            }
+            const t0 = Date.now();
+            const results = await container.jdFetcher.fetchJobDetailBatch(urls);
+            const vals = Object.values(results);
+            const counts = {
+                requested: urls.length,
+                returned: vals.length,
+                ok: vals.filter((r) => r && r.ok).length,
+                http: vals.filter((r) => r && r.tier === 'http').length,
+                browser: vals.filter((r) => r && r.tier === 'browser').length,
+                cached: vals.filter((r) => r && r.cached).length,
+            };
+            // Normalise each ok result so the extension reads the same field
+            // names as the single endpoint (jobDescription / mainJd).
+            for (const [url, r] of Object.entries(results)) {
+                if (r && r.ok) {
+                    results[url] = { ...r, jobDescription: r.description, mainJd: r.mainJd || r.description };
+                }
+            }
+            log?.info?.({ reqId: req.id, ...counts, durMs: Date.now() - t0 }, 'fetch-jd/batch: done');
+            return respondOk(res, req, { ok: true, results, counts, durationMs: Date.now() - t0 });
+        } catch (err) {
+            next(err);
+        }
+    });
+
     router.post('/extract/infor', async (req, res, next) => {
         const url = typeof req.body?.url === 'string' ? req.body.url.trim() : '';
         return handleExtract(req, res, next, url);

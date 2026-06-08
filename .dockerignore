@@ -25,6 +25,7 @@ server.log
 storage
 runs
 ai-cache
+jd-cache
 
 # Per-replica cluster state + generated LB config (cluster.sh).
 cluster

@@ -110,6 +110,25 @@ const schema = z.object({
     // Per-employer-page navigation budget. Raise if target ATSes are slow.
     JR_EMPLOYER_TIMEOUT_MS: envInt(25_000, { min: 5_000, max: 60_000 }),
 
+    // --- JD extraction (fetch-jd / extract/infor + batch) ----------------
+    // Tier 0: try a plain HTTP GET + JSON-LD parse before launching Chromium.
+    // ~70-80% of ATS pages ship JobPosting JSON-LD in the raw HTML, so most
+    // requests never touch the browser. Set false to force browser-only.
+    JDFETCH_HTTP_FIRST: envBool(true),
+    JDFETCH_HTTP_TIMEOUT_MS: envInt(8_000, { min: 1_000, max: 30_000 }),
+    // Tier 0 fan-out — plain HTTP has no RAM ceiling, so run many at once.
+    JDFETCH_HTTP_CONCURRENCY: envInt(40, { min: 1, max: 200 }),
+    // Browser tier (Tier 1) page cap + per-page nav budget + min JD length
+    // before a result counts as complete.
+    JDFETCH_MAX_CONCURRENT: envInt(2, { min: 1, max: 16 }),
+    JDFETCH_NAV_TIMEOUT_MS: envInt(25_000, { min: 5_000, max: 60_000 }),
+    JDFETCH_MIN_DESC_CHARS: envInt(300, { min: 0, max: 5_000 }),
+    // URL-level result cache: repeat URLs skip extraction. 0 disables.
+    JDFETCH_CACHE_TTL_MS: envInt(24 * 60 * 60 * 1000, { min: 0 }),
+    JDFETCH_CACHE_DIR: z.string().default('./jd-cache'),
+    // Hard cap on URLs accepted per POST /api/fetch-jd/batch call.
+    JDFETCH_BATCH_MAX: envInt(50, { min: 1, max: 500 }),
+
     DASHBOARD_BASE: envUrl('http://localhost:8086'),
     DASHBOARD_SERVICE_TOKEN: z.string().optional().default(''),
 

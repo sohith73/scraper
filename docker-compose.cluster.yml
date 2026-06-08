@@ -17,6 +17,7 @@ services:
       - STORAGE_DIR=/app/storage
       - RUNS_DIR=/app/runs
       - AI_CACHE_DIR=/app/ai-cache
+      - JDFETCH_CACHE_DIR=/app/jd-cache
       - HEADLESS=true
       - REPLICA_ID=1
     env_file:
@@ -25,6 +26,7 @@ services:
       - ./cluster/storage-1:/app/storage
       - ./runs:/app/runs
       - ./ai-cache:/app/ai-cache
+      - ./jd-cache:/app/jd-cache
     restart: always
     stop_grace_period: 30s
     shm_size: 1gb
@@ -58,6 +60,7 @@ services:
       - STORAGE_DIR=/app/storage
       - RUNS_DIR=/app/runs
       - AI_CACHE_DIR=/app/ai-cache
+      - JDFETCH_CACHE_DIR=/app/jd-cache
       - HEADLESS=true
       - REPLICA_ID=2
     env_file:
@@ -66,6 +69,7 @@ services:
       - ./cluster/storage-2:/app/storage
       - ./runs:/app/runs
       - ./ai-cache:/app/ai-cache
+      - ./jd-cache:/app/jd-cache
     restart: always
     stop_grace_period: 30s
     shm_size: 1gb
@@ -99,6 +103,7 @@ services:
       - STORAGE_DIR=/app/storage
       - RUNS_DIR=/app/runs
       - AI_CACHE_DIR=/app/ai-cache
+      - JDFETCH_CACHE_DIR=/app/jd-cache
       - HEADLESS=true
       - REPLICA_ID=3
     env_file:
@@ -107,6 +112,7 @@ services:
       - ./cluster/storage-3:/app/storage
       - ./runs:/app/runs
       - ./ai-cache:/app/ai-cache
+      - ./jd-cache:/app/jd-cache
     restart: always
     stop_grace_period: 30s
     shm_size: 1gb

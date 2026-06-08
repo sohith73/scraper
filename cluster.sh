@@ -115,7 +115,7 @@ validate_replicas() {
 
 # ---- generate per-replica storage dirs -------------------------------------
 ensure_dirs() {
-    mkdir -p runs ai-cache "$CLUSTER_DIR"
+    mkdir -p runs ai-cache jd-cache "$CLUSTER_DIR"
     local i
     for i in $(seq 1 "$REPLICAS"); do
         mkdir -p "$CLUSTER_DIR/storage-$i"
@@ -194,6 +194,7 @@ gen_compose() {
             printf '      - STORAGE_DIR=/app/storage\n'
             printf '      - RUNS_DIR=/app/runs\n'
             printf '      - AI_CACHE_DIR=/app/ai-cache\n'
+            printf '      - JDFETCH_CACHE_DIR=/app/jd-cache\n'
             printf '      - HEADLESS=true\n'
             printf '      - REPLICA_ID=%s\n' "$i"
             printf '    env_file:\n'
@@ -202,6 +203,7 @@ gen_compose() {
             printf '      - ./cluster/storage-%s:/app/storage\n' "$i"
             printf '      - ./runs:/app/runs\n'
             printf '      - ./ai-cache:/app/ai-cache\n'
+            printf '      - ./jd-cache:/app/jd-cache\n'
             printf '    restart: always\n'
             printf '    stop_grace_period: 30s\n'
             printf '    shm_size: 1gb\n'
