@@ -127,6 +127,19 @@ function textFromHtml(value) {
         .trim();
 }
 
+// cleanPageText — tidy raw document.innerText: drop CRs, collapse runs of
+// spaces/tabs per line, trim line ends, and squeeze 3+ blank lines to one.
+// Preserves the line structure so the grader still sees section breaks.
+function cleanPageText(text) {
+    return String(text || '')
+        .replace(/\r/g, '')
+        .split('\n')
+        .map((line) => line.replace(/[ \t]+/g, ' ').trimEnd())
+        .join('\n')
+        .replace(/\n{3,}/g, '\n\n')
+        .trim();
+}
+
 function locationFromDescription(description) {
     const text = textFromHtml(description);
     const patterns = [
@@ -362,6 +375,83 @@ export function createJdFetcher({
         return r;
     }
 
+    // fetchPageText — open the URL in the browser and return ALL visible text
+    // on the rendered page (document.body.innerText), not a provider-parsed
+    // JD. Used by /extract/infor= for the dashboard's second-stage screening:
+    // the grader wants the entire posting (everything the page shows), not a
+    // selector-scoped excerpt that can miss or fail THIN_CONTENT. Always uses
+    // the browser tier (Tier-0 HTTP can't render JS pages). On success returns
+    // pageText AND mirrors it into description/mainJd so existing callers that
+    // read those fields keep working.
+    async function fetchPageText(url) {
+        if (!isHttpUrl(url)) {
+            return { ok: false, error: 'BAD_INPUT', message: 'http(s) url required', durationMs: 0 };
+        }
+        const t0 = Date.now();
+        await acquire();
+        let page = null;
+        try {
+            const result = await browser.withContext({ headless: true }, async (ctx) => {
+                page = await ctx.newPage();
+                // Block heavy assets — we only need rendered text.
+                await page.route('**/*', (route) => {
+                    const t = route.request().resourceType();
+                    if (t === 'image' || t === 'media' || t === 'font') return route.abort();
+                    return route.continue();
+                });
+                try {
+                    await page.goto(url, { waitUntil: 'domcontentloaded', timeout: navTimeoutMs });
+                } catch (err) {
+                    return { ok: false, error: 'NAV_TIMEOUT', message: err.message };
+                }
+                // Settle for SPA hydration so the JD body has mounted.
+                await page.waitForTimeout(settleFor(url));
+                let out;
+                try {
+                    out = await page.evaluate(() => ({
+                        text: (document.body && document.body.innerText) ? document.body.innerText : '',
+                        finalUrl: window.location.href,
+                        title: document.title || '',
+                    }));
+                } catch (err) {
+                    return { ok: false, error: 'EVAL_FAILED', message: err.message };
+                }
+                const clean = cleanPageText(out.text);
+                const finalUrl = out.finalUrl || url;
+                if (clean.length < minDescriptionChars) {
+                    return {
+                        ok: false,
+                        error: 'THIN_CONTENT',
+                        message: `page text ${clean.length} < ${minDescriptionChars}`,
+                        partial: { pageText: clean, finalUrl, title: out.title || '' },
+                    };
+                }
+                return {
+                    ok: true,
+                    pageText: clean,
+                    // Mirror into the fields existing consumers read.
+                    description: clean,
+                    mainJd: clean,
+                    title: out.title || '',
+                    provider: providerFor(finalUrl),
+                    method: 'full-text',
+                    tier: 'browser',
+                    confidence: 'full-text',
+                    finalUrl,
+                    sourceUrl: url,
+                };
+            });
+            return { ...result, durationMs: Date.now() - t0 };
+        } catch (err) {
+            logger?.warn?.({ url, err: err.message }, '[jdFetch] fetchPageText failure');
+            return { ok: false, error: 'BROWSER_FAILURE', message: err.message, durationMs: Date.now() - t0 };
+        } finally {
+            if (page) {
+                try { await page.close(); } catch {}
+            }
+        }
+    }
+
     // Single-URL extraction. Order: cache → Tier 0 (HTTP/JSON-LD) → Tier 1
     // (browser). Tier 0 never takes a browser slot, so most traffic bypasses
     // the Chromium bottleneck entirely.
@@ -449,5 +539,5 @@ export function createJdFetcher({
         return results;
     }
 
-    return { fetchJobDetail, fetchJobDetailBatch };
+    return { fetchJobDetail, fetchJobDetailBatch, fetchPageText };
 }

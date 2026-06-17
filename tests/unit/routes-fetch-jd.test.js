@@ -41,6 +41,19 @@ function makeContainer(overrides = {}) {
                 finalUrl: url,
                 durationMs: 12,
             }),
+            // /extract/infor routes return the full visible page text.
+            fetchPageText: async (url) => ({
+                ok: true,
+                pageText: `FULL PAGE TEXT for ${url}`,
+                description: `FULL PAGE TEXT for ${url}`,
+                mainJd: `FULL PAGE TEXT for ${url}`,
+                title: 'Some Job',
+                provider: 'greenhouse',
+                method: 'full-text',
+                tier: 'browser',
+                finalUrl: url,
+                durationMs: 20,
+            }),
         },
         ...overrides,
     };
@@ -60,7 +73,7 @@ async function startEphemeral(container = makeContainer()) {
     });
 }
 
-test('GET /extract/infor=<encoded url> returns main JD metadata', async () => {
+test('GET /extract/infor=<encoded url> returns full page text', async () => {
     const srv = await startEphemeral();
     after(() => srv.close());
 
@@ -70,14 +83,14 @@ test('GET /extract/infor=<encoded url> returns main JD metadata', async () => {
     const body = await res.json();
     assert.equal(body.success, true);
     assert.equal(body.ok, true);
-    assert.equal(body.mainJd, `JD for ${jobUrl}`);
-    assert.equal(body.jobDescription, `JD for ${jobUrl}`);
-    assert.equal(body.country, 'United States');
+    assert.equal(body.pageText, `FULL PAGE TEXT for ${jobUrl}`);
+    assert.equal(body.mainJd, `FULL PAGE TEXT for ${jobUrl}`);
+    assert.equal(body.jobDescription, `FULL PAGE TEXT for ${jobUrl}`);
     assert.equal(body.provider, 'greenhouse');
     assert.equal(body.finalUrl, jobUrl);
 });
 
-test('POST /api/extract/infor accepts url in JSON body', async () => {
+test('POST /api/extract/infor returns full page text', async () => {
     const srv = await startEphemeral();
     after(() => srv.close());
 
@@ -90,6 +103,7 @@ test('POST /api/extract/infor accepts url in JSON body', async () => {
     assert.equal(res.status, 200);
     const body = await res.json();
     assert.equal(body.success, true);
-    assert.equal(body.mainJd, `JD for ${jobUrl}`);
+    assert.equal(body.pageText, `FULL PAGE TEXT for ${jobUrl}`);
+    assert.equal(body.mainJd, `FULL PAGE TEXT for ${jobUrl}`);
     assert.equal(body.provider, 'greenhouse');
 });

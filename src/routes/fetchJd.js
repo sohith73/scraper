@@ -33,7 +33,13 @@ export function fetchJdRouter({ container }) {
     }
     const router = Router();
 
-    async function handleExtract(req, res, next, rawUrl) {
+    // handleExtract — resolve a job URL to text.
+    //   fullText=true  → ALL visible page text (document.innerText) via the
+    //                    browser. Used by /extract/infor (second-stage screening
+    //                    wants the entire posting, not a parsed excerpt).
+    //   fullText=false → provider-parsed JD (JSON-LD/selectors). Used by
+    //                    /fetch-jd (scrape-pipeline enrichment).
+    async function handleExtract(req, res, next, rawUrl, fullText = false) {
         const log = container.logger;
         try {
             const url = typeof rawUrl === 'string' ? rawUrl.trim() : '';
@@ -42,14 +48,18 @@ export function fetchJdRouter({ container }) {
                 {
                     reqId: req.id,
                     url,
+                    mode: fullText ? 'full-text' : 'parsed',
                     route: req.originalUrl || req.url,
                     origin: req.get?.('origin') || '',
                     ua: req.get?.('user-agent') || '',
                 },
                 'extract/infor: request',
             );
-            const r = await container.jdFetcher.fetchJobDetail(url);
+            const r = fullText
+                ? await container.jdFetcher.fetchPageText(url)
+                : await container.jdFetcher.fetchJobDetail(url);
             if (r.ok) {
+                const text = r.description || r.pageText || '';
                 log?.info?.(
                     {
                         reqId: req.id,
@@ -60,7 +70,7 @@ export function fetchJdRouter({ container }) {
                         location: r.location || '',
                         title: r.title || '',
                         company: r.company || '',
-                        descLen: r.description.length,
+                        descLen: text.length,
                         durMs: r.durationMs,
                     },
                     'extract/infor: ok',
@@ -68,8 +78,9 @@ export function fetchJdRouter({ container }) {
                 return respondOk(res, req, {
                     ok: true,
                     ...r,
-                    jobDescription: r.description,
-                    mainJd: r.mainJd || r.description,
+                    jobDescription: text,
+                    mainJd: r.mainJd || text,
+                    pageText: r.pageText || text,
                 });
             }
             log?.warn?.(
@@ -133,7 +144,7 @@ export function fetchJdRouter({ container }) {
 
     router.post('/extract/infor', async (req, res, next) => {
         const url = typeof req.body?.url === 'string' ? req.body.url.trim() : '';
-        return handleExtract(req, res, next, url);
+        return handleExtract(req, res, next, url, true);
     });
 
     router.get(/^\/extract\/infor=(.+)$/i, async (req, res, next) => {
@@ -142,9 +153,11 @@ export function fetchJdRouter({ container }) {
         try {
             url = decodeURIComponent(encoded);
         } catch {
-            // Keep the raw segment; fetchJobDetail will validate it.
+            // Keep the raw segment; fetchPageText will validate it.
         }
-        return handleExtract(req, res, next, url);
+        // Full visible page text — the dashboard's second-stage screening grader
+        // wants the entire posting, not a provider-parsed excerpt.
+        return handleExtract(req, res, next, url, true);
     });
 
     return router;
