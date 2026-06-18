@@ -77,6 +77,15 @@ function settleFor(url) {
     return 1500;
 }
 
+// Full-page-text (fetchPageText) tuning. Many ATS/SPA postings — JobDiva hash
+// routes (#/jobs/...), Workday, Dice, Greenhouse embeds — fetch the JD via JS
+// AFTER load, so a fixed settle returns thin text and the second judge skips.
+// We instead wait for the rendered text to stabilise, up to PAGE_TEXT_MAX_WAIT_MS.
+const PAGE_TEXT_MAX_WAIT_MS = 10000;     // hard cap on render wait per page
+const PAGE_TEXT_NETWORKIDLE_MS = 5000;   // best-effort networkidle wait (capped)
+const PAGE_TEXT_POLL_MS = 700;           // innerText poll interval
+const PAGE_TEXT_MIN_CHARS = 100;         // below this = blank/error/bot-wall page
+
 const COUNTRY_HINTS = [
     [/united states|usa|u\.s\.a\.|u\.s\.|us\b|remote\s*-\s*us|\bny\b|\bca\b|\btx\b|\bfl\b|\bwa\b/i, 'United States'],
     [/canada|\bca\b|toronto|vancouver|ontario|british columbia/i, 'Canada'],
@@ -404,8 +413,32 @@ export function createJdFetcher({
                 } catch (err) {
                     return { ok: false, error: 'NAV_TIMEOUT', message: err.message };
                 }
-                // Settle for SPA hydration so the JD body has mounted.
-                await page.waitForTimeout(settleFor(url));
+                // Wait for the page to actually RENDER its content before we
+                // read text. ATS/SPA pages load the JD via JS after navigation,
+                // so a fixed settle is too short (→ thin text → skipped judge).
+                // Strategy: best-effort networkidle (capped), a short minimum
+                // settle, then poll innerText until it stops growing or we hit
+                // PAGE_TEXT_MAX_WAIT_MS. This is "open the link, wait ~5-10s for
+                // it to load, then scrape all the text".
+                await page.waitForLoadState('networkidle', { timeout: PAGE_TEXT_NETWORKIDLE_MS }).catch(() => {});
+                await page.waitForTimeout(Math.min(settleFor(url), 3000));
+                const readLen = () =>
+                    page.evaluate(() => (document.body && document.body.innerText ? document.body.innerText.length : 0)).catch(() => 0);
+                const deadline = Date.now() + PAGE_TEXT_MAX_WAIT_MS;
+                let lastLen = -1;
+                let stable = 0;
+                while (Date.now() < deadline) {
+                    const len = await readLen();
+                    // Two consecutive equal reads above the floor → rendered.
+                    if (len >= PAGE_TEXT_MIN_CHARS && len === lastLen) {
+                        stable += 1;
+                        if (stable >= 2) break;
+                    } else {
+                        stable = 0;
+                    }
+                    lastLen = len;
+                    await page.waitForTimeout(PAGE_TEXT_POLL_MS);
+                }
                 let out;
                 try {
                     out = await page.evaluate(() => ({
@@ -418,11 +451,14 @@ export function createJdFetcher({
                 }
                 const clean = cleanPageText(out.text);
                 const finalUrl = out.finalUrl || url;
-                if (clean.length < minDescriptionChars) {
+                // Low floor — we want to judge whatever real content rendered.
+                // Only a near-empty page (load error / bot wall) fails; the
+                // worker treats that as fail-open (keeps the job).
+                if (clean.length < PAGE_TEXT_MIN_CHARS) {
                     return {
                         ok: false,
                         error: 'THIN_CONTENT',
-                        message: `page text ${clean.length} < ${minDescriptionChars}`,
+                        message: `page text ${clean.length} < ${PAGE_TEXT_MIN_CHARS}`,
                         partial: { pageText: clean, finalUrl, title: out.title || '' },
                     };
                 }
