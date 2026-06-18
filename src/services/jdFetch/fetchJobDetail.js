@@ -422,33 +422,37 @@ export function createJdFetcher({
                 // it to load, then scrape all the text".
                 await page.waitForLoadState('networkidle', { timeout: PAGE_TEXT_NETWORKIDLE_MS }).catch(() => {});
                 await page.waitForTimeout(Math.min(settleFor(url), 3000));
-                const readLen = () =>
-                    page.evaluate(() => (document.body && document.body.innerText ? document.body.innerText.length : 0)).catch(() => 0);
-                const deadline = Date.now() + PAGE_TEXT_MAX_WAIT_MS;
-                let lastLen = -1;
-                let stable = 0;
-                while (Date.now() < deadline) {
-                    const len = await readLen();
-                    // Two consecutive equal reads above the floor → rendered.
-                    if (len >= PAGE_TEXT_MIN_CHARS && len === lastLen) {
-                        stable += 1;
-                        if (stable >= 2) break;
-                    } else {
-                        stable = 0;
-                    }
-                    lastLen = len;
-                    await page.waitForTimeout(PAGE_TEXT_POLL_MS);
-                }
-                let out;
-                try {
-                    out = await page.evaluate(() => ({
+                // Read the FULL text each poll and keep the richest render seen.
+                // .catch(null) tolerates a context destroyed by a client-side
+                // redirect (e.g. Dice anti-bot) — we keep the last good text
+                // instead of throwing EVAL_FAILED.
+                const readPage = () =>
+                    page.evaluate(() => ({
                         text: (document.body && document.body.innerText) ? document.body.innerText : '',
                         finalUrl: window.location.href,
                         title: document.title || '',
-                    }));
-                } catch (err) {
-                    return { ok: false, error: 'EVAL_FAILED', message: err.message };
+                    })).catch(() => null);
+                const deadline = Date.now() + PAGE_TEXT_MAX_WAIT_MS;
+                let best = { text: '', finalUrl: url, title: '' };
+                let lastLen = -1;
+                let stable = 0;
+                while (Date.now() < deadline) {
+                    const r = await readPage();
+                    if (r && typeof r.text === 'string') {
+                        if (r.text.length >= best.text.length) best = r; // keep richest
+                        const len = r.text.length;
+                        // Two consecutive equal reads above the floor → rendered.
+                        if (len >= PAGE_TEXT_MIN_CHARS && len === lastLen) {
+                            stable += 1;
+                            if (stable >= 2) break;
+                        } else {
+                            stable = 0;
+                        }
+                        lastLen = len;
+                    }
+                    await page.waitForTimeout(PAGE_TEXT_POLL_MS);
                 }
+                const out = best;
                 const clean = cleanPageText(out.text);
                 const finalUrl = out.finalUrl || url;
                 // Low floor — we want to judge whatever real content rendered.
@@ -485,6 +489,10 @@ export function createJdFetcher({
             if (page) {
                 try { await page.close(); } catch {}
             }
+            // CRITICAL: always release the browser-tier semaphore. Without this
+            // the worker permanently loses a slot after each call and deadlocks
+            // after maxConcurrent calls (every later /extract hangs forever).
+            release();
         }
     }
 
