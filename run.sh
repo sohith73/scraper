@@ -18,6 +18,17 @@ cd "$ROOT"
 NODE_MIN_MAJOR="${NODE_MIN_MAJOR:-20}"
 NVM_VERSION="${NVM_VERSION:-v0.40.1}"
 
+# ── jdFetch scraper tuning (this box: 8 GB RAM / 4 cores) ─────────────
+# Raised above the code defaults (2 slots / 25s nav) so slow ATS pages
+# (Workday, iCIMS, …) get more browser slots AND more time to settle, instead
+# of timing out as "couldn't open the job posting" in second-stage screening.
+# Each Chromium page is ~200-300 MB → 6 pages (~1.8 GB) plus the JR pipeline
+# browser fit comfortably in 8 GB; scrapes are I/O-bound so 6 on 4 cores is
+# fine. Exported here so they take precedence over .env; override by exporting
+# these before ./run.sh.
+export JDFETCH_MAX_CONCURRENT="${JDFETCH_MAX_CONCURRENT:-6}"
+export JDFETCH_NAV_TIMEOUT_MS="${JDFETCH_NAV_TIMEOUT_MS:-35000}"
+
 log() {
     printf '[%s] %s\n' "$(date -u '+%Y-%m-%dT%H:%M:%SZ')" "$*"
 }

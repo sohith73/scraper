@@ -184,9 +184,15 @@ export function buildContainer({ overrides = {}, logger = rootLogger } = {}) {
         ? createJdFetcher({
               browser,
               logger,
-              navTimeoutMs: Number(env.JDFETCH_NAV_TIMEOUT_MS) || 25000,
+              // 35s (was 25s): slow ATS like Workday/iCIMS often need >25s to
+              // settle, so a 25s nav cap was timing out otherwise-loadable pages
+              // (the dominant second-judge "couldn't open" cause). Override per box.
+              navTimeoutMs: Number(env.JDFETCH_NAV_TIMEOUT_MS) || 35000,
               minDescriptionChars: Number(env.JDFETCH_MIN_DESC_CHARS) || 300,
-              maxConcurrent: Number(env.JDFETCH_MAX_CONCURRENT) || 2,
+              // 3 (was 2): one extra Chromium slot absorbs the longer holds the
+              // bigger nav timeout creates, so a single slow page can't stall the
+              // queue. Raise further via env on a roomy box (each page ~200MB).
+              maxConcurrent: Number(env.JDFETCH_MAX_CONCURRENT) || 3,
               httpFirst: env.JDFETCH_HTTP_FIRST !== false,
               httpTimeoutMs: Number(env.JDFETCH_HTTP_TIMEOUT_MS) || 8000,
               httpConcurrency: Number(env.JDFETCH_HTTP_CONCURRENCY) || 40,
