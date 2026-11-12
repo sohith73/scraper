@@ -89,7 +89,9 @@ Core rules (ALWAYS fill these):
 
 Extended filter knobs (SET ONLY when the profile gives clear signal; else null):
 - employmentTypes: array from [full-time, contract, part-time, internship].
-  Internships only if the candidate is a student / new grad.
+  Internships only if the candidate is a student / new grad. "FTC",
+  "fixed-term contract" and "maternity cover" all mean contract, so set
+  "contract" (never "full-time") when the profile asks for those.
 - workModels: array from [onsite, remote, hybrid]. Derive from
   preferredLocations / profile notes.
 - daysAgo: integer, how recent jobs must be (days). Typical: 14 for

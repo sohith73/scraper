@@ -183,3 +183,16 @@ test('buildUserPrompt includes SEARCH INTENT + JOBS blocks + output instruction'
     // must include JR id so the model can echo it back
     assert.match(p, /"id": "jr1"/);
 });
+
+test('compactIntent emits employmentTypes only when set', () => {
+    const withTypes = compactIntent({ ...INTENT, employmentTypes: ['full-time', 'contract'] });
+    assert.deepEqual(withTypes.employmentTypes, ['full-time', 'contract']);
+    const bare = compactIntent(INTENT);
+    assert.equal('employmentTypes' in bare, false);
+});
+
+test('SYSTEM_PROMPT treats FTC / fixed-term titles as a contract employment type', () => {
+    assert.match(SYSTEM_PROMPT, /FTC is a fixed-term contract/i);
+    assert.match(SYSTEM_PROMPT, /does NOT contain "contract"/);
+    assert.match(SYSTEM_PROMPT, /includes "contract", an FTC title is fine/);
+});

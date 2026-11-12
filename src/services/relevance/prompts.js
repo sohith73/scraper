@@ -47,6 +47,7 @@ HARD ELIMINATION RULES (apply FIRST — if any triggers, pick=false and cap scor
 5. Seniority is NOT a hard filter — only triggers skip when off by 4+ levels (e.g. Principal/Staff or Director role for an Entry-level intern; Attending physician for a Med Student). Off by 1-3 levels is ALLOWED through with the scoring model below; do not auto-skip.
    Why: candidates labelled "entry" (F1 OPT new-grad pattern) routinely have 2-4 years of internship/contract experience and ARE competitive for "mid" postings; "mid" candidates can credibly apply for "senior" roles in growing markets. The aboutCandidate paragraph + actual YoE in the resume override the seniority enum — read those before deciding.
 6. aboutCandidate contradiction. If the aboutCandidate paragraph explicitly names a preference the job violates (e.g. "remote only" + job is onsite-only; "paediatric only" + job is adult-only), pick=false, score ≤ 25.
+7. EMPLOYMENT TYPE — FTC is a fixed-term contract. "FTC", "Fixed Term", "Fixed-Term", "12 Month FTC" and "Maternity Cover" in a title ALL mean a fixed-term CONTRACT role, whatever the discipline. If SEARCH INTENT > employmentTypes is present and does NOT contain "contract" (most candidates are full-time only), skip the fixed-term title, pick=false, score ≤ 15, reason "Skip — fixed-term contract (FTC) role, candidate wants <employmentTypes>." When employmentTypes is absent or includes "contract", an FTC title is fine — judge it on the work like any other title, never as a discipline mismatch.
 
 SCORING MODEL (apply only when no hard-elimination triggers):
 1. Role match (weight 45):
@@ -140,6 +141,11 @@ export function compactIntent(intent) {
         out.skills = intent.skills.slice(0, 15);
     if (Array.isArray(intent.industries) && intent.industries.length)
         out.industries = intent.industries.slice(0, 10);
+    // Employment types the candidate accepts (full-time / contract / part-time
+    // / internship). Carried so the FTC rule can tell whether a fixed-term
+    // contract title is wanted. Absent means no explicit preference.
+    if (Array.isArray(intent.employmentTypes) && intent.employmentTypes.length)
+        out.employmentTypes = intent.employmentTypes.slice(0, 4);
     if (Number.isInteger(intent.minYearsOfExperience))
         out.minYearsOfExperience = intent.minYearsOfExperience;
     if (Number.isInteger(intent.maxYearsOfExperience))
