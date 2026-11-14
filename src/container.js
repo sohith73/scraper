@@ -14,7 +14,7 @@ import { logger as rootLogger } from './config/logger.js';
 import { createHttpClient } from './clients/common/httpClient.js';
 import { listClients, getProfile, getExclusions, updateExclusions, pushJob } from './clients/dashboard/index.js';
 import { getResumeByEmail } from './clients/resume/index.js';
-import { createAiCache, createOpenAIClient } from './ai/index.js';
+import { createAiCache, createOpenAIClient, createCliJudgeClient } from './ai/index.js';
 import { summarizeProfile } from './services/intent/index.js';
 import {
     createMutex,
@@ -60,6 +60,36 @@ export function buildContainer({ overrides = {}, logger = rootLogger } = {}) {
               logger,
           })
         : null;
+
+    // judgeAi — the client used ONLY by the relevance filter (Phase 10, the
+    // per-job keep/skip judge). When JUDGE_BACKEND is a CLI ('claude'/'codex')
+    // this runs the decision through the local coding-agent on the box's
+    // subscription (~$0 API spend), with the paid OpenAI `ai` as the automatic
+    // fallback on any CLI failure. When JUDGE_BACKEND='api' (or there is no
+    // CLI case to make) it is just `ai`, so nothing else in the pipeline — the
+    // summariser, Adzuna judge, etc. — is affected.
+    const judgeAi = env.JUDGE_BACKEND !== 'api'
+        ? createCliJudgeClient({
+              backend: env.JUDGE_BACKEND,
+              fallback: ai,
+              model: env.JUDGE_CLI_MODEL,
+              extraArgs: env.JUDGE_CLI_EXTRA_ARGS
+                  ? env.JUDGE_CLI_EXTRA_ARGS.split(' ').filter(Boolean)
+                  : [],
+              timeoutMs: env.JUDGE_CLI_TIMEOUT_MS,
+              concurrency: env.JUDGE_CLI_CONCURRENCY,
+              maxCalls: env.JUDGE_CLI_MAX_CALLS,
+              maxFailures: env.JUDGE_CLI_MAX_FAILURES,
+              cache: aiCache,
+              logger,
+          })
+        : ai;
+    if (env.JUDGE_BACKEND !== 'api') {
+        logger?.info?.(
+            { backend: env.JUDGE_BACKEND, model: env.JUDGE_CLI_MODEL || '(cli default)' },
+            'relevance judge: CLI backend active (API fallback armed)',
+        );
+    }
 
     const dashboard = {
         listClients: () => listClients({ http: dashboardHttp }),
@@ -208,6 +238,7 @@ export function buildContainer({ overrides = {}, logger = rootLogger } = {}) {
         dashboard,
         resume,
         ai,
+        judgeAi,
         summariser,
         mutex,
         browser,

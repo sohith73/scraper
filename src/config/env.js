@@ -139,6 +139,41 @@ const schema = z.object({
     OPENAI_API_KEY: z.string().optional().default(''),
     OPENAI_MODEL: z.string().default('gpt-4o-mini'),
 
+    // --- Relevance judge backend (cost control) ------------------------
+    // Which engine makes the per-job keep/skip decision in the relevance
+    // filter (Phase 10 — the biggest server-side AI consumer):
+    //   'claude' — Claude Code CLI (`claude -p`), runs on the box's Max
+    //              subscription, ~$0 API spend. DEFAULT.
+    //   'codex'  — Codex CLI (`codex exec`), runs on the box's ChatGPT sub.
+    //   'api'    — the paid OpenAI path only (no CLI). Use this to run pure
+    //              API while evaluating the CLI judge.
+    // ANY CLI failure (missing/unauthenticated binary, timeout, bad output)
+    // automatically falls back to the paid OpenAI client, so correctness is
+    // never at risk — the flag only chooses the PRIMARY judge. ONLY the
+    // relevance judge is routed here; the intent summariser stays on OpenAI.
+    // NOTE: the box running the scraper must have the chosen CLI installed
+    // AND logged in, or every judge call falls back to the API.
+    JUDGE_BACKEND: z.enum(['claude', 'codex', 'api']).default('claude'),
+    // Model id handed to the CLI. Empty = the CLI's own configured default
+    // (recommended — let `claude`/`codex` pick). e.g. 'claude-haiku-5-5'.
+    JUDGE_CLI_MODEL: z.string().optional().default(''),
+    // Extra CLI flags, space-separated, appended verbatim to the judge
+    // invocation. e.g. "--allowedTools " to forbid tool use for speed.
+    JUDGE_CLI_EXTRA_ARGS: z.string().optional().default(''),
+    // Per-call wall-clock budget for one CLI judge batch.
+    JUDGE_CLI_TIMEOUT_MS: envInt(60_000, { min: 1_000, max: 600_000 }),
+    // Max simultaneous CLI processes. The pipeline fans batches out in
+    // parallel; keep this low — CLI judging is heavy.
+    JUDGE_CLI_CONCURRENCY: envInt(2, { min: 1, max: 16 }),
+    // Per-process CLI call budget (0 = unlimited). A ceiling to protect the
+    // subscription's weekly usage pool on a heavy day; calls past it use the
+    // API fallback.
+    JUDGE_CLI_MAX_CALLS: envInt(0, { min: 0 }),
+    // Consecutive CLI failures before the CLI is disabled for the rest of the
+    // process (every call then uses the API fallback). Stops a misconfigured
+    // box from slow-failing every batch.
+    JUDGE_CLI_MAX_FAILURES: envInt(3, { min: 1, max: 100 }),
+
     JOBRIGHT_BASE: envUrl('https://jobright.ai'),
     JOBRIGHT_COOLDOWN_MS: envInt(900_000, { min: 0 }),
     // Exponential-backoff ceiling for CONSECUTIVE cooldowns. Each repeat

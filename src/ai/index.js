@@ -8,4 +8,5 @@
 
 export { createAiCache } from './cache.js';
 export { createOpenAIClient } from './openaiClient.js';
+export { createCliJudgeClient } from './cliJudgeClient.js';
 export { hashPromptKey } from './keyHash.js';

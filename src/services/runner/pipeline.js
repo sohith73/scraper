@@ -182,6 +182,11 @@ export async function runPipeline({
     const { clientEmail, requestedCount, clientName } = run;
     const { dashboard, resume, summariser, browser, mutex, ai, env, clientFilters, feedback, notifier,
         clientBrowsers, clientSettings, logger: rootLogger } = container;
+    // judgeAi drives ONLY the relevance filter (the per-job keep/skip judge).
+    // It is the CLI judge (+ API fallback) when JUDGE_BACKEND is a CLI, else
+    // plain `ai`. Everything else (summariser) stays on `ai`. Guard with `ai`
+    // so a container that predates judgeAi still works.
+    const judgeAi = container.judgeAi || ai;
     const runArtDir = store.runDir(runId);
 
     // Per-run logger: tees every line to runs/<id>/run.log AND stdout.
@@ -612,7 +617,7 @@ export async function runPipeline({
             store.update(runId, { phase: PHASES.FILTERING });
             const filterRes = await phaseTimer(`filtering.page${page}`, () =>
                 filterJobsByRelevance({
-                    ai,
+                    ai: judgeAi,
                     intent,
                     jobs: freshJobs,
                     calibration: calibrationBlock,
